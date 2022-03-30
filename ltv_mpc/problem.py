@@ -24,6 +24,57 @@ class Problem:
 
     """
     Linear time-variant model predictive control problem.
+
+    The discretized dynamics of a linear system are described by:
+
+    .. math::
+
+        x_{k+1} = A x_k + B u_k
+
+    where :math:`x` is assumed to be the first-order state of a configuration
+    variable :math:`p`, i.e., it stacks both the position :math:`p` and its
+    time-derivative :math:`\\dot{p}`. Meanwhile, the system is linearly
+    constrained by:
+
+    .. math::
+
+        x_0 & = x_\\mathrm{init} \\\\
+        \\forall k, \\ C_k x_k + D_k u_k & \\leq e_k \\\\
+
+    The output control law minimizes a weighted combination of two types of
+    costs:
+
+    - Terminal state error
+        :math:`\\|x_\\mathrm{nb\\_steps} - x_\\mathrm{goal}\\|^2`
+        with weight :math:`w_{xt}`.
+    - Cumulated state error:
+        :math:`\\sum_k \\|x_k - x_\\mathrm{goal}\\|^2`
+        with weight :math:`w_{xc}`.
+    - Cumulated control costs:
+        :math:`\\sum_k \\|u_k\\|^2`
+        with weight :math:`w_{u}`.
+
+    Attributes:
+        transition_state_matrix: State linear dynamics matrix.
+        transition_input_matrix: Control linear dynamics matrix.
+        ineq_state_matrix : Constraint matrix on state variables. When this
+            argument is an array, the same matrix `C` is applied at each step
+            `k`. When it is ``None``, the null matrix is applied.
+        ineq_input_matrix : Constraint matrix on control variables. When this
+            argument is an array, the same matrix `D` is applied at each step
+            `k`. When it is ``None``, the null matrix is applied.
+        ineq_vector : Constraint vector. When this argument is an array, the
+            same vector `e` is applied at each step `k`.
+        initial_state: Initial state as stacked position and velocity.
+        goal_state: Goal state as stacked position and velocity.
+        nb_timesteps: Number of discretization steps in the preview window.
+        terminal_cost_weight: Weight on terminal state cost, or ``None`` to
+            disable.
+        stage_state_cost_weight: Weight on cumulated state costs, or ``None``
+            to disable (default).
+        stage_input_cost_weight: Weight on cumulated control costs.
+        input_dim: Dimension of an input vector.
+        state_dim: Dimension of a state vector.
     """
 
     transition_state_matrix: Union[np.ndarray, List[np.ndarray]]

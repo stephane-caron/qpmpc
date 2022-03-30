@@ -22,5 +22,20 @@ from .solve_mpcqp import solve_mpcqp
 
 
 def solve_mpc(problem: Problem, **kwargs) -> Solution:
+    """
+    Solve a linear time-invariant model predictive control problem.
+
+    Args:
+        problem: Model predictive control problem to solve.
+
+    Returns:
+        Solution to the problem, if found.
+
+    Notes:
+        In numerical analysis, there are three classes of methods to solve
+        boundary value problems: single shooting, multiple shooting and
+        collocation. The solver implemented in this class follows the `single
+        shooting method <https://en.wikipedia.org/wiki/Shooting_method>`_.
+    """
     qp = build_mpcqp(problem)
     return solve_mpcqp(problem, qp)
