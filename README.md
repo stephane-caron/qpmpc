@@ -9,7 +9,9 @@
 [![PyPI version](https://img.shields.io/pypi/v/ltv-mpc)](https://pypi.org/project/ltv-mpc/0.6.0/)
 ![Status](https://img.shields.io/pypi/status/ltv-mpc)
 
-Linear time-variant model predictive control in Python.
+Linear time-variant model predictive control in Python. Solve a quadratic program of the form:
+
+> ![ltv-mpc](https://user-images.githubusercontent.com/1189580/160887387-f5c8e1ae-9ade-48d3-8522-589d9bbef64f.svg)
 
 This module is designed for prototyping. If you need performance, check out one of the related libraries below.
 
@@ -21,10 +23,13 @@ pip install ltv-mpc
 
 ## Usage
 
-This module defines a one-stop shop ``solve_mpc(problem: Problem) -> Solution``
-function. The ``Problem`` type defines the linear model predictive control
-problem (system, constraints, initial state and cost function to optimize)
-while the ``Solution`` holds the resulting state and input trajectories.
+This module defines a one-stop shop function:
+
+```python
+solve_mpc(problem: Problem) -> Solution
+```
+
+The [``Problem``](https://tasts-robots.org/doc/ltv-mpc/usage.html#ltv_mpc.problem.Problem) type defines the linear model predictive control problem (system, constraints, initial state and cost function to optimize) while the [``Solution``](https://tasts-robots.org/doc/ltv-mpc/usage.html#ltv_mpc.solution.Solution) holds the resulting state and input trajectories.
 
 ## Example
 
