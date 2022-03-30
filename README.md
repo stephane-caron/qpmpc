@@ -1,8 +1,8 @@
 # ltv-mpc
 
-[**Installation**](https://github.com/stephane-caron/pink#installation)
+[**Installation**](https://github.com/tasts-robots/ltv-mpc#installation)
 | [**Documentation**](https://tasts-robots.org/doc/ltv-mpc/)
-| [**Usage**](https://github.com/stephane-caron/pink#usage)
+| [**Example**](https://github.com/tasts-robots/ltv-mpc#example)
 | [**Contributing**](CONTRIBUTING.md)
 
 [![build](https://img.shields.io/github/workflow/status/tasts-robots/ltv-mpc/CI)](https://github.com/tasts-robots/ltv-mpc/actions)
