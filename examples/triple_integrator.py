@@ -67,3 +67,4 @@ if __name__ == "__main__":
     pylab.plot(t, velocities)
     pylab.plot(t, accelerations)
     pylab.grid(True)
+    pylab.legend(("position", "velocity", "acceleration"))
