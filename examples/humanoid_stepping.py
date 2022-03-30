@@ -42,7 +42,7 @@ class HumanoidSteppingProblem:
     start_pos: float = 0.0
 
 
-def build_ltv_problem(problem: HumanoidSteppingProblem):
+def build_mpc_problem(problem: HumanoidSteppingProblem):
     T = problem.horizon_duration / problem.nb_timesteps
     nb_init_dsp_steps = int(round(problem.dsp_duration / T))
     nb_init_ssp_steps = int(round(problem.ssp_duration / T))
@@ -110,7 +110,7 @@ def plot_mpc_solution(stepping_problem, mpc, solution):
 
 if __name__ == "__main__":
     stepping_problem = HumanoidSteppingProblem()
-    ltv_problem = build_ltv_problem(stepping_problem)
-    mpc = build_mpc(ltv_problem)
-    solution = solve_mpc(ltv_problem, mpc)
-    plot_mpc_solution(stepping_problem, ltv_problem, solution)
+    mpc_problem = build_mpc_problem(stepping_problem)
+    mpc = build_mpc(mpc_problem)
+    solution = solve_mpc(mpc_problem, mpc)
+    plot_mpc_solution(stepping_problem, mpc_problem, solution)

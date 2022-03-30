@@ -6,7 +6,7 @@
 ltv-mpc
 #######
 
-Linear time-varying model predictive control in Python.
+Linear time-variant model predictive control in Python.
 
 .. toctree::
 

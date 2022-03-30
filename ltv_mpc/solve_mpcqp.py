@@ -15,24 +15,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Linear time-variant model predictive control in Python.
-"""
+from qpsolvers import solve_qp
 
-from .build_mpcqp import build_mpcqp
 from .mpcqp import MPCQP
 from .problem import Problem
 from .solution import Solution
-from .solve_mpc import solve_mpc
-from .solve_mpcqp import solve_mpcqp
 
-__all__ = [
-    "MPCQP",
-    "Problem",
-    "Solution",
-    "build_mpcqp",
-    "solve_mpc",
-    "solve_mpcqp",
-]
 
-__version__ = "0.6.0"
+def solve_mpcqp(problem: Problem, qp: MPCQP, **kwargs) -> Solution:
+    U = solve_qp(
+        qp.cost_matrix,
+        qp.cost_vector,
+        qp.ineq_matrix,
+        qp.ineq_vector,
+        **kwargs
+    )
+    U = U.reshape((problem.nb_timesteps, problem.input_dim))
+    return Solution(problem, U)

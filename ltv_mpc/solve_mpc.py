@@ -15,20 +15,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from qpsolvers import solve_qp
-
-from .mpcqp import MPCQP
+from .build_mpcqp import build_mpcqp
 from .problem import Problem
 from .solution import Solution
+from .solve_mpcqp import solve_mpcqp
 
 
-def solve_mpc(problem: Problem, qp: MPCQP, **kwargs) -> Solution:
-    U = solve_qp(
-        qp.cost_matrix,
-        qp.cost_vector,
-        qp.ineq_matrix,
-        qp.ineq_vector,
-        **kwargs
-    )
-    U = U.reshape((problem.nb_timesteps, problem.input_dim))
-    return Solution(problem, U)
+def solve_mpc(problem: Problem, **kwargs) -> Solution:
+    qp = build_mpcqp(problem)
+    return solve_mpcqp(problem, qp)

@@ -23,7 +23,7 @@ import numpy as np
 
 import ltv_mpc
 
-from ltv_mpc import build_mpc, solve_mpc
+from ltv_mpc import solve_mpc
 
 
 gravity = 9.81  # [m] / [s]^2
@@ -73,7 +73,7 @@ class TestHumanoid(unittest.TestCase):
             else np.array([+next_max, -next_min])
             for i in range(problem.nb_timesteps)
         ]
-        ltv_problem = ltv_mpc.Problem(
+        mpc_problem = ltv_mpc.Problem(
             transition_state_matrix=state_matrix,
             transition_input_matrix=input_matrix,
             ineq_state_matrix=ineq_matrix,
@@ -88,14 +88,13 @@ class TestHumanoid(unittest.TestCase):
         )
         #
         self.stepping_problem = problem
-        self.ltv_problem = ltv_problem
+        self.problem = mpc_problem
 
     def test_build_and_solve(self):
-        mpc = build_mpc(self.ltv_problem)
-        solution = solve_mpc(self.ltv_problem, mpc)
-        N = self.ltv_problem.nb_timesteps
-        input_dim = self.ltv_problem.input_dim
-        state_dim = self.ltv_problem.state_dim
+        solution = solve_mpc(self.problem)
+        N = self.problem.nb_timesteps
+        input_dim = self.problem.input_dim
+        state_dim = self.problem.state_dim
         self.assertEqual(
             solution.stacked_inputs.flatten().shape, (N * input_dim,)
         )

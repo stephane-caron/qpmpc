@@ -23,7 +23,7 @@ from .problem import Problem
 from .mpcqp import MPCQP
 
 
-def build_mpc(problem: Problem, sparse: bool = False) -> MPCQP:
+def build_mpcqp(problem: Problem, sparse: bool = False) -> MPCQP:
     input_dim = problem.input_dim
     state_dim = problem.state_dim
     stacked_input_dim = problem.input_dim * problem.nb_timesteps
