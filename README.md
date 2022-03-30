@@ -24,8 +24,7 @@ pip install ltv-mpc
 This module defines a one-stop shop ``solve_mpc(problem: Problem) -> Solution``
 function. The ``Problem`` type defines the linear model predictive control
 problem (system, constraints, initial state and cost function to optimize)
-while the ``Solution`` holds the solution to a given problem (state and input
-trajectories as stacked vectors).
+while the ``Solution`` holds the resulting state and input trajectories.
 
 ## Example
 
