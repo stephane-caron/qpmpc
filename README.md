@@ -23,7 +23,10 @@ pip install ltv-mpc
 
 The module defines two types:
 
-- ``Problem`` defines the model predictive control problem, *i.e.*, a constrained linear time-variant system, a cost function to optimize, and an initial state.
+- ``Problem`` defines the model predictive control problem, that is:
+    - Constrained linear time-variant system
+    - Cost function to optimize
+    - Initial (and goal) state
 - ``Solution`` holds the solution to a given problem.
 
 The ``solve_mpc`` function takes a ``Problem`` as input and outputs the corresponding ``Solution``.
@@ -102,7 +105,6 @@ This module is still under development and its API might change. Future works ma
 
 - Complete documentation
 - Complete test coverage
-- Rename Problem to something more descriptive
 - General linear stage cost functions
 
 ## See also
