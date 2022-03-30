@@ -1,0 +1,48 @@
+[build-system]
+requires = ["flit_core >=2,<4"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "ltv-mpc"
+readme = "README.md"
+license = {file = "LICENSE"}
+authors = [
+    {name = "Stéphane Caron", email = "stephane.caron@normalesup.org"},
+]
+maintainers = [
+    {name = "Stéphane Caron", email = "stephane.caron@normalesup.org"},
+]
+dynamic = ['version', 'description']
+requires-python = ">=3.8"
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Topic :: Scientific/Engineering :: Mathematics",
+]
+dependencies = [
+    "qpsolvers >=1.8.0",
+]
+keywords = ["rate", "loop", "frequency", "regulator"]
+
+[project.optional-dependencies]
+doc = [
+    "sphinx",
+]
+
+[project.urls]
+Documentation = "https://tasts-robots.org/doc/ltv-mpc/"
+Source = "https://github.com/tasts-robots/ltv-mpc"
+Tracker = "https://github.com/tasts-robots/ltv-mpc/issues"
+Changelog = "https://github.com/tasts-robots/ltv-mpc/blob/master/CHANGELOG.md"
+
+[tool.black]
+line-length = 79
+
+[tool.flit.module]
+name = "ltv_mpc"
