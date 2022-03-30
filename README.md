@@ -11,6 +11,8 @@
 
 Linear time-variant model predictive control in Python.
 
+This module is designed for prototyping. If you need performance, check out one of the related libraries below.
+
 ## Installation
 
 ```sh
@@ -108,8 +110,6 @@ This module is still under development and its API might change. Future works ma
 - General linear stage cost functions
 
 ## See also
-
-This module is designed for prototyping. If you need performance, check out some of the related libraries below.
 
 | System                | Library                                                  | Language | License      |
 |-----------------------|----------------------------------------------------------|----------|--------------|
