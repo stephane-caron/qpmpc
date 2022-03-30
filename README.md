@@ -79,7 +79,7 @@ We can solve it with:
     solution = solve_mpc(problem, mpc)
 ```
 
-The solution holds complete state and input trajectories as stacked vectors. For instance, we can extract and plot positions, velocities and accelerations as follows:
+The solution holds complete state and input trajectories as stacked vectors. For instance, we can plot positions, velocities and accelerations as follows:
 
 ```python
     import pylab
@@ -92,7 +92,14 @@ The solution holds complete state and input trajectories as stacked vectors. For
     pylab.plot(t, velocities)
     pylab.plot(t, accelerations)
     pylab.grid(True)
+    pylab.legend(("position", "velocity", "acceleration"))
 ```
+
+This example produces the following trajectory:
+
+![2022-03-30-172206_1920x1080_scrot](https://user-images.githubusercontent.com/1189580/160871543-3734ec65-fe74-4a6f-8452-a877aa4050b1.png)
+
+The behavior is a weighted compromis between reaching the goal state (weight ``1.0``) and keeping reasonable finite jerk inputs (weight ``1e-6``), which prevents bang-bang accelerations.
 
 ## 🏗️ Work in progress
 
