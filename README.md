@@ -6,7 +6,7 @@
 | [**Contributing**](CONTRIBUTING.md)
 
 [![build](https://img.shields.io/github/workflow/status/tasts-robots/ltv-mpc/CI)](https://github.com/tasts-robots/ltv-mpc/actions)
-[![PyPI version](https://badge.fury.io/py/ltv-mpc.svg)](https://badge.fury.io/py/ltv-mpc)
+[![PyPI version](https://img.shields.io/pypi/v/pin-pink)](https://pypi.org/project/ltv-mpc/0.6.0/)
 ![Status](https://img.shields.io/pypi/status/ltv-mpc)
 
 Linear time-variant model predictive control in Python.
