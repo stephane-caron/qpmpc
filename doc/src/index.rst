@@ -11,5 +11,7 @@ Linear time-variant model predictive control in Python.
 .. toctree::
 
     installation.rst
+    usage.rst
+    examples.rst
 
 You can download the full module documentation as a `PDF document <ltv-mpc.pdf>`_.

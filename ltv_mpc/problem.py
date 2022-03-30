@@ -22,6 +22,10 @@ import numpy as np
 
 class Problem:
 
+    """
+    Linear time-variant model predictive control problem.
+    """
+
     transition_state_matrix: Union[np.ndarray, List[np.ndarray]]
     transition_input_matrix: Union[np.ndarray, List[np.ndarray]]
     ineq_state_matrix: Union[None, np.ndarray, List[np.ndarray]]

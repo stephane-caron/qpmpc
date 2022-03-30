@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+### Added
+
+- Usage and examples documentation sections
+
 ## [0.6.0] - 2022/03/30
 
 ### Added

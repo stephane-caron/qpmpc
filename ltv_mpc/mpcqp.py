@@ -23,6 +23,11 @@ import numpy as np
 @dataclass
 class MPCQP:
 
+    """
+    Quadratic program (QP) corresponding to a model predictive control (MPC)
+    problem.
+    """
+
     cost_matrix: np.ndarray
     cost_vector: np.ndarray
     ineq_matrix: np.ndarray

@@ -22,15 +22,36 @@ from .problem import Problem
 
 class Solution:
 
+    """
+    State and input trajectories that optimize a given
+    :class:`ltv_mpc.problem.Problem`.
+
+    Attributes:
+        stacked_inputs: Stacked vector of inputs :math:`u_k` for
+            :math:`k \\in \\{0, \\ldots, N - 1\\}`.
+    """
+
     stacked_inputs: np.ndarray
 
     def __init__(self, problem: Problem, stacked_inputs: np.ndarray):
+        """
+        Test.
+        """
         self.problem = problem
         self.stacked_inputs = stacked_inputs
         self.__stacked_states = None
 
     @property
     def stacked_states(self):
+        """
+        Stacked vector of states :math:`x_k` for
+        :math:`k \\in \\{0, \\ldots, N\\}`, with :math:`N` the number of
+        timesteps.
+
+        Note:
+            The time complexity of calling this property is :math:`O(N)` the
+            first time, then :math:`O(1)` as the result is memoized.
+        """
         if self.__stacked_states is not None:
             return self.__stacked_states
         X = np.zeros((self.problem.nb_timesteps + 1, self.problem.state_dim))
