@@ -61,7 +61,7 @@ This leads us to the following linear MPC problem:
 
     initial_pos = 0.0
     goal_pos = 1.0
-    problem = ltv_mpc.Problem(
+    problem = Problem(
         transition_state_matrix=A,
         transition_input_matrix=B,
         ineq_state_matrix=ineq_matrix,
