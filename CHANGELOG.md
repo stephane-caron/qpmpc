@@ -13,6 +13,10 @@ All notable changes to this project will be documented in this file.
 
 - Only export ``Problem``, ``Solution`` and ``solve_mpc`` module-wide
 
+### Fixed
+
+- Edge case where inputs don't affect the first inequality constraints
+
 ## [0.6.0] - 2022/03/30
 
 ### Added
