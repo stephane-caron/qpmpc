@@ -22,7 +22,6 @@ import pylab
 
 import ltv_mpc
 
-from ltv_mpc import build_mpc
 from ltv_mpc import solve_mpc
 
 
@@ -111,6 +110,5 @@ def plot_mpc_solution(stepping_problem, mpc, solution):
 if __name__ == "__main__":
     stepping_problem = HumanoidSteppingProblem()
     mpc_problem = build_mpc_problem(stepping_problem)
-    mpc = build_mpc(mpc_problem)
-    solution = solve_mpc(mpc_problem, mpc)
+    solution = solve_mpc(mpc_problem)
     plot_mpc_solution(stepping_problem, mpc_problem, solution)
