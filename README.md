@@ -9,7 +9,7 @@
 [![PyPI version](https://img.shields.io/pypi/v/ltv-mpc)](https://pypi.org/project/ltv-mpc/0.6.0/)
 ![Status](https://img.shields.io/pypi/status/ltv-mpc)
 
-Linear time-variant model predictive control in Python. Solve a quadratic program of the form:
+Linear time-variant (LTV) model predictive control in Python. Solve a quadratic program of the form:
 
 > ![ltv-mpc](https://user-images.githubusercontent.com/1189580/160887387-f5c8e1ae-9ade-48d3-8522-589d9bbef64f.svg)
 
@@ -29,7 +29,7 @@ This module defines a one-stop shop function:
 solve_mpc(problem: Problem) -> Solution
 ```
 
-The [``Problem``](https://tasts-robots.org/doc/ltv-mpc/usage.html#ltv_mpc.problem.Problem) type defines the linear model predictive control problem (system, constraints, initial state and cost function to optimize) while the [``Solution``](https://tasts-robots.org/doc/ltv-mpc/usage.html#ltv_mpc.solution.Solution) holds the resulting state and input trajectories.
+The [``Problem``](https://tasts-robots.org/doc/ltv-mpc/usage.html#ltv_mpc.problem.Problem) type defines the model predictive control problem (LTV system, LTV constraints, initial state and cost function to optimize) while the [``Solution``](https://tasts-robots.org/doc/ltv-mpc/usage.html#ltv_mpc.solution.Solution) holds the resulting state and input trajectories.
 
 ## Example
 
@@ -104,7 +104,7 @@ This example produces the following trajectory:
 
 ![2022-03-30-172206_1920x1080_scrot](https://user-images.githubusercontent.com/1189580/160871543-3734ec65-fe74-4a6f-8452-a877aa4050b1.png)
 
-The behavior is a weighted compromis between reaching the goal state (weight ``1.0``) and keeping reasonable finite jerk inputs (weight ``1e-6``), which prevents bang-bang accelerations.
+The behavior is a weighted compromise between reaching the goal state (weight ``1.0``) and keeping reasonable finite jerk inputs (weight ``1e-6``). The latter mitigate bang-bang accelerations but prevent fully reaching the goal within the horizon. See the [examples](examples/) folder for more examples.
 
 ## 🏗️ Work in progress
 
