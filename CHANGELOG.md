@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
+- ``sparse`` keyword argument to use with sparse QP solvers
 - Usage and examples documentation sections
 
 ### Changed
