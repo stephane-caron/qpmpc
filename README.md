@@ -11,7 +11,7 @@
 
 Linear time-variant (LTV) model predictive control in Python. Solve a quadratic program of the form:
 
-> ![ltv-mpc](https://user-images.githubusercontent.com/1189580/160887387-f5c8e1ae-9ade-48d3-8522-589d9bbef64f.svg)
+> ![ltv-mpc](https://raw.githubusercontent.com/tasts-robots/ltv-mpc/master/doc/src/images/ltv-mpc.svg)
 
 This module is designed for prototyping. If you need performance, check out one of the related libraries below.
 
