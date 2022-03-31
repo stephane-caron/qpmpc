@@ -16,6 +16,7 @@
 # limitations under the License.
 
 from dataclasses import dataclass
+from typing import Union
 
 import numpy as np
 
@@ -33,9 +34,9 @@ class QuadraticProgram:
     Quadratic program (QP) with inequality constraints.
     """
 
-    cost_matrix: np.ndarray
+    cost_matrix: Union[np.ndarray, csc_matrix]
     cost_vector: np.ndarray
-    ineq_matrix: np.ndarray
+    ineq_matrix: Union[np.ndarray, csc_matrix]
     ineq_vector: np.ndarray
 
 
