@@ -39,7 +39,7 @@ Let us define a triple integrator:
     import numpy as np
 
     horizon_duration = 1.0  # [s]
-    N = 16
+    N = 16  # number of discretization steps
     T = horizon_duration / N
     A = np.array([[1.0, T, T ** 2 / 2.0], [0.0, 1.0, T], [0.0, 0.0, 1.0]])
     B = np.array([T ** 3 / 6.0, T ** 2 / 2.0, T]).reshape((3, 1))
@@ -81,7 +81,7 @@ We can solve it with:
 ```python
     from ltv_mpc import solve_mpc
 
-    solution = solve_mpc(problem, mpc)
+    solution = solve_mpc(problem, solver="quadprog")
 ```
 
 The solution holds complete state and input trajectories as stacked vectors. For instance, we can plot positions, velocities and accelerations as follows:
