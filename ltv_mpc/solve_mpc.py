@@ -84,8 +84,11 @@ def build_qp(problem: Problem, sparse: bool = False) -> QuadraticProgram:
             G[:, input_slice] = D
         if C is not None:
             G += C.dot(psi)
-        G_list.append(G)
-        h_list.append(h)
+        if k == 0 and D is None:  # corner case, input has no effect
+            assert np.all(h >= 0.0)
+        else:  # regular case, G is non-zero
+            G_list.append(G)
+            h_list.append(h)
         phi = A.dot(phi)
         psi = A.dot(psi)
         psi[:, input_slice] = B
