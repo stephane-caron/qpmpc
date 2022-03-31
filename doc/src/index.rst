@@ -6,7 +6,8 @@
 ltv-mpc
 #######
 
-Linear time-variant model predictive control in Python. Solve a quadratic program of the form:
+Linear time-variant (LTV) model predictive control in Python. Solve a quadratic
+program of the form:
 
 .. math::
 
@@ -16,6 +17,8 @@ Linear time-variant model predictive control in Python. Solve a quadratic progra
     & C_k x_k + D_k u_k \leq e_k \\
     & x_0 = x_{\mathit{init}}
     \end{array}
+
+The library provides a one-stop shop :func:`.solve_mpc` function that computes the :class:`.Solution` corresponding to such a :class:`.Problem`.
 
 .. toctree::
 
