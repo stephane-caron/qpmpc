@@ -23,6 +23,7 @@ import numpy as np
 
 import ltv_mpc
 
+from ltv_mpc.solve_mpc import build_qp
 from ltv_mpc import solve_mpc
 
 
@@ -90,7 +91,13 @@ class TestHumanoid(unittest.TestCase):
         self.stepping_problem = problem
         self.problem = mpc_problem
 
-    def test_build_and_solve(self):
+    def test_build_qp(self):
+        qp = build_qp(self.problem)
+        G = qp.ineq_matrix
+        self.assertNotAlmostEqual(np.linalg.norm(G[0]), 0.0)
+        self.assertNotAlmostEqual(np.linalg.norm(G[1]), 0.0)
+
+    def test_solve_mpc(self):
         solution = solve_mpc(self.problem)
         N = self.problem.nb_timesteps
         input_dim = self.problem.input_dim
