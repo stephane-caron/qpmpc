@@ -8,6 +8,10 @@ All notable changes to this project will be documented in this file.
 
 - Usage and examples documentation sections
 
+### Changed
+
+- Only export ``Problem``, ``Solution`` and ``solve_mpc`` module-wide
+
 ## [0.6.0] - 2022/03/30
 
 ### Added

@@ -21,15 +21,3 @@ Reading the solution
 
 .. automodule:: ltv_mpc.solution
     :members:
-
-Advanced usage
-==============
-
-.. automodule:: ltv_mpc.mpcqp
-    :members:
-
-.. automodule:: ltv_mpc.build_mpcqp
-    :members:
-
-.. automodule:: ltv_mpc.solve_mpcqp
-    :members:

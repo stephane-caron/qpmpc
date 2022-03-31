@@ -19,20 +19,14 @@
 Linear time-variant model predictive control in Python.
 """
 
-from .build_mpcqp import build_mpcqp
-from .mpcqp import MPCQP
 from .problem import Problem
 from .solution import Solution
 from .solve_mpc import solve_mpc
-from .solve_mpcqp import solve_mpcqp
 
 __all__ = [
-    "MPCQP",
     "Problem",
     "Solution",
-    "build_mpcqp",
     "solve_mpc",
-    "solve_mpcqp",
 ]
 
 __version__ = "0.6.0"
