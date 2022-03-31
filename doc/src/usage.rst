@@ -13,8 +13,7 @@ Defining a problem
 Solving the problem
 ===================
 
-.. automodule:: ltv_mpc.solve_mpc
-    :members:
+.. autofunction:: ltv_mpc.solve_mpc.solve_mpc
 
 Reading the solution
 ====================
