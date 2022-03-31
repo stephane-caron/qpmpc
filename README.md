@@ -116,6 +116,8 @@ This module is still under development and its API might change. Future works ma
 
 ## See also
 
+This module is designed for prototyping. If you need performance, check out one of the following libraries, and [open a PR](https://github.com/tasts-robots/ltv-mpc/pulls) if you know other relevant ones:
+
 | System                | Library                                                  | Language | License      |
 |-----------------------|----------------------------------------------------------|----------|--------------|
 | Linear time-invariant | [Copra (original)](https://github.com/jrl-umi3218/copra) | C++      | BSD-2-Clause |
