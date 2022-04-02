@@ -127,46 +127,46 @@ class Problem:
         self.terminal_cost_weight = terminal_cost_weight
         self.stage_state_cost_weight = stage_state_cost_weight
         self.stage_input_cost_weight = stage_input_cost_weight
-        if type(transition_input_matrix) is np.ndarray:
+        if isinstance(transition_input_matrix, np.ndarray):
             self.input_dim = transition_input_matrix.shape[1]
-        else:  # type(transition_input_matrix) is List[np.ndarray]
+        else:  # isinstance(transition_input_matrix, List[np.ndarray])
             self.input_dim = transition_input_matrix[0].shape[1]
-        if type(transition_state_matrix) is np.ndarray:
+        if isinstance(transition_state_matrix, np.ndarray):
             self.state_dim = transition_state_matrix.shape[1]
-        else:  # type(transition_state_matrix) is List[np.ndarray]
+        else:  # isinstance(transition_state_matrix, List[np.ndarray])
             self.state_dim = transition_state_matrix[0].shape[1]
 
     def get_transition_state_matrix(self, k):
         return (
             self.transition_state_matrix[k]
-            if type(self.transition_state_matrix) is list
+            if isinstance(self.transition_state_matrix, list)
             else self.transition_state_matrix
         )
 
     def get_transition_input_matrix(self, k):
         return (
             self.transition_input_matrix[k]
-            if type(self.transition_input_matrix) is list
+            if isinstance(self.transition_input_matrix, list)
             else self.transition_input_matrix
         )
 
     def get_ineq_state_matrix(self, k):
         return (
             self.ineq_state_matrix[k]
-            if type(self.ineq_state_matrix) is list
+            if isinstance(self.ineq_state_matrix, list)
             else self.ineq_state_matrix
         )
 
     def get_ineq_input_matrix(self, k):
         return (
             self.ineq_input_matrix[k]
-            if type(self.ineq_input_matrix) is list
+            if isinstance(self.ineq_input_matrix, list)
             else self.ineq_input_matrix
         )
 
     def get_ineq_vector(self, k):
         return (
             self.ineq_vector[k]
-            if type(self.ineq_vector) is list
+            if isinstance(self.ineq_vector, list)
             else self.ineq_vector
         )

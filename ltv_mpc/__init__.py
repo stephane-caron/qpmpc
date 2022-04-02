@@ -29,4 +29,4 @@ __all__ = [
     "solve_mpc",
 ]
 
-__version__ = "0.6.0"
+__version__ = "0.6.1"
