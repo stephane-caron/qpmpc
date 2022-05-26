@@ -107,13 +107,13 @@ This example produces the following trajectory:
 
 The behavior is a weighted compromise between reaching the goal state (weight ``1.0``) and keeping reasonable finite jerk inputs (weight ``1e-6``). The latter mitigate bang-bang accelerations but prevent fully reaching the goal within the horizon. See the [examples](examples/) folder for more examples.
 
-## 🏗️ Work in progress
+## 🏗️ Areas of improvement
 
-This module is still under development and its API might change. Future works may include:
+This module is incomplete with regards to the following points:
 
-- Complete documentation
-- Complete test coverage
-- General linear stage cost functions
+- Cost functions: can be extended to general linear stage cost functions
+- Documentation: there are some undocumented functions
+- Test coverage: only one end-to-end test
 
 ## See also
 
