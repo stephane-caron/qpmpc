@@ -1,12 +1,13 @@
 # ltv-mpc
 
 [**Installation**](https://github.com/tasts-robots/ltv-mpc#installation)
-| [**Documentation**](https://tasts-robots.org/doc/ltv-mpc/)
+| [**Usage**](https://github.com/tasts-robots/ltv-mpc#usage)
 | [**Example**](https://github.com/tasts-robots/ltv-mpc#example)
-| [**Contributing**](CONTRIBUTING.md)
+| [**See also**](https://github.com/tasts-robots/ltv-mpc#see-also)
 
 [![Build](https://img.shields.io/github/workflow/status/tasts-robots/ltv-mpc/CI)](https://github.com/tasts-robots/ltv-mpc/actions)
 [![Coverage](https://coveralls.io/repos/github/tasts-robots/ltv-mpc/badge.svg?branch=master)](https://coveralls.io/github/tasts-robots/ltv-mpc?branch=master)
+[![Documentation](https://img.shields.io/badge/docs-online-brightgreen?logo=read-the-docs&style=flat)](https://tasts-robots.org/doc/ltv-mpc/)
 [![PyPI version](https://img.shields.io/pypi/v/ltv-mpc)](https://pypi.org/project/ltv-mpc/0.6.0/)
 ![Status](https://img.shields.io/pypi/status/ltv-mpc)
 
