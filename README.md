@@ -3,6 +3,7 @@
 [**Installation**](https://github.com/tasts-robots/ltv-mpc#installation)
 | [**Usage**](https://github.com/tasts-robots/ltv-mpc#usage)
 | [**Example**](https://github.com/tasts-robots/ltv-mpc#example)
+| [**Areas of improvement**](https://github.com/tasts-robots/ltv-mpc#areas-of-improvement)
 | [**See also**](https://github.com/tasts-robots/ltv-mpc#see-also)
 
 [![Build](https://img.shields.io/github/workflow/status/tasts-robots/ltv-mpc/CI)](https://github.com/tasts-robots/ltv-mpc/actions)
@@ -108,13 +109,15 @@ This example produces the following trajectory:
 
 The behavior is a weighted compromise between reaching the goal state (weight ``1.0``) and keeping reasonable finite jerk inputs (weight ``1e-6``). The latter mitigate bang-bang accelerations but prevent fully reaching the goal within the horizon. See the [examples](examples/) folder for more examples.
 
-## 🏗️ Areas of improvement
+## Areas of improvement
 
 This module is incomplete with regards to the following points:
 
 - Cost functions: can be extended to general linear stage cost functions
 - Documentation: there are some undocumented functions
 - Test coverage: only one end-to-end test
+
+New [contributions](CONTRIBUTING.md) are welcome :)
 
 ## See also
 
