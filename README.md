@@ -4,7 +4,7 @@
 | [**Usage**](https://github.com/tasts-robots/ltv-mpc#usage)
 | [**Example**](https://github.com/tasts-robots/ltv-mpc#example)
 | [**Areas of improvement**](https://github.com/tasts-robots/ltv-mpc#areas-of-improvement)
-| [**See also**](https://github.com/tasts-robots/ltv-mpc#see-also)
+| [**Alternatives**](https://github.com/tasts-robots/ltv-mpc#alternatives)
 
 [![Build](https://img.shields.io/github/workflow/status/tasts-robots/ltv-mpc/CI)](https://github.com/tasts-robots/ltv-mpc/actions)
 [![Coverage](https://coveralls.io/repos/github/tasts-robots/ltv-mpc/badge.svg?branch=master)](https://coveralls.io/github/tasts-robots/ltv-mpc?branch=master)
@@ -119,13 +119,13 @@ This module is incomplete with regards to the following points:
 
 New [contributions](CONTRIBUTING.md) are welcome :)
 
-## See also
+## Alternatives
 
 This module is designed for prototyping. If you need performance, check out one of the following libraries, and [open a PR](https://github.com/tasts-robots/ltv-mpc/pulls) if you know other relevant ones:
 
-| System                | Library                                                    | Language   | License      |
-|-----------------------|------------------------------------------------------------|------------|--------------|
-| Linear time-invariant | [Copra (original)](https://github.com/jrl-umi3218/copra)   | C++        | BSD-2-Clause |
-| Linear time-variant   | [Copra (fork)](https://github.com/ANYbotics/copra)         | C++        | BSD-2-Clause |
-| Linear time-variant   | [mpc\_interface](https://github.com/Gepetto/mpc-interface) | C++/Python | BSD-2-Clause |
-| Nonlinear             | [Crocoddyl](https://github.com/loco-3d/crocoddyl)          | C++        | BSD-3-Clause |
+| Library                                                    | System                | Language   | License      |
+|------------------------------------------------------------|-----------------------|------------|--------------|
+| [Copra (original)](https://github.com/jrl-umi3218/copra)   | Linear time-invariant | C++        | BSD-2-Clause |
+| [Copra (fork)](https://github.com/ANYbotics/copra)         | Linear time-variant   | C++        | BSD-2-Clause |
+| [mpc\_interface](https://github.com/Gepetto/mpc-interface) | Linear time-variant   | C++/Python | BSD-2-Clause |
+| [Crocoddyl](https://github.com/loco-3d/crocoddyl)          | Nonlinear             | C++        | BSD-3-Clause |
