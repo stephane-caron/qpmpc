@@ -31,7 +31,7 @@ pip install ltv-mpc
 This module defines a one-stop shop function:
 
 ```python
-solve_mpc(problem: Problem) -> Solution
+solve_mpc(problem: Problem, solver: str) -> Solution
 ```
 
 The [``Problem``](https://tasts-robots.org/doc/ltv-mpc/usage.html#ltv_mpc.problem.Problem) type defines the model predictive control problem (LTV system, LTV constraints, initial state and cost function to optimize) while the [``Solution``](https://tasts-robots.org/doc/ltv-mpc/usage.html#ltv_mpc.solution.Solution) holds the resulting state and input trajectories.
