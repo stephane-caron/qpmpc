@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.0] - 2022/08/12
+
+### Added
+
+- New ``mpc_interface`` alternative in the README
+
+### Changed
+
+- ``solve_qp`` now takes a mandatory ``solver`` keyword argument
+
+### Fixed
+
+- Unit tests for the new ``solver`` keyword argument
+
 ## [0.7.0] - 2022/04/03
 
 ### Added
