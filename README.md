@@ -123,8 +123,9 @@ New [contributions](CONTRIBUTING.md) are welcome :)
 
 This module is designed for prototyping. If you need performance, check out one of the following libraries, and [open a PR](https://github.com/tasts-robots/ltv-mpc/pulls) if you know other relevant ones:
 
-| System                | Library                                                  | Language | License      |
-|-----------------------|----------------------------------------------------------|----------|--------------|
-| Linear time-invariant | [Copra (original)](https://github.com/jrl-umi3218/copra) | C++      | BSD-2-Clause |
-| Linear time-variant   | [Copra (fork)](https://github.com/ANYbotics/copra)       | C++      | BSD-2-Clause |
-| Nonlinear             | [Crocoddyl](https://github.com/loco-3d/crocoddyl)        | C++      | BSD-3-Clause |
+| System                | Library                                                    | Language   | License      |
+|-----------------------|------------------------------------------------------------|------------|--------------|
+| Linear time-invariant | [Copra (original)](https://github.com/jrl-umi3218/copra)   | C++        | BSD-2-Clause |
+| Linear time-variant   | [Copra (fork)](https://github.com/ANYbotics/copra)         | C++        | BSD-2-Clause |
+| Linear time-variant   | [mpc\_interface](https://github.com/Gepetto/mpc-interface) | C++/Python | BSD-2-Clause |
+| Nonlinear             | [Crocoddyl](https://github.com/loco-3d/crocoddyl)          | C++        | BSD-3-Clause |
