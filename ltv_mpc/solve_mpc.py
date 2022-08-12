@@ -16,7 +16,7 @@
 # limitations under the License.
 
 from dataclasses import dataclass
-from typing import Union
+from typing import Optional, Union
 
 import numpy as np
 
@@ -123,12 +123,22 @@ def build_qp(problem: Problem, sparse: bool = False) -> QuadraticProgram:
     )
 
 
-def solve_mpc(problem: Problem, sparse: bool = False, **kwargs) -> Solution:
+def solve_mpc(
+    problem: Problem,
+    sparse: bool = False,
+    solver: Optional[str] = None,
+    **kwargs
+) -> Solution:
     """
     Solve a linear time-invariant model predictive control problem.
 
     Args:
         problem: Model predictive control problem to solve.
+        solver: Quadratic programming solver to use, to choose in
+            :data:`qpsolvers.available_solvers`. Both "quadprog" and "osqp"
+            tend to perform well on model predictive control problems. See for
+            instance `this benchmark
+            <https://github.com/stephane-caron/qpsolvers#benchmark>`__.
         sparse: Whether to use sparse or dense matrices in the output quadratic
             program. Enable it if the QP solver is sparse (e.g. OSQP).
 
@@ -149,6 +159,7 @@ def solve_mpc(problem: Problem, sparse: bool = False, **kwargs) -> Solution:
         qp.cost_vector,
         qp.ineq_matrix,
         qp.ineq_vector,
+        solver=solver,
         **kwargs
     )
     U = U.reshape((problem.nb_timesteps, problem.input_dim))
