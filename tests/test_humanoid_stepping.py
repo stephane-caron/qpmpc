@@ -98,7 +98,7 @@ class TestHumanoid(unittest.TestCase):
         self.assertNotAlmostEqual(np.linalg.norm(G[1]), 0.0)
 
     def test_solve_mpc(self):
-        solution = solve_mpc(self.problem)
+        solution = solve_mpc(self.problem, solver="quadprog")
         N = self.problem.nb_timesteps
         input_dim = self.problem.input_dim
         state_dim = self.problem.state_dim
