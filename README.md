@@ -16,7 +16,9 @@ Linear time-variant (LTV) model predictive control in Python. Solve a quadratic 
 
 > ![ltv-mpc](https://raw.githubusercontent.com/tasts-robots/ltv-mpc/master/doc/src/images/ltv-mpc.svg)
 
-This module is designed for prototyping. If you need performance, check out one of the related libraries below.
+This module is designed for prototyping. If you need performance, check out the [alternatives](#alternatives) below.
+
+📢 **2022-08:** the brand new [mpc_interface](https://github.com/Gepetto/mpc-interface) handles more general cost functions.
 
 ## Installation
 
