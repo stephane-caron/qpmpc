@@ -28,7 +28,7 @@ classifiers = [
 dependencies = [
     "qpsolvers >=1.8.0",
 ]
-keywords = ["rate", "loop", "frequency", "regulator"]
+keywords = ["model", "predictive", "control", "linear", "time-varying"]
 
 [project.optional-dependencies]
 doc = [
