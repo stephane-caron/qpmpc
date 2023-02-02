@@ -11,8 +11,6 @@ Linear time-variant (LTV) model predictive control in Python. Solve a quadratic 
 
 This module is designed for prototyping. If you need performance, check out the [alternatives](#alternatives) below.
 
-📢 **2022-08:** the brand new [mpc_interface](https://github.com/Gepetto/mpc-interface) handles more general cost functions.
-
 ## Installation
 
 ```sh
@@ -120,7 +118,7 @@ This module is designed for prototyping. If you need performance, check out one 
 
 | Library                                                    | System                | Language   | License      |
 |------------------------------------------------------------|-----------------------|------------|--------------|
-| [Copra (original)](https://github.com/jrl-umi3218/copra)   | Linear time-invariant | C++        | BSD-2-Clause |
 | [Copra (fork)](https://github.com/ANYbotics/copra)         | Linear time-variant   | C++        | BSD-2-Clause |
-| [mpc\_interface](https://github.com/Gepetto/mpc-interface) | Linear time-variant   | C++/Python | BSD-2-Clause |
+| [Copra (original)](https://github.com/jrl-umi3218/copra)   | Linear time-invariant | C++        | BSD-2-Clause |
 | [Crocoddyl](https://github.com/loco-3d/crocoddyl)          | Nonlinear             | C++        | BSD-3-Clause |
+| [mpc\_interface](https://github.com/Gepetto/mpc-interface) | Linear time-variant   | C++/Python | BSD-2-Clause |
