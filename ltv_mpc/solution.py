@@ -15,20 +15,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""Process solutions to a model predictive control problem."""
+
 import numpy as np
 
 from .problem import Problem
 
 
 class Solution:
-    """
-    State and input trajectories that optimize a given
-    :class:`ltv_mpc.problem.Problem`.
+    r"""State and input trajectories that optimize an MPC problem.
 
-    Attributes
-    ----------
+    See also the :class:`ltv_mpc.problem.Problem` class.
+
+    Attributes:
         stacked_inputs: Stacked vector of inputs :math:`u_k` for
-            :math:`k \\in \\{0, \\ldots, N - 1\\}`.
+            :math:`k \in \{0, \ldots, N - 1\}`.
     """
 
     stacked_inputs: np.ndarray
@@ -41,10 +42,15 @@ class Solution:
 
     @property
     def stacked_states(self):
-        """
-        Stacked vector of states :math:`x_k` for
-        :math:`k \\in \\{0, \\ldots, N\\}`, with :math:`N` the number of
-        timesteps.
+        r"""Stacked vector of states.
+
+        This is the vector :math:`X` structured as:
+
+        .. math::
+
+            X = \begin{bmatrix} x_0 \\ x_1 \\ \vdots \\ x_N \end{bmatrix}
+
+        with :math:`N` the number of timesteps.
 
         Note:
             The time complexity of calling this property is :math:`O(N)` the

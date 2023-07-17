@@ -36,12 +36,10 @@ def build_qp(problem: Problem, sparse: bool = False) -> QuadraticProgram:
         sparse: Whether to use sparse or dense matrices in the output quadratic
             program. Enable it if you are calling a sparse solver afterwards.
 
-    Returns
-    -------
+    Returns:
         Quadratic program representing the input problem.
 
-    Notes
-    -----
+    Notes:
         In numerical analysis, there are three classes of methods to solve
         boundary value problems: single shooting, multiple shooting and
         collocation. The QP built by this function implements a `single
@@ -115,8 +113,7 @@ def solve_mpc(
     solver: Optional[str] = None,
     **kwargs
 ) -> Solution:
-    """
-    Solve a linear time-invariant model predictive control problem.
+    """Solve a linear time-invariant model predictive control problem.
 
     Args:
         problem: Model predictive control problem to solve.
@@ -127,15 +124,11 @@ def solve_mpc(
             <https://github.com/stephane-caron/qpsolvers#benchmark>`__.
         sparse: Whether to use sparse or dense matrices in the output quadratic
             program. Enable it if the QP solver is sparse (e.g. OSQP).
+        kwargs: Keyword arguments forwarded to the QP solver via the
+            `solve_qp`_ function.
 
-    Returns
-    -------
+    Returns:
         Solution to the problem, if found.
-
-    Note:
-        Keyword arguments are passed to the QP solver via the `solve_qp`_
-        function. In particular, the ``solver`` string can be set to select a
-        different QP solver.
 
     .. _solve_qp:
         https://scaron.info/doc/qpsolvers/quadratic-programming.html#qpsolvers.solve_qp

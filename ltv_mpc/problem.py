@@ -56,8 +56,7 @@ class Problem:
         :math:`\\sum_k \\|u_k\\|^2`
         with weight :math:`w_{u}`.
 
-    Attributes
-    ----------
+    Attributes:
         goal_state: Goal state as stacked position and velocity.
         ineq_input_matrix: Constraint matrix on control variables. When this
             argument is an array, the same matrix `D` is applied at each step
@@ -108,6 +107,7 @@ class Problem:
         stage_state_cost_weight: Optional[float],
         stage_input_cost_weight: float,
     ) -> None:
+        """Start a new model predictive control problem."""
         if stage_input_cost_weight <= 0.0:
             raise ProblemDefinitionError(
                 "non-negative control weight needed for regularization"
@@ -170,21 +170,45 @@ class Problem:
             else self.transition_input_matrix
         )
 
-    def get_ineq_state_matrix(self, k):
+    def get_ineq_state_matrix(self, k) -> np.ndarray:
+        """Get state inequality matrix at a given timestep.
+
+        Args:
+            k: Index of the timestep.
+
+        Returns:
+            State inequality matrix at that step.
+        """
         return (
             self.ineq_state_matrix[k]
             if isinstance(self.ineq_state_matrix, list)
             else self.ineq_state_matrix
         )
 
-    def get_ineq_input_matrix(self, k):
+    def get_ineq_input_matrix(self, k) -> np.ndarray:
+        """Get input inequality matrix at a given timestep.
+
+        Args:
+            k: Index of the timestep.
+
+        Returns:
+            Input inequality matrix at that step.
+        """
         return (
             self.ineq_input_matrix[k]
             if isinstance(self.ineq_input_matrix, list)
             else self.ineq_input_matrix
         )
 
-    def get_ineq_vector(self, k):
+    def get_ineq_vector(self, k) -> np.ndarray:
+        """Get inequality vector at a given timestep.
+
+        Args:
+            k: Index of the timestep.
+
+        Returns:
+            Inequality vector at that step.
+        """
         return (
             self.ineq_vector[k]
             if isinstance(self.ineq_vector, list)
