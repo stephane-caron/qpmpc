@@ -74,7 +74,7 @@ class Solution:
         return self.__stacked_inputs
 
     @property
-    def stacked_states(self) -> np.ndarray:
+    def stacked_states(self) -> Optional[np.ndarray]:
         r"""Stacked vector of states.
 
         This is the vector :math:`X` structured as:
@@ -84,6 +84,9 @@ class Solution:
             X = \begin{bmatrix} x_0 \\ x_1 \\ \vdots \\ x_N \end{bmatrix}
 
         with :math:`N` the number of timesteps.
+
+        Returns:
+            Stacked state vector if a solution was found, ``None`` otherwise.
 
         Note:
             The time complexity of calling this property is :math:`O(N)` the
