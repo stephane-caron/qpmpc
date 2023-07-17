@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 - Documentation checks using ``ruff``
 - Exception: ``ProblemDefinitionError``
 - Problem: setter for the initial state
+- Solution: ``first_input`` getter
 
 ### Changed
 

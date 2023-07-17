@@ -41,6 +41,15 @@ class Solution:
         self.__stacked_states = None
 
     @property
+    def first_input(self) -> np.ndarray:
+        """Get the first control input of the solution.
+
+        In model predictive control, this is the part of the solution we are
+        mainly interested in.
+        """
+        return self.stacked_inputs[0]
+
+    @property
     def stacked_states(self):
         r"""Stacked vector of states.
 
