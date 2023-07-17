@@ -17,6 +17,8 @@
 
 from typing import List, Optional, Union
 
+from .exceptions import ProblemDefinitionError
+
 import numpy as np
 
 
@@ -105,9 +107,10 @@ class Problem:
         stage_state_cost_weight: Optional[float],
         stage_input_cost_weight: float,
     ) -> None:
-        assert (
-            stage_input_cost_weight > 0.0
-        ), "non-negative control weight needed for regularization"
+        if stage_input_cost_weight <= 0.0:
+            raise ProblemDefinitionError(
+                "non-negative control weight needed for regularization"
+            )
         assert (
             terminal_cost_weight is not None
             or stage_state_cost_weight is not None

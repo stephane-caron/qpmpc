@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+### Added
+
+- Base class for exceptions raised by this library
+- Exception: ``ProblemDefinitionError``
+
+### Changed
+
+- Don't assume a ``Problem`` is fully defined in constructor
+
 ## [1.0.0] - 2022/08/12
 
 ### Added
