@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 
 - Don't assume a ``Problem`` is fully defined in constructor
+- Use problem class from ``qpsolvers`` internally
 
 ## [1.0.0] - 2022/08/12
 

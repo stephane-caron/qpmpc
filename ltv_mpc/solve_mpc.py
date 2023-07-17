@@ -15,34 +15,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from dataclasses import dataclass
-from typing import Optional, Union
+from typing import Optional
 
 import numpy as np
-
+from qpsolvers import Problem as QuadraticProgram
+from qpsolvers import solve_problem
 from scipy.sparse import csc_matrix
-from qpsolvers import solve_qp
 
 from .problem import Problem
 from .solution import Solution
 
 
-@dataclass
-class QuadraticProgram:
-
-    """
-    Quadratic program (QP) with inequality constraints.
-    """
-
-    cost_matrix: Union[np.ndarray, csc_matrix]
-    cost_vector: np.ndarray
-    ineq_matrix: Union[np.ndarray, csc_matrix]
-    ineq_vector: np.ndarray
-
-
 def build_qp(problem: Problem, sparse: bool = False) -> QuadraticProgram:
-    """
-    Build the quadratic program corresponding to an LTV-MPC problem.
+    """Build the quadratic program corresponding to an LTV-MPC problem.
 
     Args:
         problem: Model predictive control problem.
@@ -118,9 +103,7 @@ def build_qp(problem: Problem, sparse: bool = False) -> QuadraticProgram:
     if sparse:
         P = csc_matrix(P)
         G = csc_matrix(G)
-    return QuadraticProgram(
-        cost_matrix=P, cost_vector=q, ineq_matrix=G, ineq_vector=h
-    )
+    return QuadraticProgram(P, q, G, h)
 
 
 def solve_mpc(
@@ -154,13 +137,6 @@ def solve_mpc(
         https://scaron.info/doc/qpsolvers/quadratic-programming.html#qpsolvers.solve_qp
     """
     qp = build_qp(problem, sparse=sparse)
-    U = solve_qp(
-        qp.cost_matrix,
-        qp.cost_vector,
-        qp.ineq_matrix,
-        qp.ineq_vector,
-        solver=solver,
-        **kwargs
-    )
+    U = solve_problem(qp, solver=solver, **kwargs)
     U = U.reshape((problem.nb_timesteps, problem.input_dim))
     return Solution(problem, U)
