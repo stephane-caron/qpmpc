@@ -78,8 +78,8 @@ def build_qp(problem: Problem, sparse: bool = False) -> QuadraticProgram:
         psi = A.dot(psi)
         psi[:, input_slice] = B
 
-    P = problem.stage_input_cost_weight * np.eye(stacked_input_dim)
-    q = np.zeros(stacked_input_dim)
+    P: np.ndarray = problem.stage_input_cost_weight * np.eye(stacked_input_dim)
+    q: np.ndarray = np.zeros(stacked_input_dim)
     if (
         problem.terminal_cost_weight is not None
         and problem.terminal_cost_weight > 1e-10
@@ -98,11 +98,10 @@ def build_qp(problem: Problem, sparse: bool = False) -> QuadraticProgram:
         P += problem.stage_state_cost_weight * np.dot(Psi.T, Psi)
         q += problem.stage_state_cost_weight * np.dot(c.T, Psi)
 
-    G = np.vstack(G_list)
-    h = np.hstack(h_list)
+    G: np.ndarray = np.vstack(G_list)
+    h: np.ndarray = np.hstack(h_list)
     if sparse:
-        P = csc_matrix(P)
-        G = csc_matrix(G)
+        return QuadraticProgram(csc_matrix(P), q, csc_matrix(G), h)
     return QuadraticProgram(P, q, G, h)
 
 
