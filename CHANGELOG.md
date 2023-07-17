@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 
 - Base class for exceptions raised by this library
+- Documentation checks using ``ruff``
 - Exception: ``ProblemDefinitionError``
 
 ### Changed

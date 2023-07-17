@@ -58,27 +58,31 @@ def build_qp(problem: Problem, sparse: bool = False) -> QuadraticProgram:
         if problem.stage_state_cost_weight is not None:
             phi_list.append(phi)
             psi_list.append(psi)
-        A = problem.get_transition_state_matrix(k)
-        B = problem.get_transition_input_matrix(k)
-        C = problem.get_ineq_state_matrix(k)
-        D = problem.get_ineq_input_matrix(k)
-        e = problem.get_ineq_vector(k)
-        G = np.zeros((e.shape[0], stacked_input_dim))
-        h = e if C is None else e - np.dot(C.dot(phi), problem.initial_state)
+        A_k = problem.get_transition_state_matrix(k)
+        B_k = problem.get_transition_input_matrix(k)
+        C_k = problem.get_ineq_state_matrix(k)
+        D_k = problem.get_ineq_input_matrix(k)
+        e_k = problem.get_ineq_vector(k)
+        G_k = np.zeros((e_k.shape[0], stacked_input_dim))
+        h_k = (
+            e_k
+            if C_k is None
+            else e_k - np.dot(C_k.dot(phi), problem.initial_state)
+        )
         input_slice = slice(k * input_dim, (k + 1) * input_dim)
-        if D is not None:
+        if D_k is not None:
             # we rely on G == 0 to avoid a slower +=
-            G[:, input_slice] = D
-        if C is not None:
-            G += C.dot(psi)
-        if k == 0 and D is None:  # corner case, input has no effect
-            assert np.all(h >= 0.0)
+            G_k[:, input_slice] = D_k
+        if C_k is not None:
+            G_k += C_k.dot(psi)
+        if k == 0 and D_k is None:  # corner case, input has no effect
+            assert np.all(h_k >= 0.0)
         else:  # regular case, G is non-zero
-            G_list.append(G)
-            h_list.append(h)
-        phi = A.dot(phi)
-        psi = A.dot(psi)
-        psi[:, input_slice] = B
+            G_list.append(G_k)
+            h_list.append(h_k)
+        phi = A_k.dot(phi)
+        psi = A_k.dot(psi)
+        psi[:, input_slice] = B_k
 
     P: np.ndarray = problem.stage_input_cost_weight * np.eye(stacked_input_dim)
     q: np.ndarray = np.zeros(stacked_input_dim)
