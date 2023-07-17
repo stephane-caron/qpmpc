@@ -106,9 +106,6 @@ class Problem:
         stage_input_cost_weight: float,
     ) -> None:
         assert (
-            ineq_state_matrix is not None or ineq_input_matrix is not None
-        ), "use LQR for unconstrained case"
-        assert (
             stage_input_cost_weight > 0.0
         ), "non-negative control weight needed for regularization"
         assert (
