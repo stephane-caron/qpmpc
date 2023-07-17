@@ -17,11 +17,14 @@
 
 """Exceptions raised by this library."""
 
+
 class LTVMPCException(Exception):
     """Base class for exceptions from ltv-mpc."""
 
+
 class ProblemDefinitionError(LTVMPCException):
     """Problem definition is incorrect."""
+
 
 class StateError(LTVMPCException):
     """State is incorrect."""

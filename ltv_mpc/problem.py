@@ -83,7 +83,7 @@ class Problem:
     ineq_input_matrix: Union[None, np.ndarray, List[np.ndarray]]
     ineq_state_matrix: Union[None, np.ndarray, List[np.ndarray]]
     ineq_vector: Union[np.ndarray, List[np.ndarray]]
-    initial_state: np.ndarray
+    initial_state: Optional[np.ndarray]
     input_dim: int
     nb_timesteps: int
     stage_input_cost_weight: float

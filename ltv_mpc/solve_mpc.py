@@ -115,7 +115,7 @@ def solve_mpc(
     problem: Problem,
     sparse: bool = False,
     solver: Optional[str] = None,
-    **kwargs
+    **kwargs,
 ) -> Solution:
     """Solve a linear time-invariant model predictive control problem.
 
