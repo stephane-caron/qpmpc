@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 - Base class for exceptions raised by this library
 - Documentation checks using ``ruff``
 - Exception: ``ProblemDefinitionError``
+- Problem: setter for the initial state
 
 ### Changed
 

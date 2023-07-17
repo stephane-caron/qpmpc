@@ -21,7 +21,7 @@ from typing import List, Optional, Union
 
 import numpy as np
 
-from .exceptions import ProblemDefinitionError
+from .exceptions import ProblemDefinitionError, StateError
 
 
 class Problem:
@@ -139,6 +139,22 @@ class Problem:
         self.terminal_cost_weight = terminal_cost_weight
         self.transition_input_matrix = transition_input_matrix
         self.transition_state_matrix = transition_state_matrix
+
+    def set_initial_state(self, initial_state: np.ndarray):
+        """Set the initial state.
+
+        Args:
+            initial_state: New initial state.
+
+        Raises:
+            StateError: if the initial state does not have the right dimension.
+        """
+        if initial_state.size != self.state_dim:
+            raise StateError(
+                f"Initial state of shape {initial_state.shape} "
+                f"does not match state dimension ({self.state_dim})"
+            )
+        self.initial_state = initial_state.flatten()
 
     def get_transition_state_matrix(self, k) -> np.ndarray:
         """Get state-transition matrix at a given timestep.
