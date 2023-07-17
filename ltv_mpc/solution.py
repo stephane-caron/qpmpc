@@ -31,6 +31,8 @@ class Solution:
     See also the :class:`ltv_mpc.problem.Problem` class.
 
     Attributes:
+        problem: Model predictive control problem that was solved.
+        qpsol: Solution of the corresponding quadratic program.
     """
 
     qpsol: qpsolvers.Solution
