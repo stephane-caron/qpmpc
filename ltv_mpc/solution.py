@@ -89,13 +89,16 @@ class Solution:
             The time complexity of calling this property is :math:`O(N)` the
             first time, then :math:`O(1)` as the result is memoized.
         """
+        if self.__stacked_inputs is None:
+            return None
         if self.__stacked_states is not None:
             return self.__stacked_states
+        U = self.__stacked_inputs
         X = np.zeros((self.problem.nb_timesteps + 1, self.problem.state_dim))
         X[0] = self.problem.initial_state
         for k in range(self.problem.nb_timesteps):
             A = self.problem.get_transition_state_matrix(k)
             B = self.problem.get_transition_input_matrix(k)
-            X[k + 1] = A.dot(X[k]) + B.dot(self.stacked_inputs[k])
+            X[k + 1] = A.dot(X[k]) + B.dot(U[k])
         self.__stacked_states = X
         return X
