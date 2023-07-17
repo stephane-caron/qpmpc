@@ -100,12 +100,12 @@ class Problem:
         ineq_state_matrix: Union[None, np.ndarray, List[np.ndarray]],
         ineq_input_matrix: Union[None, np.ndarray, List[np.ndarray]],
         ineq_vector: Union[np.ndarray, List[np.ndarray]],
-        initial_state: np.ndarray,
         goal_state: np.ndarray,
         nb_timesteps: int,
         terminal_cost_weight: Optional[float],
         stage_state_cost_weight: Optional[float],
         stage_input_cost_weight: float,
+        initial_state: Optional[np.ndarray] = None,
     ) -> None:
         """Start a new model predictive control problem."""
         if stage_input_cost_weight <= 0.0:
@@ -130,7 +130,7 @@ class Problem:
         self.ineq_input_matrix = ineq_input_matrix
         self.ineq_state_matrix = ineq_state_matrix
         self.ineq_vector = ineq_vector
-        self.initial_state = initial_state
+        self.initial_state = None  # initialized below
         self.input_dim = input_dim
         self.nb_timesteps = nb_timesteps
         self.stage_input_cost_weight = stage_input_cost_weight
@@ -139,6 +139,8 @@ class Problem:
         self.terminal_cost_weight = terminal_cost_weight
         self.transition_input_matrix = transition_input_matrix
         self.transition_state_matrix = transition_state_matrix
+        if initial_state is not None:
+            self.set_initial_state(initial_state)
 
     def set_initial_state(self, initial_state: np.ndarray):
         """Set the initial state.

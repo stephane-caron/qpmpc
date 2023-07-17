@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 
 - Don't assume a ``Problem`` is fully defined in constructor
+- Initial state of a problem is now constructor-optional
 - Use problem class from ``qpsolvers`` internally
 
 ## [1.0.0] - 2022/08/12
