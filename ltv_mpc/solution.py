@@ -22,7 +22,7 @@ from typing import Optional
 import numpy as np
 import qpsolvers
 
-from .problem import Problem
+from .mpc_problem import MPCProblem
 
 
 class Solution:
@@ -37,10 +37,10 @@ class Solution:
 
     __stacked_inputs: Optional[np.ndarray]
     __stacked_states: Optional[np.ndarray]
-    problem: Problem
+    problem: MPCProblem
     qpsol: qpsolvers.Solution
 
-    def __init__(self, problem: Problem, qpsol: qpsolvers.Solution):
+    def __init__(self, problem: MPCProblem, qpsol: qpsolvers.Solution):
         """Test."""
         stacked_inputs = None
         if qpsol.found:

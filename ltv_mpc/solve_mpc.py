@@ -20,16 +20,16 @@
 from typing import Optional
 
 import numpy as np
-from qpsolvers import Problem as QuadraticProgram
+import qpsolvers
 from qpsolvers import solve_problem
 from scipy.sparse import csc_matrix
 
 from .exceptions import ProblemDefinitionError
-from .problem import Problem
+from .problem import MPCProblem
 from .solution import Solution
 
 
-def build_qp(problem: Problem, sparse: bool = False) -> QuadraticProgram:
+def build_qp(problem: MPCProblem, sparse: bool = False) -> qpsolvers.Problem:
     """Build the quadratic program corresponding to an LTV-MPC problem.
 
     Args:
@@ -107,12 +107,12 @@ def build_qp(problem: Problem, sparse: bool = False) -> QuadraticProgram:
     G: np.ndarray = np.vstack(G_list)
     h: np.ndarray = np.hstack(h_list)
     if sparse:
-        return QuadraticProgram(csc_matrix(P), q, csc_matrix(G), h)
-    return QuadraticProgram(P, q, G, h)
+        return qpsolvers.Problem(csc_matrix(P), q, csc_matrix(G), h)
+    return qpsolvers.Problem(P, q, G, h)
 
 
 def solve_mpc(
-    problem: Problem,
+    problem: MPCProblem,
     sparse: bool = False,
     solver: Optional[str] = None,
     **kwargs,

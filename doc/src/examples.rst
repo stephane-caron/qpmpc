@@ -32,11 +32,11 @@ This leads us to the following linear MPC problem:
 
 .. code:: python
 
-    from ltv_mpc import Problem
+    from ltv_mpc import MPCProblem
 
     initial_pos = 0.0
     goal_pos = 1.0
-    problem = ltv_mpc.Problem(
+    problem = ltv_mpc.MPCProblem(
         transition_state_matrix=A,
         transition_input_matrix=B,
         ineq_state_matrix=ineq_matrix,
@@ -56,16 +56,16 @@ We can solve it with:
 
     from ltv_mpc import solve_mpc
 
-    solution = solve_mpc(problem, mpc)
+    plan = solve_mpc(problem, mpc)
 
-The solution holds complete state and input trajectories as stacked vectors. For instance, we can plot positions, velocities and accelerations as follows:
+The resulting plan holds complete state and input trajectories as stacked vectors. For instance, we can plot positions, velocities and accelerations as follows:
 
 .. code:: python
 
     import pylab
 
     t = np.linspace(0.0, horizon_duration, nb_timesteps + 1)
-    X = solution.stacked_states
+    X = plan.stacked_states
     positions, velocities, accelerations = X[:, 0], X[:, 1], X[:, 2]
     pylab.ion()
     pylab.plot(t, positions)

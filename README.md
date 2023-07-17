@@ -22,10 +22,10 @@ pip install ltv-mpc
 This module defines a one-stop shop function:
 
 ```python
-solve_mpc(problem: Problem, solver: str) -> Solution
+solve_mpc(problem: MPCProblem, solver: str) -> Solution
 ```
 
-The [``Problem``](https://tasts-robots.org/doc/ltv-mpc/usage.html#ltv_mpc.problem.Problem) type defines the model predictive control problem (LTV system, LTV constraints, initial state and cost function to optimize) while the [``Solution``](https://tasts-robots.org/doc/ltv-mpc/usage.html#ltv_mpc.solution.Solution) holds the resulting state and input trajectories. The ``solver`` string is used to select the backend [quadratic programming solver](https://github.com/stephane-caron/qpsolvers#solvers).
+The [``MPCProblem``](https://tasts-robots.org/doc/ltv-mpc/usage.html#ltv_mpc.mpc_problem.MPCProblem) type defines the model predictive control problem (LTV system, LTV constraints, initial state and cost function to optimize) while the [``Solution``](https://tasts-robots.org/doc/ltv-mpc/usage.html#ltv_mpc.solution.Solution) holds the resulting state and input trajectories. The ``solver`` string is used to select the backend [quadratic programming solver](https://github.com/stephane-caron/qpsolvers#solvers).
 
 ## Example
 
@@ -53,11 +53,11 @@ Suppose for the sake of example that acceleration is the main constraint acting 
 This leads us to the following linear MPC problem:
 
 ```python
-    from ltv_mpc import Problem
+    from ltv_mpc import MPCProblem
 
     x_init = np.array([0.0, 0.0, 0.0])
     x_goal = np.array([1.0, 0.0, 0.0])
-    problem = Problem(
+    problem = MPCProblem(
         transition_state_matrix=A,
         transition_input_matrix=B,
         ineq_state_matrix=C,

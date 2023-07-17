@@ -24,7 +24,7 @@ import numpy as np
 from .exceptions import ProblemDefinitionError, StateError
 
 
-class Problem:
+class MPCProblem:
     r"""Linear time-variant model predictive control problem.
 
     The discretized dynamics of a linear system are described by:

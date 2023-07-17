@@ -18,9 +18,7 @@
 import numpy as np
 import pylab
 
-from ltv_mpc import Problem
-from ltv_mpc import solve_mpc
-
+from ltv_mpc import MPCProblem, solve_mpc
 
 if __name__ == "__main__":
     # Double integrator LTV system
@@ -39,7 +37,7 @@ if __name__ == "__main__":
     # Complete LTV problem
     initial_pos = 0.0
     goal_pos = 1.0
-    problem = Problem(
+    problem = MPCProblem(
         transition_state_matrix=A,
         transition_input_matrix=B,
         ineq_state_matrix=ineq_matrix,
@@ -54,11 +52,11 @@ if __name__ == "__main__":
     )
 
     # Solve our LTV problem
-    solution = solve_mpc(problem, solver="osqp")
+    plan = solve_mpc(problem, solver="osqp")
 
     # Plot solution
     t = np.linspace(0.0, horizon_duration, nb_timesteps + 1)
-    X = solution.stacked_states
+    X = plan.stacked_states
     positions, velocities, accelerations = X[:, 0], X[:, 1], X[:, 2]
     pylab.ion()
     pylab.clf()
