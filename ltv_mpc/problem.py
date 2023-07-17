@@ -23,7 +23,6 @@ from .exceptions import ProblemDefinitionError
 
 
 class Problem:
-
     """
     Linear time-variant model predictive control problem.
 
@@ -56,7 +55,8 @@ class Problem:
         :math:`\\sum_k \\|u_k\\|^2`
         with weight :math:`w_{u}`.
 
-    Attributes:
+    Attributes
+    ----------
         goal_state: Goal state as stacked position and velocity.
         ineq_input_matrix: Constraint matrix on control variables. When this
             argument is an array, the same matrix `D` is applied at each step

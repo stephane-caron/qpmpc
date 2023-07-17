@@ -15,9 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Linear time-variant model predictive control in Python.
-"""
+"""Linear time-variant model predictive control in Python."""
 
 from .problem import Problem
 from .solution import Solution

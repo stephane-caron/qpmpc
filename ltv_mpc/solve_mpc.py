@@ -34,10 +34,12 @@ def build_qp(problem: Problem, sparse: bool = False) -> QuadraticProgram:
         sparse: Whether to use sparse or dense matrices in the output quadratic
             program. Enable it if you are calling a sparse solver afterwards.
 
-    Returns:
+    Returns
+    -------
         Quadratic program representing the input problem.
 
-    Notes:
+    Notes
+    -----
         In numerical analysis, there are three classes of methods to solve
         boundary value problems: single shooting, multiple shooting and
         collocation. The QP built by this function implements a `single
@@ -124,7 +126,8 @@ def solve_mpc(
         sparse: Whether to use sparse or dense matrices in the output quadratic
             program. Enable it if the QP solver is sparse (e.g. OSQP).
 
-    Returns:
+    Returns
+    -------
         Solution to the problem, if found.
 
     Note:

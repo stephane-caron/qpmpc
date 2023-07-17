@@ -21,12 +21,12 @@ from .problem import Problem
 
 
 class Solution:
-
     """
     State and input trajectories that optimize a given
     :class:`ltv_mpc.problem.Problem`.
 
-    Attributes:
+    Attributes
+    ----------
         stacked_inputs: Stacked vector of inputs :math:`u_k` for
             :math:`k \\in \\{0, \\ldots, N - 1\\}`.
     """
@@ -34,9 +34,7 @@ class Solution:
     stacked_inputs: np.ndarray
 
     def __init__(self, problem: Problem, stacked_inputs: np.ndarray):
-        """
-        Test.
-        """
+        """Test."""
         self.problem = problem
         self.stacked_inputs = stacked_inputs
         self.__stacked_states = None
