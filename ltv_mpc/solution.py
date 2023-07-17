@@ -17,7 +17,10 @@
 
 """Process solutions to a model predictive control problem."""
 
+from typing import Optional
+
 import numpy as np
+import qpsolvers
 
 from .problem import Problem
 
@@ -28,29 +31,50 @@ class Solution:
     See also the :class:`ltv_mpc.problem.Problem` class.
 
     Attributes:
-        stacked_inputs: Stacked vector of inputs :math:`u_k` for
-            :math:`k \in \{0, \ldots, N - 1\}`.
     """
 
-    stacked_inputs: np.ndarray
+    qpsol: qpsolvers.Solution
 
-    def __init__(self, problem: Problem, stacked_inputs: np.ndarray):
+    def __init__(self, problem: Problem, qpsol: qpsolvers.Solution):
         """Test."""
-        self.problem = problem
-        self.stacked_inputs = stacked_inputs
+        stacked_inputs = None
+        if qpsol.found:
+            U = qpsol.x
+            U = U.reshape((problem.nb_timesteps, problem.input_dim))
+            stacked_inputs = U
+        self.__stacked_inputs = stacked_inputs
         self.__stacked_states = None
+        self.problem = problem
+        self.qpsol = qpsol
 
     @property
-    def first_input(self) -> np.ndarray:
+    def first_input(self) -> Optional[np.ndarray]:
         """Get the first control input of the solution.
+
+        Returns:
+            First input if a solution was found, ``None`` otherwise.
 
         In model predictive control, this is the part of the solution we are
         mainly interested in.
         """
-        return self.stacked_inputs[0]
+        if self.__stacked_inputs is None:
+            return None
+        return self.__stacked_inputs[0]
 
     @property
-    def stacked_states(self):
+    def stacked_inputs(self) -> Optional[np.ndarray]:
+        r"""Get the stacked input vector, if a solution was found.
+
+        This is the stacked vector :math:`U` of inputs :math:`u_k` for :math:`k
+        \in \{0, \ldots, N - 1\}`.
+
+        Returns:
+            Stacked input vector if a solution was found, ``None`` otherwise.
+        """
+        return self.__stacked_inputs
+
+    @property
+    def stacked_states(self) -> np.ndarray:
         r"""Stacked vector of states.
 
         This is the vector :math:`X` structured as:
