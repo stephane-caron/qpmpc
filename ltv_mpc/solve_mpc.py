@@ -24,6 +24,7 @@ from qpsolvers import Problem as QuadraticProgram
 from qpsolvers import solve_problem
 from scipy.sparse import csc_matrix
 
+from .exceptions import ProblemDefinitionError
 from .problem import Problem
 from .solution import Solution
 
@@ -48,6 +49,9 @@ def build_qp(problem: Problem, sparse: bool = False) -> QuadraticProgram:
     input_dim = problem.input_dim
     state_dim = problem.state_dim
     stacked_input_dim = problem.input_dim * problem.nb_timesteps
+    if problem.initial_state is None:
+        raise ProblemDefinitionError("initial state is undefined")
+    initial_state: np.ndarray = problem.initial_state
 
     phi = np.eye(state_dim)
     psi = np.zeros((state_dim, stacked_input_dim))
@@ -67,7 +71,7 @@ def build_qp(problem: Problem, sparse: bool = False) -> QuadraticProgram:
         h_k = (
             e_k
             if C_k is None
-            else e_k - np.dot(C_k.dot(phi), problem.initial_state)
+            else e_k - np.dot(C_k.dot(phi), initial_state)
         )
         input_slice = slice(k * input_dim, (k + 1) * input_dim)
         if D_k is not None:

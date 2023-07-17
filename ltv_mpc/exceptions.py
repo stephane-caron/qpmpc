@@ -27,4 +27,4 @@ class ProblemDefinitionError(LTVMPCException):
 
 
 class StateError(LTVMPCException):
-    """State is incorrect."""
+    """Report an ill-formed state."""
