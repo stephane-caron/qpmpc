@@ -16,16 +16,13 @@
 # limitations under the License.
 
 import unittest
-
 from dataclasses import dataclass
 
 import numpy as np
 
 import ltv_mpc
-
-from ltv_mpc.solve_mpc import build_qp
 from ltv_mpc import solve_mpc
-
+from ltv_mpc.solve_mpc import build_qp
 
 gravity = 9.81  # [m] / [s]^2
 
@@ -93,9 +90,8 @@ class TestHumanoid(unittest.TestCase):
 
     def test_build_qp(self):
         qp = build_qp(self.problem)
-        G = qp.ineq_matrix
-        self.assertNotAlmostEqual(np.linalg.norm(G[0]), 0.0)
-        self.assertNotAlmostEqual(np.linalg.norm(G[1]), 0.0)
+        self.assertNotAlmostEqual(np.linalg.norm(qp.G[0]), 0.0)
+        self.assertNotAlmostEqual(np.linalg.norm(qp.G[1]), 0.0)
 
     def test_solve_mpc(self):
         solution = solve_mpc(self.problem, solver="quadprog")
