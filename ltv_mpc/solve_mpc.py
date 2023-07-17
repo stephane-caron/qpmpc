@@ -25,8 +25,8 @@ from qpsolvers import solve_problem
 from scipy.sparse import csc_matrix
 
 from .exceptions import ProblemDefinitionError
+from .plan import Plan
 from .problem import MPCProblem
-from .solution import Solution
 
 
 def build_qp(problem: MPCProblem, sparse: bool = False) -> qpsolvers.Problem:
@@ -116,7 +116,7 @@ def solve_mpc(
     sparse: bool = False,
     solver: Optional[str] = None,
     **kwargs,
-) -> Solution:
+) -> Plan:
     """Solve a linear time-invariant model predictive control problem.
 
     Args:
@@ -139,4 +139,4 @@ def solve_mpc(
     """
     qp = build_qp(problem, sparse=sparse)
     qpsol = solve_problem(qp, solver=solver, **kwargs)
-    return Solution(problem, qpsol)
+    return Plan(problem, qpsol)

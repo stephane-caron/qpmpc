@@ -25,7 +25,7 @@ import qpsolvers
 from .mpc_problem import MPCProblem
 
 
-class Solution:
+class Plan:
     r"""State and input trajectories that optimize an MPC problem.
 
     See also the :class:`ltv_mpc.problem.Problem` class.

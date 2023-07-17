@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
 - Don't assume a ``Problem`` is fully defined in constructor
 - Initial state of a problem is now constructor-optional
 - Rename ``Problem`` to ``MPCProblem``
+- Rename ``Solution`` to ``Plan``
 - Use problem class from ``qpsolvers`` internally
 
 ## [1.0.0] - 2022/08/12

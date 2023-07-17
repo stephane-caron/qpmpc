@@ -18,12 +18,12 @@
 """Linear time-variant model predictive control in Python."""
 
 from .mpc_problem import MPCProblem
-from .solution import Solution
+from .plan import Plan
 from .solve_mpc import solve_mpc
 
 __all__ = [
     "MPCProblem",
-    "Solution",
+    "Plan",
     "solve_mpc",
 ]
 
