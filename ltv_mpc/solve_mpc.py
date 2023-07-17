@@ -25,8 +25,8 @@ from qpsolvers import solve_problem
 from scipy.sparse import csc_matrix
 
 from .exceptions import ProblemDefinitionError
+from .mpc_problem import MPCProblem
 from .plan import Plan
-from .problem import MPCProblem
 
 
 def build_qp(problem: MPCProblem, sparse: bool = False) -> qpsolvers.Problem:

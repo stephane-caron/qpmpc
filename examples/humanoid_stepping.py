@@ -20,10 +20,7 @@ from dataclasses import dataclass
 import numpy as np
 import pylab
 
-import ltv_mpc
-
-from ltv_mpc import solve_mpc
-
+from ltv_mpc import MPCProblem, solve_mpc
 
 gravity = 9.81  # [m] / [s]^2
 
@@ -67,7 +64,7 @@ def build_mpc_problem(problem: HumanoidSteppingProblem):
         else np.array([+next_max, -next_min])
         for i in range(problem.nb_timesteps)
     ]
-    return ltv_mpc.Problem(
+    return MPCProblem(
         transition_state_matrix=state_matrix,
         transition_input_matrix=input_matrix,
         ineq_state_matrix=ineq_matrix,

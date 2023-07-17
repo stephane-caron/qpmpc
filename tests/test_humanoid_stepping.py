@@ -20,8 +20,7 @@ from dataclasses import dataclass
 
 import numpy as np
 
-import ltv_mpc
-from ltv_mpc import solve_mpc
+from ltv_mpc import MPCProblem, solve_mpc
 from ltv_mpc.solve_mpc import build_qp
 
 gravity = 9.81  # [m] / [s]^2
@@ -71,7 +70,7 @@ class TestHumanoid(unittest.TestCase):
             else np.array([+next_max, -next_min])
             for i in range(problem.nb_timesteps)
         ]
-        mpc_problem = ltv_mpc.Problem(
+        mpc_problem = MPCProblem(
             transition_state_matrix=state_matrix,
             transition_input_matrix=input_matrix,
             ineq_state_matrix=ineq_matrix,
