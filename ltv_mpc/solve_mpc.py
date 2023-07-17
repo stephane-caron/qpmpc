@@ -138,7 +138,5 @@ def solve_mpc(
         https://scaron.info/doc/qpsolvers/quadratic-programming.html#qpsolvers.solve_qp
     """
     qp = build_qp(problem, sparse=sparse)
-    solution = solve_problem(qp, solver=solver, **kwargs)
-    U = solution.x
-    U = U.reshape((problem.nb_timesteps, problem.input_dim))
-    return Solution(problem, U)
+    qpsol = solve_problem(qp, solver=solver, **kwargs)
+    return Solution(problem, qpsol)
