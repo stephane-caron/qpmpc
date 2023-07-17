@@ -55,42 +55,41 @@ class Problem:
         with weight :math:`w_{u}`.
 
     Attributes:
-        transition_state_matrix: State linear dynamics matrix.
-        transition_input_matrix: Control linear dynamics matrix.
-        ineq_state_matrix: Constraint matrix on state variables. When this
-            argument is an array, the same matrix `C` is applied at each step
-            `k`. When it is ``None``, the null matrix is applied.
+        goal_state: Goal state as stacked position and velocity.
         ineq_input_matrix: Constraint matrix on control variables. When this
             argument is an array, the same matrix `D` is applied at each step
+            `k`. When it is ``None``, the null matrix is applied.
+        ineq_state_matrix: Constraint matrix on state variables. When this
+            argument is an array, the same matrix `C` is applied at each step
             `k`. When it is ``None``, the null matrix is applied.
         ineq_vector: Constraint vector. When this argument is an array, the
             same vector `e` is applied at each step `k`.
         initial_state: Initial state as stacked position and velocity.
-        goal_state: Goal state as stacked position and velocity.
+        input_dim: Dimension of an input vector.
         nb_timesteps: Number of discretization steps in the preview window.
-        terminal_cost_weight: Weight on terminal state cost, or ``None`` to
-            disable.
+        stage_input_cost_weight: Weight on cumulated control costs.
         stage_state_cost_weight: Weight on cumulated state costs, or ``None``
             to disable (default).
-        stage_input_cost_weight: Weight on cumulated control costs.
-        input_dim: Dimension of an input vector.
         state_dim: Dimension of a state vector.
+        terminal_cost_weight: Weight on terminal state cost, or ``None`` to
+            disable.
+        transition_input_matrix: Control linear dynamics matrix.
+        transition_state_matrix: State linear dynamics matrix.
     """
 
-    transition_state_matrix: Union[np.ndarray, List[np.ndarray]]
-    transition_input_matrix: Union[np.ndarray, List[np.ndarray]]
-    ineq_state_matrix: Union[None, np.ndarray, List[np.ndarray]]
+    goal_state: np.ndarray
     ineq_input_matrix: Union[None, np.ndarray, List[np.ndarray]]
+    ineq_state_matrix: Union[None, np.ndarray, List[np.ndarray]]
     ineq_vector: Union[np.ndarray, List[np.ndarray]]
     initial_state: np.ndarray
-    goal_state: np.ndarray
-    nb_timesteps: int
-    terminal_cost_weight: Optional[float]
-    stage_state_cost_weight: Optional[float]
-    stage_input_cost_weight: float
-
     input_dim: int
+    nb_timesteps: int
+    stage_input_cost_weight: float
+    stage_state_cost_weight: Optional[float]
     state_dim: int
+    terminal_cost_weight: Optional[float]
+    transition_input_matrix: Union[np.ndarray, List[np.ndarray]]
+    transition_state_matrix: Union[np.ndarray, List[np.ndarray]]
 
     def __init__(
         self,
