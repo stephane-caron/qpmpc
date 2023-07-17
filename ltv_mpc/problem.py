@@ -15,6 +15,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""Define model predictive control problems."""
+
 from typing import List, Optional, Union
 
 import numpy as np
@@ -23,8 +25,7 @@ from .exceptions import ProblemDefinitionError
 
 
 class Problem:
-    """
-    Linear time-variant model predictive control problem.
+    r"""Linear time-variant model predictive control problem.
 
     The discretized dynamics of a linear system are described by:
 
@@ -139,14 +140,30 @@ class Problem:
         self.transition_input_matrix = transition_input_matrix
         self.transition_state_matrix = transition_state_matrix
 
-    def get_transition_state_matrix(self, k):
+    def get_transition_state_matrix(self, k) -> np.ndarray:
+        """Get state-transition matrix at a given timestep.
+
+        Args:
+            k: Index of the timestep.
+
+        Returns:
+            State-transition matrix at that step.
+        """
         return (
             self.transition_state_matrix[k]
             if isinstance(self.transition_state_matrix, list)
             else self.transition_state_matrix
         )
 
-    def get_transition_input_matrix(self, k):
+    def get_transition_input_matrix(self, k) -> np.ndarray:
+        """Get input-transition matrix at a given timestep.
+
+        Args:
+            k: Index of the timestep.
+
+        Returns:
+            Input-transition matrix at that step.
+        """
         return (
             self.transition_input_matrix[k]
             if isinstance(self.transition_input_matrix, list)
