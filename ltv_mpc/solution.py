@@ -35,6 +35,9 @@ class Solution:
         qpsol: Solution of the corresponding quadratic program.
     """
 
+    __stacked_inputs: Optional[np.ndarray]
+    __stacked_states: Optional[np.ndarray]
+    problem: Problem
     qpsol: qpsolvers.Solution
 
     def __init__(self, problem: Problem, qpsol: qpsolvers.Solution):
