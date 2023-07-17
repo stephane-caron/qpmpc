@@ -17,9 +17,9 @@
 
 from typing import List, Optional, Union
 
-from .exceptions import ProblemDefinitionError
-
 import numpy as np
+
+from .exceptions import ProblemDefinitionError
 
 
 class Problem:
@@ -111,29 +111,33 @@ class Problem:
             raise ProblemDefinitionError(
                 "non-negative control weight needed for regularization"
             )
-        assert (
-            terminal_cost_weight is not None
-            or stage_state_cost_weight is not None
-        ), "set either wxt or wxc"
-        self.transition_state_matrix = transition_state_matrix
-        self.transition_input_matrix = transition_input_matrix
-        self.ineq_state_matrix = ineq_state_matrix
+        if terminal_cost_weight is None and stage_state_cost_weight is None:
+            raise ProblemDefinitionError(
+                "either terminal or stage state cost should be set"
+            )
+        input_dim = (
+            transition_input_matrix.shape[1]
+            if isinstance(transition_input_matrix, np.ndarray)
+            else transition_input_matrix[0].shape[1]
+        )
+        state_dim = (
+            transition_state_matrix.shape[1]
+            if isinstance(transition_state_matrix, np.ndarray)
+            else transition_state_matrix[0].shape[1]
+        )
+        self.goal_state = goal_state
         self.ineq_input_matrix = ineq_input_matrix
+        self.ineq_state_matrix = ineq_state_matrix
         self.ineq_vector = ineq_vector
         self.initial_state = initial_state
-        self.goal_state = goal_state
+        self.input_dim = input_dim
         self.nb_timesteps = nb_timesteps
-        self.terminal_cost_weight = terminal_cost_weight
-        self.stage_state_cost_weight = stage_state_cost_weight
         self.stage_input_cost_weight = stage_input_cost_weight
-        if isinstance(transition_input_matrix, np.ndarray):
-            self.input_dim = transition_input_matrix.shape[1]
-        else:  # isinstance(transition_input_matrix, List[np.ndarray])
-            self.input_dim = transition_input_matrix[0].shape[1]
-        if isinstance(transition_state_matrix, np.ndarray):
-            self.state_dim = transition_state_matrix.shape[1]
-        else:  # isinstance(transition_state_matrix, List[np.ndarray])
-            self.state_dim = transition_state_matrix[0].shape[1]
+        self.stage_state_cost_weight = stage_state_cost_weight
+        self.state_dim = state_dim
+        self.terminal_cost_weight = terminal_cost_weight
+        self.transition_input_matrix = transition_input_matrix
+        self.transition_state_matrix = transition_state_matrix
 
     def get_transition_state_matrix(self, k):
         return (
