@@ -57,13 +57,13 @@ class Problem:
     Attributes:
         transition_state_matrix: State linear dynamics matrix.
         transition_input_matrix: Control linear dynamics matrix.
-        ineq_state_matrix : Constraint matrix on state variables. When this
+        ineq_state_matrix: Constraint matrix on state variables. When this
             argument is an array, the same matrix `C` is applied at each step
             `k`. When it is ``None``, the null matrix is applied.
-        ineq_input_matrix : Constraint matrix on control variables. When this
+        ineq_input_matrix: Constraint matrix on control variables. When this
             argument is an array, the same matrix `D` is applied at each step
             `k`. When it is ``None``, the null matrix is applied.
-        ineq_vector : Constraint vector. When this argument is an array, the
+        ineq_vector: Constraint vector. When this argument is an array, the
             same vector `e` is applied at each step `k`.
         initial_state: Initial state as stacked position and velocity.
         goal_state: Goal state as stacked position and velocity.
