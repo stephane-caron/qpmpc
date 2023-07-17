@@ -68,11 +68,7 @@ def build_qp(problem: Problem, sparse: bool = False) -> QuadraticProgram:
         D_k = problem.get_ineq_input_matrix(k)
         e_k = problem.get_ineq_vector(k)
         G_k = np.zeros((e_k.shape[0], stacked_input_dim))
-        h_k = (
-            e_k
-            if C_k is None
-            else e_k - np.dot(C_k.dot(phi), initial_state)
-        )
+        h_k = e_k if C_k is None else e_k - np.dot(C_k.dot(phi), initial_state)
         input_slice = slice(k * input_dim, (k + 1) * input_dim)
         if D_k is not None:
             # we rely on G == 0 to avoid a slower +=
@@ -142,6 +138,7 @@ def solve_mpc(
         https://scaron.info/doc/qpsolvers/quadratic-programming.html#qpsolvers.solve_qp
     """
     qp = build_qp(problem, sparse=sparse)
-    U = solve_problem(qp, solver=solver, **kwargs)
+    solution = solve_problem(qp, solver=solver, **kwargs)
+    U = solution.x
     U = U.reshape((problem.nb_timesteps, problem.input_dim))
     return Solution(problem, U)
