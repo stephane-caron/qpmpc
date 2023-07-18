@@ -17,8 +17,6 @@
 
 """Solve model predictive control problems."""
 
-from typing import Optional
-
 import numpy as np
 import qpsolvers
 from qpsolvers import solve_problem
@@ -113,8 +111,8 @@ def build_qp(problem: MPCProblem, sparse: bool = False) -> qpsolvers.Problem:
 
 def solve_mpc(
     problem: MPCProblem,
+    solver: str,
     sparse: bool = False,
-    solver: Optional[str] = None,
     **kwargs,
 ) -> Plan:
     """Solve a linear time-invariant model predictive control problem.
@@ -125,7 +123,7 @@ def solve_mpc(
             :data:`qpsolvers.available_solvers`. Both "quadprog" and "osqp"
             tend to perform well on model predictive control problems. See for
             instance `this benchmark
-            <https://github.com/stephane-caron/qpsolvers#benchmark>`__.
+            <https://github.com/qpsolvers/qpsolvers#benchmark>`__.
         sparse: Whether to use sparse or dense matrices in the output quadratic
             program. Enable it if the QP solver is sparse (e.g. OSQP).
         kwargs: Keyword arguments forwarded to the QP solver via the
@@ -135,7 +133,7 @@ def solve_mpc(
         Solution to the problem, if found.
 
     .. _solve_qp:
-        https://scaron.info/doc/qpsolvers/quadratic-programming.html#qpsolvers.solve_qp
+        https://qpsolvers.github.io/qpsolvers/quadratic-programming.html#qpsolvers.solve_qp
     """
     qp = build_qp(problem, sparse=sparse)
     qpsol = solve_problem(qp, solver=solver, **kwargs)

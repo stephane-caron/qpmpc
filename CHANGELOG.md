@@ -21,6 +21,7 @@ All notable changes to this project will be documented in this file.
 - Rename ``Solution`` to ``Plan``
 - Rename ``stacked_inputs`` to just ``inputs`` in plans
 - Rename ``stacked_states`` to just ``states`` in plans
+- Solver keyword argument to ``solve_mpc`` is now mandatory
 - Use problem class from ``qpsolvers`` internally
 
 ## [1.0.0] - 2022/08/12
