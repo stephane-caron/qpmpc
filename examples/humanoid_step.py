@@ -91,7 +91,7 @@ def build_mpc_problem(params: Parameters):
     )
 
 
-def plot_mpc_solution(params, mpc_problem, plan):
+def plot_plan(params, mpc_problem, plan):
     """Plot plan resulting from the MPC problem.
 
     Args:
@@ -127,4 +127,4 @@ if __name__ == "__main__":
     params = Parameters()
     mpc_problem = build_mpc_problem(params)
     plan = solve_mpc(mpc_problem, solver="quadprog")
-    plot_mpc_solution(params, mpc_problem, plan)
+    plot_plan(params, mpc_problem, plan)

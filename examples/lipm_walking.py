@@ -99,7 +99,27 @@ def build_mpc_problem(params: Parameters, start_pos: float, end_pos: float):
     )
 
 
-def plot_mpc_solution(params, mpc_problem, plan, state: np.ndarray) -> None:
+def integrate(state: np.ndarray, jerk: float, dt: float) -> np.ndarray:
+    """Integrate state (pos, vel, accel) with constant jerk.
+
+    Args:
+        state: Initial state.
+        jerk: Constant jerk to integrate.
+        dt: Duration to integrate for, in seconds.
+
+    Returns:
+        State after integration.
+    """
+    p_0, v_0, a_0 = state
+    return np.array(
+        [
+            p_0 + dt * (v_0 + dt * (a_0 / 2 + dt * jerk / 6)),
+            v_0 + dt * (a_0 + dt * (jerk / 2)),
+            a_0 + dt * jerk,
+        ]
+    )
+
+def plot_plan(params, mpc_problem, plan, state: np.ndarray) -> None:
     """Plot plan resulting from the MPC problem.
 
     Args:
@@ -134,26 +154,6 @@ def plot_mpc_solution(params, mpc_problem, plan, state: np.ndarray) -> None:
     pylab.show(block=False)
 
 
-def integrate(state: np.ndarray, jerk: float, dt: float) -> np.ndarray:
-    """Integrate state (pos, vel, accel) with constant jerk.
-
-    Args:
-        state: Initial state.
-        jerk: Constant jerk to integrate.
-        dt: Duration to integrate for, in seconds.
-
-    Returns:
-        State after integration.
-    """
-    p_0, v_0, a_0 = state
-    return np.array(
-        [
-            p_0 + dt * (v_0 + dt * (a_0 / 2 + dt * jerk / 6)),
-            v_0 + dt * (a_0 + dt * (jerk / 2)),
-            a_0 + dt * jerk,
-        ]
-    )
-
 
 if __name__ == "__main__":
     params = Parameters()
@@ -162,9 +162,10 @@ if __name__ == "__main__":
     T = params.sampling_period
     substeps: int = 20  # number of integration substeps
     dt = T / substeps
-    while True:
+    for _ in range(10):
         mpc_problem.set_initial_state(state)
         plan = solve_mpc(mpc_problem, solver="quadprog")
         for step in range(substeps):
             state = integrate(state, plan.inputs[0], dt)
-            plot_mpc_solution(params, mpc_problem, plan, state)
+            # plot_plan(params, mpc_problem, plan, state)
+            print(f"{state=}")
