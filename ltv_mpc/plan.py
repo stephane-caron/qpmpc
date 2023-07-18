@@ -107,7 +107,7 @@ class Plan:
             The time complexity of calling this property is :math:`O(N)` the
             first time, then :math:`O(1)` as the result is memoized.
         """
-        if self.is_empty:
+        if self.__inputs is None:  # same as is_empty, helps mypy
             return None
         if self.__states is not None:
             return self.__states
