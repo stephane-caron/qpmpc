@@ -102,10 +102,11 @@ def plot_mpc_solution(stepping_problem, mpc, solution):
     pylab.plot(t, zmp_min, "g:")
     pylab.plot(t, zmp_max, "b:")
     pylab.grid(True)
+    pylab.show(block=True)
 
 
 if __name__ == "__main__":
     stepping_problem = HumanoidSteppingProblem()
     mpc_problem = build_mpc_problem(stepping_problem)
-    solution = solve_mpc(mpc_problem)
+    solution = solve_mpc(mpc_problem, solver="quadprog")
     plot_mpc_solution(stepping_problem, mpc_problem, solution)
