@@ -22,20 +22,19 @@ import pylab
 
 from ltv_mpc import MPCProblem, solve_mpc
 
-gravity = 9.81  # [m] / [s]^2
-
 
 @dataclass
 class HumanoidSteppingProblem:
 
     com_height: float = 0.8
-    dsp_duration: float = 0.1
-    end_pos: float = 0.3
-    foot_length: float = 0.1
-    horizon_duration: float = 2.5
+    dsp_duration: float = 0.1  # [s]
+    end_pos: float = 0.3  # [m]
+    foot_length: float = 0.1  # [m]
+    gravity: float = 9.81  # [m] / [s]²
+    horizon_duration: float = 2.5  # [s]
     nb_timesteps: int = 16
-    ssp_duration: float = 0.7
-    start_pos: float = 0.0
+    ssp_duration: float = 0.7  # [s]
+    start_pos: float = 0.0  # [m]
 
 
 def build_mpc_problem(problem: HumanoidSteppingProblem):
@@ -48,7 +47,8 @@ def build_mpc_problem(problem: HumanoidSteppingProblem):
     )
     input_matrix = np.array([T ** 3 / 6.0, T ** 2 / 2.0, T])
     input_matrix = input_matrix.reshape((3, 1))
-    zmp_from_state = np.array([1.0, 0.0, -problem.com_height / gravity])
+    eta = problem.com_height / problem.gravity
+    zmp_from_state = np.array([1.0, 0.0, -eta])
     ineq_matrix = np.array([+zmp_from_state, -zmp_from_state])
     cur_max = problem.start_pos + 0.5 * problem.foot_length
     cur_min = problem.start_pos - 0.5 * problem.foot_length
@@ -79,16 +79,11 @@ def build_mpc_problem(problem: HumanoidSteppingProblem):
     )
 
 
-def plot_mpc_solution(stepping_problem, mpc, solution):
-    t = np.linspace(
-        0.0,
-        stepping_problem.horizon_duration,
-        stepping_problem.nb_timesteps + 1,
-    )
+def plot_mpc_solution(problem, mpc, solution):
+    t = np.linspace(0.0, problem.horizon_duration, problem.nb_timesteps + 1)
     X = solution.states
-    zmp_from_state = np.array(
-        [1.0, 0.0, -stepping_problem.com_height / gravity]
-    )
+    eta = problem.com_height / problem.gravity
+    zmp_from_state = np.array([1.0, 0.0, -eta])
     zmp = X.dot(zmp_from_state)
     pos = X[:, 0]
     zmp_min = [x[0] if abs(x[0]) < 10 else None for x in mpc.ineq_vector]
