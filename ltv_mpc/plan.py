@@ -53,6 +53,11 @@ class Plan:
         self.qpsol = qpsol
 
     @property
+    def is_empty(self) -> bool:
+        """Check whether the plan is empty."""
+        return self.__inputs is None
+
+    @property
     def first_input(self) -> Optional[np.ndarray]:
         """Get the first control input of the solution.
 
