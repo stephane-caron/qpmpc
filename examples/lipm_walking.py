@@ -123,30 +123,45 @@ def integrate(state: np.ndarray, jerk: float, dt: float) -> np.ndarray:
 
 class LivePlot:
     def __init__(self):
-        plt.ion()
-        figure = plt.figure()
-        figure.canvas.draw()
+        figure, axis = plt.subplots()
+        canvas = figure.canvas
         plt.grid(True)
         plt.show(block=False)
-        axis = figure.axes[0]
+        plt.pause(0.12)
         self.axis = axis
-        self.axis_background = figure.canvas.copy_from_bbox(axis.bbox)
+        self.background = None
+        self.canvas = canvas
+        self.canvas.mpl_connect("draw_event", self.on_draw)
         self.figure = figure
         self.lines = {}
 
     def add_line(self, name, *args, **kwargs):
+        kwargs["animated"] = True
         (line,) = self.axis.plot([], *args, **kwargs)
         self.lines[name] = line
 
-    def update_line(self, name, t, data):
-        self.lines[name].set_data(t, data)
+    def update_line(self, name, xdata, ydata):
+        self.lines[name].set_data(xdata, ydata)
 
-    def replot(self):
-        self.figure.canvas.restore_region(self.axis_background)
+    def on_draw(self, event):
+        if event is not None:
+            if event.canvas != self.canvas:
+                raise RuntimeError
+        self.background = self.canvas.copy_from_bbox(self.figure.bbox)
+        self.draw_lines()
+
+    def draw_lines(self):
         for line in self.lines.values():
-            self.axis.draw_artist(line)
-        self.figure.canvas.blit(self.axis.bbox)
-        self.figure.canvas.flush_events()
+            self.figure.draw_artist(line)
+
+    def update(self):
+        if self.background is None:
+            self.on_draw(None)
+        else:
+            self.canvas.restore_region(self.background)
+            self.draw_lines()
+            self.canvas.blit(self.figure.bbox)
+        self.canvas.flush_events()
 
 
 def plot_plan(live_plot, params, mpc_problem, plan) -> None:
@@ -184,7 +199,7 @@ if __name__ == "__main__":
     mpc_problem = build_mpc_problem(params, start_pos=0, end_pos=1)
     state = np.array([0.0, 0.0, 0.0])
     T = params.sampling_period
-    substeps: int = 5  # number of integration substeps
+    substeps: int = 15  # number of integration substeps
     dt = T / substeps
 
     live_plot = LivePlot()
@@ -197,13 +212,12 @@ if __name__ == "__main__":
     live_plot.axis.set_xlim(0, horizon_duration)
     live_plot.axis.set_ylim(-0.5, 1.5)
 
-    rate = RateLimiter(frequency=1.0 / T)
+    rate = RateLimiter(frequency=1.0 / dt)
     t = 0.0
     for _ in range(30):
         mpc_problem.set_initial_state(state)
         plan = solve_mpc(mpc_problem, solver="quadprog")
         plot_plan(live_plot, params, mpc_problem, plan)
-        live_plot.replot()
         for step in range(substeps):
             state = integrate(state, plan.inputs[0], dt)
             live_plot.update_line(
@@ -211,6 +225,6 @@ if __name__ == "__main__":
                 [t + step * dt, t + (step + 1) * dt],
                 [state[0], state[0] + dt * state[1]],
             )
+            live_plot.update()
             rate.sleep()
-        live_plot.replot()
         t += T
