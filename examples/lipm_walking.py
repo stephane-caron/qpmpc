@@ -149,7 +149,7 @@ class LivePlot:
         self.figure.canvas.flush_events()
 
 
-def plot_plan(live_plot, params, mpc_problem, plan, state: np.ndarray) -> None:
+def plot_plan(live_plot, params, mpc_problem, plan) -> None:
     """Plot plan resulting from the MPC problem.
 
     Args:
@@ -174,15 +174,9 @@ def plot_plan(live_plot, params, mpc_problem, plan, state: np.ndarray) -> None:
     zmp_min.append(zmp_min[-1])
     zmp_max.append(zmp_max[-1])
     live_plot.update_line("pos", t, pos)
-    live_plot.update_line(
-        "initial_state",
-        [0, 0.1],
-        [state[0], state[0] + 0.1 * state[1]],
-    )
     live_plot.update_line("zmp", t, zmp)
     live_plot.update_line("zmp_min", t, zmp_min)
     live_plot.update_line("zmp_max", t, zmp_max)
-    live_plot.replot()
 
 
 if __name__ == "__main__":
@@ -199,14 +193,24 @@ if __name__ == "__main__":
     live_plot.add_line("zmp", "r-")
     live_plot.add_line("zmp_min", "g:")
     live_plot.add_line("zmp_max", "b:")
-    live_plot.axis.set_xlim(0, 2)
-    live_plot.axis.set_ylim(-1, 1)
+    horizon_duration = params.sampling_period * params.nb_timesteps
+    live_plot.axis.set_xlim(0, horizon_duration)
+    live_plot.axis.set_ylim(-0.5, 1.5)
 
-    rate = RateLimiter(frequency=1.0 / dt)
+    rate = RateLimiter(frequency=1.0 / T)
+    t = 0.0
     for _ in range(30):
         mpc_problem.set_initial_state(state)
         plan = solve_mpc(mpc_problem, solver="quadprog")
+        plot_plan(live_plot, params, mpc_problem, plan)
+        live_plot.replot()
         for step in range(substeps):
             state = integrate(state, plan.inputs[0], dt)
-            plot_plan(live_plot, params, mpc_problem, plan, state)
+            live_plot.update_line(
+                "initial_state",
+                [t + step * dt, t + (step + 1) * dt],
+                [state[0], state[0] + dt * state[1]],
+            )
             rate.sleep()
+        live_plot.replot()
+        t += T
