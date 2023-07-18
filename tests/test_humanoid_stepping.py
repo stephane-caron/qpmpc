@@ -97,11 +97,10 @@ class TestHumanoid(unittest.TestCase):
         N = self.problem.nb_timesteps
         input_dim = self.problem.input_dim
         state_dim = self.problem.state_dim
-        self.assertEqual(
-            solution.stacked_inputs.flatten().shape, (N * input_dim,)
-        )
-        self.assertEqual(
-            solution.stacked_states.flatten().shape, ((N + 1) * state_dim,)
+        U = solution.inputs
+        X = solution.states
+        self.assertEqual(U.flatten().shape, (N * input_dim,))
+        self.assertEqual(X.flatten().shape, ((N + 1) * state_dim,)
         )
 
 
