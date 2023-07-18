@@ -15,6 +15,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""Humanoid planning to walk a single step ahead."""
+
 from dataclasses import dataclass
 
 import numpy as np
@@ -25,6 +27,7 @@ from ltv_mpc import MPCProblem, solve_mpc
 
 @dataclass
 class Parameters:
+    """Parameters of the step and humanoid."""
 
     com_height: float = 0.8
     dsp_duration: float = 0.1  # [s]
@@ -38,6 +41,15 @@ class Parameters:
 
 
 def build_mpc_problem(params: Parameters):
+    """Build the model predictive control problem.
+
+    Args:
+        params: Problem parameters.
+
+    For details on this problem and how model predictive control can be used
+    for humanoid stepping, see "Trajectory free linear model predictive control
+    for stable walking in the presence of strong perturbations" (Wieber, 2006).
+    """
     T = params.horizon_duration / params.nb_timesteps
     nb_init_dsp_steps = int(round(params.dsp_duration / T))
     nb_init_ssp_steps = int(round(params.ssp_duration / T))
@@ -80,6 +92,13 @@ def build_mpc_problem(params: Parameters):
 
 
 def plot_mpc_solution(params, mpc_problem, plan):
+    """Plot plan resulting from the MPC problem.
+
+    Args:
+        params: Parameters of the problem.
+        mpc_problem: Model predictive control problem.
+        plan: Solution to the MPC problem.
+    """
     t = np.linspace(0.0, params.horizon_duration, params.nb_timesteps + 1)
     X = plan.states
     eta = params.com_height / params.gravity

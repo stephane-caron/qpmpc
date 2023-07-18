@@ -15,13 +15,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""Triple integrator LTV system."""
+
 import numpy as np
 import pylab
 
 from ltv_mpc import MPCProblem, solve_mpc
 
 if __name__ == "__main__":
-    # Double integrator LTV system
     horizon_duration = 1.0
     nb_timesteps = 16
     T = horizon_duration / nb_timesteps
