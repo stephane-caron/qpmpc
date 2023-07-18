@@ -65,7 +65,7 @@ The resulting plan holds complete state and input trajectories as stacked vector
     import pylab
 
     t = np.linspace(0.0, horizon_duration, nb_timesteps + 1)
-    X = plan.stacked_states
+    X = plan.states
     positions, velocities, accelerations = X[:, 0], X[:, 1], X[:, 2]
     pylab.ion()
     pylab.plot(t, positions)

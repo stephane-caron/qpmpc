@@ -18,6 +18,8 @@ All notable changes to this project will be documented in this file.
 - Initial state of a problem is now constructor-optional
 - Rename ``Problem`` to ``MPCProblem``
 - Rename ``Solution`` to ``Plan``
+- Rename ``stacked_inputs`` to just ``inputs`` in plans
+- Rename ``stacked_states`` to just ``states`` in plans
 - Use problem class from ``qpsolvers`` internally
 
 ## [1.0.0] - 2022/08/12

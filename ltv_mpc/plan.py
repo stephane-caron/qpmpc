@@ -35,20 +35,20 @@ class Plan:
         qpsol: Solution of the corresponding quadratic program.
     """
 
-    __stacked_inputs: Optional[np.ndarray]
-    __stacked_states: Optional[np.ndarray]
+    __inputs: Optional[np.ndarray]
+    __states: Optional[np.ndarray]
     problem: MPCProblem
     qpsol: qpsolvers.Solution
 
     def __init__(self, problem: MPCProblem, qpsol: qpsolvers.Solution):
         """Test."""
-        stacked_inputs = None
+        inputs = None
         if qpsol.found:
             U = qpsol.x
             U = U.reshape((problem.nb_timesteps, problem.input_dim))
-            stacked_inputs = U
-        self.__stacked_inputs = stacked_inputs
-        self.__stacked_states = None
+            inputs = U
+        self.__inputs = inputs
+        self.__states = None
         self.problem = problem
         self.qpsol = qpsol
 
@@ -62,24 +62,29 @@ class Plan:
         In model predictive control, this is the part of the solution we are
         mainly interested in.
         """
-        if self.__stacked_inputs is None:
+        if self.__inputs is None:
             return None
-        return self.__stacked_inputs[0]
+        return self.__inputs[0]
 
     @property
-    def stacked_inputs(self) -> Optional[np.ndarray]:
-        r"""Get the stacked input vector, if a solution was found.
+    def inputs(self) -> Optional[np.ndarray]:
+        r"""Stacked input vector, or ``None`` if the plan is empty.
 
-        This is the stacked vector :math:`U` of inputs :math:`u_k` for :math:`k
-        \in \{0, \ldots, N - 1\}`.
+        This is the stacked vector :math:`U` structured as:
+
+        .. math::
+
+            U = \begin{bmatrix} u_0 \\ u_1 \\ \vdots \\ u_{N-1} \end{bmatrix}
+
+        with :math:`N` the number of timesteps.
 
         Returns:
-            Stacked input vector if a solution was found, ``None`` otherwise.
+            Stacked input vector if the plan is non-empty, ``None`` otherwise.
         """
-        return self.__stacked_inputs
+        return self.__inputs
 
     @property
-    def stacked_states(self) -> Optional[np.ndarray]:
+    def states(self) -> Optional[np.ndarray]:
         r"""Stacked vector of states.
 
         This is the vector :math:`X` structured as:
@@ -91,22 +96,22 @@ class Plan:
         with :math:`N` the number of timesteps.
 
         Returns:
-            Stacked state vector if a solution was found, ``None`` otherwise.
+            Stacked state vector if the plan is non-empty, ``None`` otherwise.
 
         Note:
             The time complexity of calling this property is :math:`O(N)` the
             first time, then :math:`O(1)` as the result is memoized.
         """
-        if self.__stacked_inputs is None:
+        if self.is_empty:
             return None
-        if self.__stacked_states is not None:
-            return self.__stacked_states
-        U = self.__stacked_inputs
+        if self.__states is not None:
+            return self.__states
+        U = self.__inputs
         X = np.zeros((self.problem.nb_timesteps + 1, self.problem.state_dim))
         X[0] = self.problem.initial_state
         for k in range(self.problem.nb_timesteps):
-            A = self.problem.get_transition_state_matrix(k)
-            B = self.problem.get_transition_input_matrix(k)
-            X[k + 1] = A.dot(X[k]) + B.dot(U[k])
-        self.__stacked_states = X
+            A_k = self.problem.get_transition_state_matrix(k)
+            B_k = self.problem.get_transition_input_matrix(k)
+            X[k + 1] = A_k.dot(X[k]) + B_k.dot(U[k])
+        self.__states = X
         return X

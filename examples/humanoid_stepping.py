@@ -85,7 +85,7 @@ def plot_mpc_solution(stepping_problem, mpc, solution):
         stepping_problem.horizon_duration,
         stepping_problem.nb_timesteps + 1,
     )
-    X = solution.stacked_states
+    X = solution.states
     zmp_from_state = np.array(
         [1.0, 0.0, -stepping_problem.com_height / gravity]
     )
