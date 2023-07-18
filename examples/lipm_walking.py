@@ -23,7 +23,7 @@ See also: https://github.com/stephane-caron/lipm_walking_controller/
 from dataclasses import dataclass
 
 import numpy as np
-import pylab
+from matplotlib import pyplot as plt
 
 from ltv_mpc import MPCProblem, solve_mpc
 
@@ -119,6 +119,7 @@ def integrate(state: np.ndarray, jerk: float, dt: float) -> np.ndarray:
         ]
     )
 
+
 def plot_plan(params, mpc_problem, plan, state: np.ndarray) -> None:
     """Plot plan resulting from the MPC problem.
 
@@ -143,16 +144,15 @@ def plot_plan(params, mpc_problem, plan, state: np.ndarray) -> None:
     ]
     zmp_min.append(zmp_min[-1])
     zmp_max.append(zmp_max[-1])
-    pylab.ion()
-    pylab.clf()
-    pylab.plot(t, pos)
-    pylab.plot([0, 0.1], [state[0], state[0] + 0.1 * state[1]], "ro", lw=2)
-    pylab.plot(t, zmp, "r-")
-    pylab.plot(t, zmp_min, "g:")
-    pylab.plot(t, zmp_max, "b:")
-    pylab.grid(True)
-    pylab.show(block=False)
-
+    plt.ion()
+    fig = plt.figure()
+    plt.plot(t, pos)
+    plt.plot([0, 0.1], [state[0], state[0] + 0.1 * state[1]], "ro", lw=2)
+    plt.plot(t, zmp, "r-")
+    plt.plot(t, zmp_min, "g:")
+    plt.plot(t, zmp_max, "b:")
+    plt.grid(True)
+    plt.show(block=True)
 
 
 if __name__ == "__main__":
@@ -162,10 +162,10 @@ if __name__ == "__main__":
     T = params.sampling_period
     substeps: int = 20  # number of integration substeps
     dt = T / substeps
-    for _ in range(10):
+    for _ in range(3):
         mpc_problem.set_initial_state(state)
         plan = solve_mpc(mpc_problem, solver="quadprog")
         for step in range(substeps):
             state = integrate(state, plan.inputs[0], dt)
-            # plot_plan(params, mpc_problem, plan, state)
+            plot_plan(params, mpc_problem, plan, state)
             print(f"{state=}")
