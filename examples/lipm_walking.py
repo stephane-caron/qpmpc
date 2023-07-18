@@ -23,6 +23,7 @@ See also: https://github.com/stephane-caron/lipm_walking_controller/
 from dataclasses import dataclass
 
 import numpy as np
+from loop_rate_limiters import RateLimiter
 from matplotlib import pyplot as plt
 
 from ltv_mpc import MPCProblem, solve_mpc
@@ -120,7 +121,35 @@ def integrate(state: np.ndarray, jerk: float, dt: float) -> np.ndarray:
     )
 
 
-def plot_plan(params, mpc_problem, plan, state: np.ndarray) -> None:
+class LivePlot:
+    def __init__(self):
+        plt.ion()
+        figure = plt.figure()
+        figure.canvas.draw()
+        plt.grid(True)
+        plt.show(block=False)
+        axis = figure.axes[0]
+        self.axis = axis
+        self.axis_background = figure.canvas.copy_from_bbox(axis.bbox)
+        self.figure = figure
+        self.lines = {}
+
+    def add_line(self, name, *args, **kwargs):
+        (line,) = self.axis.plot([], *args, **kwargs)
+        self.lines[name] = line
+
+    def update_line(self, name, t, data):
+        self.lines[name].set_data(t, data)
+
+    def replot(self):
+        self.figure.canvas.restore_region(self.axis_background)
+        for line in self.lines.values():
+            self.axis.draw_artist(line)
+        self.figure.canvas.blit(self.axis.bbox)
+        self.figure.canvas.flush_events()
+
+
+def plot_plan(live_plot, params, mpc_problem, plan, state: np.ndarray) -> None:
     """Plot plan resulting from the MPC problem.
 
     Args:
@@ -144,15 +173,16 @@ def plot_plan(params, mpc_problem, plan, state: np.ndarray) -> None:
     ]
     zmp_min.append(zmp_min[-1])
     zmp_max.append(zmp_max[-1])
-    plt.ion()
-    fig = plt.figure()
-    plt.plot(t, pos)
-    plt.plot([0, 0.1], [state[0], state[0] + 0.1 * state[1]], "ro", lw=2)
-    plt.plot(t, zmp, "r-")
-    plt.plot(t, zmp_min, "g:")
-    plt.plot(t, zmp_max, "b:")
-    plt.grid(True)
-    plt.show(block=True)
+    live_plot.update_line("pos", t, pos)
+    live_plot.update_line(
+        "initial_state",
+        [0, 0.1],
+        [state[0], state[0] + 0.1 * state[1]],
+    )
+    live_plot.update_line("zmp", t, zmp)
+    live_plot.update_line("zmp_min", t, zmp_min)
+    live_plot.update_line("zmp_max", t, zmp_max)
+    live_plot.replot()
 
 
 if __name__ == "__main__":
@@ -160,12 +190,23 @@ if __name__ == "__main__":
     mpc_problem = build_mpc_problem(params, start_pos=0, end_pos=1)
     state = np.array([0.0, 0.0, 0.0])
     T = params.sampling_period
-    substeps: int = 20  # number of integration substeps
+    substeps: int = 5  # number of integration substeps
     dt = T / substeps
-    for _ in range(3):
+
+    live_plot = LivePlot()
+    live_plot.add_line("pos")
+    live_plot.add_line("initial_state", "ro", lw=2)
+    live_plot.add_line("zmp", "r-")
+    live_plot.add_line("zmp_min", "g:")
+    live_plot.add_line("zmp_max", "b:")
+    live_plot.axis.set_xlim(0, 2)
+    live_plot.axis.set_ylim(-1, 1)
+
+    rate = RateLimiter(frequency=1.0 / dt)
+    for _ in range(30):
         mpc_problem.set_initial_state(state)
         plan = solve_mpc(mpc_problem, solver="quadprog")
         for step in range(substeps):
             state = integrate(state, plan.inputs[0], dt)
-            plot_plan(params, mpc_problem, plan, state)
-            print(f"{state=}")
+            plot_plan(live_plot, params, mpc_problem, plan, state)
+            rate.sleep()
