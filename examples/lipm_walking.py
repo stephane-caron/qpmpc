@@ -97,7 +97,7 @@ def build_mpc_problem(params: Parameters):
         ineq_input_matrix=None,
         ineq_vector=None,
         initial_state=None,
-        goal_state=np.array([0.0, 0.0, 0.0]),  # lateral dimension
+        goal_state=None,
         nb_timesteps=params.nb_timesteps,
         terminal_cost_weight=1.0,
         stage_state_cost_weight=None,
@@ -135,31 +135,45 @@ class PhaseStepper:
 
     def get_nb_steps(self):
         offset = self.index
-
-        nb_init_dsp_steps = self.nb_dsp_steps - offset
-        if nb_init_dsp_steps <= 0:
-            nb_init_dsp_steps = 0
+        nb_init_dsp_steps = max(0, self.nb_dsp_steps - offset)
         offset = max(0, offset - self.nb_dsp_steps)
-
-        nb_init_ssp_steps = self.nb_ssp_steps - offset
-        if nb_init_ssp_steps <= 0:
-            nb_init_ssp_steps = 0
+        nb_init_ssp_steps = max(0, self.nb_ssp_steps - offset)
         offset = max(0, offset - self.nb_ssp_steps)
 
-        nb_next_dsp_steps = self.nb_dsp_steps - offset
-        if nb_next_dsp_steps <= 0:
-            nb_next_dsp_steps = 0
-        offset = max(0, offset - self.nb_dsp_steps)
-
-        if offset > self.nb_ssp_steps:
+        remaining = (
+            self.params.nb_timesteps - nb_init_dsp_steps - nb_init_ssp_steps
+        )
+        nb_next_dsp_steps = min(self.nb_dsp_steps, remaining)
+        remaining = max(0, remaining - self.nb_dsp_steps)
+        nb_next_ssp_steps = min(self.nb_ssp_steps, remaining)
+        remaining = max(0, remaining - self.nb_ssp_steps)
+        nb_last_dsp_steps = min(self.nb_dsp_steps, remaining)
+        remaining = max(0, remaining - self.nb_dsp_steps)
+        nb_last_ssp_steps = min(self.nb_ssp_steps, remaining)
+        remaining = max(0, remaining - self.nb_ssp_steps)
+        if remaining > 0:
             raise ProblemDefinitionError(
                 "there are more than two steps in the receding horizon"
             )
 
-        return (nb_init_dsp_steps, nb_init_ssp_steps, nb_next_dsp_steps)
+        return (
+            nb_init_dsp_steps,
+            nb_init_ssp_steps,
+            nb_next_dsp_steps,
+            nb_next_ssp_steps,
+            nb_last_dsp_steps,
+            nb_last_ssp_steps,
+        )
 
     def get_next_foot_pos(self, foot_pos: float) -> float:
         return foot_pos + self.params.strides[self.stride_index]
+
+    def get_last_foot_pos(self, foot_pos: float) -> float:
+        upcoming_stride = (self.stride_index + 1) % len(self.params.strides)
+        return (
+            self.get_next_foot_pos(foot_pos)
+            + self.params.strides[upcoming_stride]
+        )
 
 
 def update_constraints(
@@ -167,22 +181,32 @@ def update_constraints(
     phase: PhaseStepper,
     cur_foot_pos: float,
 ):
-    nb_init_dsp_steps, nb_init_ssp_steps, nb_dsp_steps = phase.get_nb_steps()
+    (
+        nb_init_dsp_steps,
+        nb_init_ssp_steps,
+        nb_next_dsp_steps,
+        nb_next_ssp_steps,
+        nb_last_dsp_steps,
+        nb_last_ssp_steps,
+    ) = phase.get_nb_steps()
     next_foot_pos = phase.get_next_foot_pos(cur_foot_pos)
+    last_foot_pos = phase.get_last_foot_pos(cur_foot_pos)
     cur_max = cur_foot_pos + 0.5 * params.foot_size
     cur_min = cur_foot_pos - 0.5 * params.foot_size
     next_max = next_foot_pos + 0.5 * params.foot_size
     next_min = next_foot_pos - 0.5 * params.foot_size
-    mpc_problem.ineq_vector = [
-        np.array([+MAX_ZMP_DIST, +MAX_ZMP_DIST])
-        if k < nb_init_dsp_steps
-        else np.array([+cur_max, -cur_min])
-        if k - nb_init_dsp_steps <= nb_init_ssp_steps
-        else np.array([+MAX_ZMP_DIST, +MAX_ZMP_DIST])
-        if k - nb_init_dsp_steps - nb_init_ssp_steps < nb_dsp_steps
-        else np.array([+next_max, -next_min])
-        for k in range(params.nb_timesteps)
-    ]
+    last_max = last_foot_pos + 0.5 * params.foot_size
+    last_min = last_foot_pos - 0.5 * params.foot_size
+    mpc_problem.ineq_vector = (
+        [np.array([+MAX_ZMP_DIST, +MAX_ZMP_DIST])] * nb_init_dsp_steps
+        + [np.array([+cur_max, -cur_min])] * nb_init_ssp_steps
+        + [np.array([+MAX_ZMP_DIST, +MAX_ZMP_DIST])] * nb_next_dsp_steps
+        + [np.array([+next_max, -next_min])] * nb_next_ssp_steps
+        + [np.array([+MAX_ZMP_DIST, +MAX_ZMP_DIST])] * nb_last_dsp_steps
+        + [np.array([+last_max, -last_min])] * nb_last_ssp_steps
+    )
+    goal_pos = last_foot_pos if nb_last_dsp_steps > 0 else next_foot_pos
+    mpc_problem.update_goal_state(np.array([goal_pos, 0.0, 0.0]))
 
 
 def integrate(state: np.ndarray, jerk: float, dt: float) -> np.ndarray:
@@ -307,7 +331,7 @@ if __name__ == "__main__":
     live_plot.add_line("zmp_min", "g:")
     live_plot.add_line("zmp_max", "b:")
 
-    slowdown = 50.0
+    slowdown = 10.0
     rate = RateLimiter(frequency=1.0 / (slowdown * dt))
     t = 0.0
 
@@ -339,7 +363,11 @@ if __name__ == "__main__":
             live_plot.update_line("cur_pos", [t2], [cur_pos])
             live_plot.update_line("cur_dcm", [t2], [cur_dcm])
             live_plot.update_line("cur_zmp", [t2], [cur_zmp])
-            live_plot.update_line("goal_pos", [t2 + horizon_duration], [0.0])
+            live_plot.update_line(
+                "goal_pos",
+                [t2 + horizon_duration],
+                [mpc_problem.goal_state[0]],
+            )
             live_plot.update()
             rate.sleep()
         phase.advance()

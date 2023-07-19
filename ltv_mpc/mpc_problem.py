@@ -100,12 +100,12 @@ class MPCProblem:
         ineq_state_matrix: Union[None, np.ndarray, List[np.ndarray]],
         ineq_input_matrix: Union[None, np.ndarray, List[np.ndarray]],
         ineq_vector: Union[np.ndarray, List[np.ndarray]],
-        goal_state: np.ndarray,
         nb_timesteps: int,
         terminal_cost_weight: Optional[float],
         stage_state_cost_weight: Optional[float],
         stage_input_cost_weight: float,
         initial_state: Optional[np.ndarray] = None,
+        goal_state: Optional[np.ndarray] = None,
     ) -> None:
         """Start a new model predictive control problem."""
         if stage_input_cost_weight <= 0.0:
@@ -126,7 +126,7 @@ class MPCProblem:
             if isinstance(transition_state_matrix, np.ndarray)
             else transition_state_matrix[0].shape[1]
         )
-        self.goal_state = goal_state
+        self.goal_state = None  # initialized below
         self.ineq_input_matrix = ineq_input_matrix
         self.ineq_state_matrix = ineq_state_matrix
         self.ineq_vector = ineq_vector
@@ -139,6 +139,8 @@ class MPCProblem:
         self.terminal_cost_weight = terminal_cost_weight
         self.transition_input_matrix = transition_input_matrix
         self.transition_state_matrix = transition_state_matrix
+        if goal_state is not None:
+            self.update_goal_state(goal_state)
         if initial_state is not None:
             self.update_initial_state(initial_state)
 
@@ -216,6 +218,22 @@ class MPCProblem:
             if isinstance(self.ineq_vector, list)
             else self.ineq_vector
         )
+
+    def update_goal_state(self, goal_state: np.ndarray):
+        """Set the goal state.
+
+        Args:
+            goal_state: New goal state.
+
+        Raises:
+            StateError: if the goal state does not have the right dimension.
+        """
+        if goal_state.size != self.state_dim:
+            raise StateError(
+                f"goal state of shape {goal_state.shape} "
+                f"does not match state dimension ({self.state_dim})"
+            )
+        self.goal_state = goal_state.flatten()
 
     def update_initial_state(self, initial_state: np.ndarray):
         """Set the initial state.
