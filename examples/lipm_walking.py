@@ -318,11 +318,12 @@ if __name__ == "__main__":
     support_foot_pos = params.init_support_foot_pos
 
     # Skip edge cases of separate initial and final DSP durations (2/2): here
-    # we set some initial velocity and have the initial ZMP at the center of
-    # the initial foothold. See the lipm_walking_controller and its
+    # we set the initial ZMP at the center of the initial foothold, and the
+    # initial DCM halfway. See the lipm_walking_controller and its
     # configuration for details on initial/final DSP phases.
     init_accel = -params.omega**2 * support_foot_pos
-    state = np.array([0.0, 0.1, init_accel])
+    init_vel = 0.5 * params.omega * support_foot_pos
+    state = np.array([0.0, init_vel, init_accel])
 
     for _ in range(300):
         mpc_problem.update_initial_state(state)
