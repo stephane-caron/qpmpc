@@ -101,7 +101,7 @@ def build_mpc_problem(params: Parameters):
     )
 
 
-class StepPhase:
+class PhaseStepper:
     def __init__(self, params):
         nb_dsp_steps = int(round(params.dsp_duration / T))
         nb_ssp_steps = int(round(params.ssp_duration / T))
@@ -122,10 +122,12 @@ class StepPhase:
         self.stride_index = 0
 
     def advance(self):
-        self.index = (self.index + 1) % self.params.nb_timesteps
+        self.index += 1
+        if self.index >= self.nb_dsp_steps + self.nb_ssp_steps:
+            self.index = 0
 
     def advance_stride(self):
-        self.stride_index = (self.stride_index + 1) % len(self.params.strides)
+        self.stride_index += 1
 
     def get_nb_steps(self):
         offset = self.index
@@ -152,16 +154,17 @@ class StepPhase:
 
         return (nb_init_dsp_steps, nb_init_ssp_steps, nb_next_dsp_steps)
 
+    def get_next_foot_pos(self, foot_pos: float) -> float:
+        return foot_pos + self.params.strides[self.stride_index]
+
 
 def update_constraints(
     mpc_problem: MPCProblem,
-    phase: StepPhase,
+    phase: PhaseStepper,
     cur_foot_pos: float,
 ):
-    next_foot_pos = cur_foot_pos + params.strides[phase.stride_index]
     nb_init_dsp_steps, nb_init_ssp_steps, nb_dsp_steps = phase.get_nb_steps()
-    if nb_init_dsp_steps == 1:  # beginning of a new step
-        phase.advance_stride()
+    next_foot_pos = phase.get_next_foot_pos(cur_foot_pos)
     print(f"{nb_init_dsp_steps=}")
     print(f"{nb_init_ssp_steps=}")
     print(f"{nb_dsp_steps=}")
@@ -291,7 +294,8 @@ if __name__ == "__main__":
     horizon_duration = params.sampling_period * params.nb_timesteps
 
     live_plot = LivePlot(
-        xlim=(0, horizon_duration), ylim=tuple(params.strides)
+        xlim=(0, horizon_duration),
+        ylim=tuple(params.strides),
     )
     live_plot.add_line("pos", "b-")
     live_plot.add_line("initial_state", "ro", lw=2)
@@ -299,11 +303,12 @@ if __name__ == "__main__":
     live_plot.add_line("zmp_min", "g:")
     live_plot.add_line("zmp_max", "b:")
 
-    slowdown = 2.0
+    slowdown = 5.0
     rate = RateLimiter(frequency=1.0 / (slowdown * dt))
     t = 0.0
+    t_slide_offset = 0.3
 
-    phase = StepPhase(params)
+    phase = PhaseStepper(params)
     support_foot_pos = params.init_support_foot_pos
 
     # Skip edge cases of separate initial and final DSP durations (2/2): here
@@ -327,4 +332,7 @@ if __name__ == "__main__":
             live_plot.update()
             rate.sleep()
         phase.advance()
+        if phase.index == 0:
+            support_foot_pos = phase.get_next_foot_pos(support_foot_pos)
+            phase.advance_stride()
         t += T
