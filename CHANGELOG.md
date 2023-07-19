@@ -16,7 +16,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 
 - Don't assume a ``Problem`` is fully defined in constructor
-- Initial state of a problem is now constructor-optional
+- Initial and goal states are now keyword arguments of ``MPCProblem``
 - Rename ``Problem`` to ``MPCProblem``
 - Rename ``Solution`` to ``Plan``
 - Rename ``stacked_inputs`` to just ``inputs`` in plans
