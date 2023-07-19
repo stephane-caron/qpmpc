@@ -177,7 +177,7 @@ class PhaseStepper:
         )
 
 
-def update_constraints(
+def update_goal_and_constraints(
     mpc_problem: MPCProblem,
     phase: PhaseStepper,
     cur_foot_pos: float,
@@ -361,7 +361,7 @@ if __name__ == "__main__":
 
     for _ in range(300):
         mpc_problem.update_initial_state(state)
-        update_constraints(mpc_problem, phase, support_foot_pos)
+        update_goal_and_constraints(mpc_problem, phase, support_foot_pos)
         plan = solve_mpc(mpc_problem, solver="proxqp")
         plot_plan(t, live_plot, params, mpc_problem, plan)
         for step in range(substeps):
