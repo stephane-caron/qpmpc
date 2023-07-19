@@ -109,7 +109,13 @@ class StepPhase:
             raise ProblemDefinitionError(
                 "there are more than two steps in the receding horizon"
             )
-        self.index = 2
+
+        # Skip edge cases of separate initial and final DSP durations (1/2):
+        # here we set the initial index in the middle of the first SSP phase in
+        # the receding horizon, thus creating a short first SSP phase.
+        initial_index = 5
+
+        self.index = initial_index
         self.nb_dsp_steps = nb_dsp_steps
         self.nb_ssp_steps = nb_ssp_steps
         self.params = params
@@ -173,7 +179,6 @@ def update_constraints(
         else np.array([+next_max, -next_min])
         for k in range(params.nb_timesteps)
     ]
-    print(f"{mpc_problem.ineq_vector}")
 
 
 def integrate(state: np.ndarray, jerk: float, dt: float) -> np.ndarray:
@@ -285,25 +290,27 @@ if __name__ == "__main__":
     dt = T / substeps
     horizon_duration = params.sampling_period * params.nb_timesteps
 
-    live_plot = LivePlot(xlim=(0, horizon_duration), ylim=(-1.0, 1.0))
+    live_plot = LivePlot(
+        xlim=(0, horizon_duration), ylim=tuple(params.strides)
+    )
     live_plot.add_line("pos", "b-")
     live_plot.add_line("initial_state", "ro", lw=2)
     live_plot.add_line("zmp", "r-")
     live_plot.add_line("zmp_min", "g:")
     live_plot.add_line("zmp_max", "b:")
 
-    slowdown = 50.0
+    slowdown = 2.0
     rate = RateLimiter(frequency=1.0 / (slowdown * dt))
     t = 0.0
 
     phase = StepPhase(params)
     support_foot_pos = params.init_support_foot_pos
 
-    # Skip the edge cases of separate initial and final DSP durations by
-    # setting the initial ZMP directly at the center of the initial foothold.
+    # Skip edge cases of separate initial and final DSP durations (2/2): here
+    # we set the initial ZMP directly at the center of the initial foothold.
     # See the lipm_walking_controller and its configuration for details.
     init_accel = -params.omega_square * support_foot_pos
-    state = np.array([0.0, 0.0, init_accel])
+    state = np.array([0.0, 0.1, init_accel])
 
     for _ in range(300):
         mpc_problem.update_initial_state(state)
