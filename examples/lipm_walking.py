@@ -169,9 +169,6 @@ def update_constraints(
 ):
     nb_init_dsp_steps, nb_init_ssp_steps, nb_dsp_steps = phase.get_nb_steps()
     next_foot_pos = phase.get_next_foot_pos(cur_foot_pos)
-    print(f"{nb_init_dsp_steps=}")
-    print(f"{nb_init_ssp_steps=}")
-    print(f"{nb_dsp_steps=}")
     cur_max = cur_foot_pos + 0.5 * params.foot_size
     cur_min = cur_foot_pos - 0.5 * params.foot_size
     next_max = next_foot_pos + 0.5 * params.foot_size
@@ -328,7 +325,7 @@ if __name__ == "__main__":
     for _ in range(300):
         mpc_problem.update_initial_state(state)
         update_constraints(mpc_problem, phase, support_foot_pos)
-        plan = solve_mpc(mpc_problem, solver="quadprog")
+        plan = solve_mpc(mpc_problem, solver="proxqp")
         plot_plan(t, live_plot, params, mpc_problem, plan)
         for step in range(substeps):
             state = integrate(state, plan.inputs[0], dt)
