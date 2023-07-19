@@ -22,6 +22,7 @@ See also: https://github.com/stephane-caron/lipm_walking_controller/
 
 from dataclasses import dataclass
 
+import matplotlib
 import numpy as np
 from loop_rate_limiters import RateLimiter
 from matplotlib import pyplot as plt
@@ -58,9 +59,9 @@ def build_mpc_problem(params: Parameters, start_pos: float, end_pos: float):
     """
     T = params.sampling_period
     state_matrix = np.array(
-        [[1.0, T, T ** 2 / 2.0], [0.0, 1.0, T], [0.0, 0.0, 1.0]]
+        [[1.0, T, T**2 / 2.0], [0.0, 1.0, T], [0.0, 0.0, 1.0]]
     )
-    input_matrix = np.array([T ** 3 / 6.0, T ** 2 / 2.0, T]).reshape((3, 1))
+    input_matrix = np.array([T**3 / 6.0, T**2 / 2.0, T]).reshape((3, 1))
 
     nb_init_dsp_steps = int(round(params.dsp_duration / T))
     nb_init_ssp_steps = int(round(params.ssp_duration / T))
@@ -122,7 +123,9 @@ def integrate(state: np.ndarray, jerk: float, dt: float) -> np.ndarray:
 
 
 class LivePlot:
-    def __init__(self):
+    def __init__(self, fast: bool = True):
+        if fast:  # blitting doesn't work with all matplotlib backends
+            matplotlib.use("TkAgg")
         figure, axis = plt.subplots()
         canvas = figure.canvas
         plt.grid(True)
@@ -132,6 +135,7 @@ class LivePlot:
         self.background = None
         self.canvas = canvas
         self.canvas.mpl_connect("draw_event", self.on_draw)
+        self.fast = fast
         self.figure = figure
         self.lines = {}
 
@@ -157,10 +161,12 @@ class LivePlot:
     def update(self):
         if self.background is None:
             self.on_draw(None)
-        else:
+        elif self.fast:
             self.canvas.restore_region(self.background)
             self.draw_lines()
             self.canvas.blit(self.figure.bbox)
+        else:  # slow mode, if blitting doesn't work
+            self.canvas.draw()
         self.canvas.flush_events()
 
 
@@ -214,7 +220,7 @@ if __name__ == "__main__":
 
     rate = RateLimiter(frequency=1.0 / dt)
     t = 0.0
-    for _ in range(30):
+    for _ in range(300):
         mpc_problem.set_initial_state(state)
         plan = solve_mpc(mpc_problem, solver="quadprog")
         plot_plan(live_plot, params, mpc_problem, plan)
