@@ -20,6 +20,7 @@
 See also: https://github.com/stephane-caron/lipm_walking_controller/
 """
 
+import argparse
 from dataclasses import dataclass
 
 import matplotlib
@@ -310,7 +311,20 @@ def plot_plan(t, live_plot, params, mpc_problem, plan) -> None:
     live_plot.update_line("zmp_max", trange, zmp_max)
 
 
+def parse_command_line_arguments() -> argparse.Namespace:
+    """Parse command-line arguments."""
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--slowdown",
+        help="Slow time down by a multiplicative factor",
+        type=float,
+        default=1.0,
+    )
+    return parser.parse_args()
+
+
 if __name__ == "__main__":
+    args = parse_command_line_arguments()
     params = Parameters()
     mpc_problem = build_mpc_problem(params)
     T = params.sampling_period
@@ -331,8 +345,7 @@ if __name__ == "__main__":
     live_plot.add_line("zmp_min", "g:")
     live_plot.add_line("zmp_max", "b:")
 
-    slowdown = 10.0
-    rate = RateLimiter(frequency=1.0 / (slowdown * dt))
+    rate = RateLimiter(frequency=1.0 / (args.slowdown * dt))
     t = 0.0
 
     phase = PhaseStepper(params)
