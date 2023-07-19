@@ -324,9 +324,13 @@ if __name__ == "__main__":
         plot_plan(t, live_plot, params, mpc_problem, plan)
         for step in range(substeps):
             state = integrate(state, plan.inputs[0], dt)
+            t2 = t + step * dt
+            if t2 >= t_slide_offset:
+                t3 = t2 - t_slide_offset
+                live_plot.axis.set_xlim(t3, t3 + horizon_duration)
             live_plot.update_line(
                 "initial_state",
-                [t + step * dt, t + (step + 1) * dt],
+                [t2, t2 + dt],
                 [state[0], state[0] + dt * state[1]],
             )
             live_plot.update()
