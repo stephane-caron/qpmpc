@@ -131,7 +131,7 @@ class PhaseStepper:
             self.index = 0
 
     def advance_stride(self):
-        self.stride_index += 1
+        self.stride_index = (self.stride_index + 1) % len(self.params.strides)
 
     def get_nb_steps(self):
         offset = self.index
