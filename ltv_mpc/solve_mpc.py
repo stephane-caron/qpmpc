@@ -49,7 +49,10 @@ def build_qp(problem: MPCProblem, sparse: bool = False) -> qpsolvers.Problem:
     stacked_input_dim = problem.input_dim * problem.nb_timesteps
     if problem.initial_state is None:
         raise ProblemDefinitionError("initial state is undefined")
+    if problem.goal_state is None:
+        raise ProblemDefinitionError("goal state is undefined")
     initial_state: np.ndarray = problem.initial_state
+    goal_state: np.ndarray = problem.goal_state
 
     phi = np.eye(state_dim)
     psi = np.zeros((state_dim, stacked_input_dim))
@@ -88,7 +91,7 @@ def build_qp(problem: MPCProblem, sparse: bool = False) -> qpsolvers.Problem:
         problem.terminal_cost_weight is not None
         and problem.terminal_cost_weight > 1e-10
     ):
-        c = np.dot(phi, problem.initial_state) - problem.goal_state
+        c = np.dot(phi, problem.initial_state) - goal_state
         P += problem.terminal_cost_weight * np.dot(psi.T, psi)
         q += problem.terminal_cost_weight * np.dot(c.T, psi)
     if (
