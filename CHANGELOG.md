@@ -23,6 +23,7 @@ All notable changes to this project will be documented in this file.
 - Rename ``stacked_states`` to just ``states`` in plans
 - Solver keyword argument to ``solve_mpc`` is now mandatory
 - Use problem class from ``qpsolvers`` internally
+- Warn rather than raise an exception when initial state is unfeasible
 
 ## [1.0.0] - 2022/08/12
 
