@@ -28,8 +28,9 @@ from loop_rate_limiters import RateLimiter
 from matplotlib import pyplot as plt
 
 from ltv_mpc import MPCProblem, solve_mpc
+from ltv_mpc.exceptions import ProblemDefinitionError
 
-MAX_ZMP_DIST = 1e5  # [m]
+MAX_ZMP_DIST = 100.0  # [m]
 
 
 @dataclass
@@ -43,12 +44,22 @@ class Parameters:
     dsp_duration: float = 0.1  # [s]
     foot_size: float = 0.065  # [m]
     gravity: float = 9.81  # [m] / [s]²
+    init_support_foot_pos: float = 0.09  # [m]
     nb_timesteps: int = 16
     sampling_period: float = 0.1  # [s]
     ssp_duration: float = 0.7  # [s]
+    strides = [-0.18, 0.18]  # [m]
+
+    @property
+    def omega_square(self) -> float:
+        return self.gravity / self.com_height
+
+    @property
+    def zmp_from_state(self) -> np.ndarray:
+        return np.array([1.0, 0.0, -1.0 / self.omega_square])
 
 
-def build_mpc_problem(params: Parameters, start_pos: float, end_pos: float):
+def build_mpc_problem(params: Parameters):
     """Build the model predictive control problem.
 
     Args:
@@ -61,46 +72,108 @@ def build_mpc_problem(params: Parameters, start_pos: float, end_pos: float):
     """
     T = params.sampling_period
     state_matrix = np.array(
-        [[1.0, T, T**2 / 2.0], [0.0, 1.0, T], [0.0, 0.0, 1.0]]
+        [
+            [1.0, T, T**2 / 2.0],
+            [0.0, 1.0, T],
+            [0.0, 0.0, 1.0],
+        ]
     )
-    input_matrix = np.array([T**3 / 6.0, T**2 / 2.0, T]).reshape((3, 1))
-
-    nb_init_dsp_steps = int(round(params.dsp_duration / T))
-    nb_init_ssp_steps = int(round(params.ssp_duration / T))
-    nb_dsp_steps = int(round(params.dsp_duration / T))
-
-    eta = params.com_height / params.gravity
-    zmp_from_state = np.array([1.0, 0.0, -eta])
-    ineq_matrix = np.array([+zmp_from_state, -zmp_from_state])
-
-    cur_max = start_pos + 0.5 * params.foot_size
-    cur_min = start_pos - 0.5 * params.foot_size
-    next_max = end_pos + 0.5 * params.foot_size
-    next_min = end_pos - 0.5 * params.foot_size
-    ineq_vector = [
-        np.array([+MAX_ZMP_DIST, +MAX_ZMP_DIST])
-        if i < nb_init_dsp_steps
-        else np.array([+cur_max, -cur_min])
-        if i - nb_init_dsp_steps <= nb_init_ssp_steps
-        else np.array([+MAX_ZMP_DIST, +MAX_ZMP_DIST])
-        if i - nb_init_dsp_steps - nb_init_ssp_steps < nb_dsp_steps
-        else np.array([+next_max, -next_min])
-        for i in range(params.nb_timesteps)
-    ]
-
+    input_matrix = np.array(
+        [
+            T**3 / 6.0,
+            T**2 / 2.0,
+            T,
+        ]
+    ).reshape((3, 1))
+    ineq_matrix = np.array([+params.zmp_from_state, -params.zmp_from_state])
     return MPCProblem(
         transition_state_matrix=state_matrix,
         transition_input_matrix=input_matrix,
         ineq_state_matrix=ineq_matrix,
         ineq_input_matrix=None,
-        ineq_vector=ineq_vector,
+        ineq_vector=None,
         initial_state=None,
-        goal_state=np.array([end_pos, 0.0, 0.0]),
+        goal_state=np.array([0.0, 0.0, 0.0]),  # lateral dimension
         nb_timesteps=params.nb_timesteps,
         terminal_cost_weight=1.0,
         stage_state_cost_weight=None,
         stage_input_cost_weight=1e-3,
     )
+
+
+class StepPhase:
+    def __init__(self, params):
+        nb_dsp_steps = int(round(params.dsp_duration / T))
+        nb_ssp_steps = int(round(params.ssp_duration / T))
+        if 2 * (nb_dsp_steps + nb_ssp_steps) < params.nb_timesteps:
+            raise ProblemDefinitionError(
+                "there are more than two steps in the receding horizon"
+            )
+        self.index = 2
+        self.nb_dsp_steps = nb_dsp_steps
+        self.nb_ssp_steps = nb_ssp_steps
+        self.params = params
+        self.stride_index = 0
+
+    def advance(self):
+        self.index = (self.index + 1) % self.params.nb_timesteps
+
+    def advance_stride(self):
+        self.stride_index = (self.stride_index + 1) % len(self.params.strides)
+
+    def get_nb_steps(self):
+        offset = self.index
+
+        nb_init_dsp_steps = self.nb_dsp_steps - offset
+        if nb_init_dsp_steps <= 0:
+            offset -= self.nb_dsp_steps
+            nb_init_dsp_steps = 0
+
+        nb_init_ssp_steps = self.nb_ssp_steps - offset
+        if nb_init_ssp_steps <= 0:
+            offset -= self.nb_ssp_steps
+            nb_init_ssp_steps = 0
+
+        nb_next_dsp_steps = self.nb_dsp_steps - offset
+        if nb_next_dsp_steps <= 0:
+            offset -= self.nb_dsp_steps
+            nb_next_dsp_steps = 0
+
+        if offset > self.nb_ssp_steps:
+            raise ProblemDefinitionError(
+                "there are more than two steps in the receding horizon"
+            )
+
+        return (nb_init_dsp_steps, nb_init_ssp_steps, nb_next_dsp_steps)
+
+
+def update_constraints(
+    mpc_problem: MPCProblem,
+    phase: StepPhase,
+    cur_foot_pos: float,
+):
+    next_foot_pos = cur_foot_pos + params.strides[phase.stride_index]
+    nb_init_dsp_steps, nb_init_ssp_steps, nb_dsp_steps = phase.get_nb_steps()
+    if nb_init_dsp_steps == 1:  # beginning of a new step
+        phase.advance_stride()
+    print(f"{nb_init_dsp_steps=}")
+    print(f"{nb_init_ssp_steps=}")
+    print(f"{nb_dsp_steps=}")
+    cur_max = cur_foot_pos + 0.5 * params.foot_size
+    cur_min = cur_foot_pos - 0.5 * params.foot_size
+    next_max = next_foot_pos + 0.5 * params.foot_size
+    next_min = next_foot_pos - 0.5 * params.foot_size
+    mpc_problem.ineq_vector = [
+        np.array([+MAX_ZMP_DIST, +MAX_ZMP_DIST])
+        if k < nb_init_dsp_steps
+        else np.array([+cur_max, -cur_min])
+        if k - nb_init_dsp_steps <= nb_init_ssp_steps
+        else np.array([+MAX_ZMP_DIST, +MAX_ZMP_DIST])
+        if k - nb_init_dsp_steps - nb_init_ssp_steps < nb_dsp_steps
+        else np.array([+next_max, -next_min])
+        for k in range(params.nb_timesteps)
+    ]
+    print(f"{mpc_problem.ineq_vector}")
 
 
 def integrate(state: np.ndarray, jerk: float, dt: float) -> np.ndarray:
