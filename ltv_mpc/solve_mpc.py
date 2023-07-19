@@ -17,6 +17,8 @@
 
 """Solve model predictive control problems."""
 
+from logging import warn
+
 import numpy as np
 import qpsolvers
 from qpsolvers import solve_problem
@@ -79,7 +81,7 @@ def build_qp(problem: MPCProblem, sparse: bool = False) -> qpsolvers.Problem:
         if k == 0 and D_k is None and np.any(h_k < 0.0):
             # in this case, the initial state constraint is violated and cannot
             # be compensated by any input (D_k is None)
-            raise ProblemDefinitionError("initial state is unfeasible")
+            warn("initial state is unfeasible")
         else:  # regular case, G is non-zero
             G_list.append(G_k)
             h_list.append(h_k)
