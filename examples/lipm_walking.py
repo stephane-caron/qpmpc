@@ -29,6 +29,8 @@ from matplotlib import pyplot as plt
 
 from ltv_mpc import MPCProblem, solve_mpc
 
+MAX_ZMP_DIST = 1e5  # [m]
+
 
 @dataclass
 class Parameters:
@@ -76,11 +78,11 @@ def build_mpc_problem(params: Parameters, start_pos: float, end_pos: float):
     next_max = end_pos + 0.5 * params.foot_size
     next_min = end_pos - 0.5 * params.foot_size
     ineq_vector = [
-        np.array([+1000.0, +1000.0])
+        np.array([+MAX_ZMP_DIST, +MAX_ZMP_DIST])
         if i < nb_init_dsp_steps
         else np.array([+cur_max, -cur_min])
         if i - nb_init_dsp_steps <= nb_init_ssp_steps
-        else np.array([+1000.0, +1000.0])
+        else np.array([+MAX_ZMP_DIST, +MAX_ZMP_DIST])
         if i - nb_init_dsp_steps - nb_init_ssp_steps < nb_dsp_steps
         else np.array([+next_max, -next_min])
         for i in range(params.nb_timesteps)
@@ -123,10 +125,12 @@ def integrate(state: np.ndarray, jerk: float, dt: float) -> np.ndarray:
 
 
 class LivePlot:
-    def __init__(self, fast: bool = True):
+    def __init__(self, xlim, ylim, fast: bool = True):
         if fast:  # blitting doesn't work with all matplotlib backends
             matplotlib.use("TkAgg")
         figure, axis = plt.subplots()
+        axis.set_xlim(*xlim)
+        axis.set_ylim(*ylim)
         canvas = figure.canvas
         plt.grid(True)
         plt.show(block=False)
@@ -170,7 +174,7 @@ class LivePlot:
         self.canvas.flush_events()
 
 
-def plot_plan(live_plot, params, mpc_problem, plan) -> None:
+def plot_plan(t, live_plot, params, mpc_problem, plan) -> None:
     """Plot plan resulting from the MPC problem.
 
     Args:
@@ -180,50 +184,53 @@ def plot_plan(live_plot, params, mpc_problem, plan) -> None:
         state: Additional state to plot.
     """
     horizon_duration = params.sampling_period * params.nb_timesteps
-    t = np.linspace(0.0, horizon_duration, params.nb_timesteps + 1)
+    trange = np.linspace(t, t + horizon_duration, params.nb_timesteps + 1)
     X = plan.states
-    eta = params.com_height / params.gravity
-    zmp_from_state = np.array([1.0, 0.0, -eta])
+    zmp_from_state = np.array([1.0, 0.0, -params.com_height / params.gravity])
     zmp = X.dot(zmp_from_state)
     pos = X[:, 0]
     zmp_min = [
-        x[0] if abs(x[0]) < 10 else None for x in mpc_problem.ineq_vector
+        x[0] if abs(x[0]) < MAX_ZMP_DIST else None for x in mpc_problem.ineq_vector
     ]
     zmp_max = [
-        -x[1] if abs(x[1]) < 10 else None for x in mpc_problem.ineq_vector
+        -x[1] if abs(x[1]) < MAX_ZMP_DIST else None for x in mpc_problem.ineq_vector
     ]
     zmp_min.append(zmp_min[-1])
     zmp_max.append(zmp_max[-1])
-    live_plot.update_line("pos", t, pos)
-    live_plot.update_line("zmp", t, zmp)
-    live_plot.update_line("zmp_min", t, zmp_min)
-    live_plot.update_line("zmp_max", t, zmp_max)
+    print(f"{mpc_problem.ineq_vector=}")
+    print(f"{trange.shape=}, {pos.shape=}, {np.array(zmp_min).shape=}")
+    live_plot.update_line("pos", trange, pos)
+    live_plot.update_line("zmp", trange, zmp)
+    live_plot.update_line("zmp_min", trange, zmp_min)
+    live_plot.update_line("zmp_max", trange, zmp_max)
 
 
 if __name__ == "__main__":
     params = Parameters()
-    mpc_problem = build_mpc_problem(params, start_pos=0, end_pos=1)
+    end_pos = 0.5
+    mpc_problem = build_mpc_problem(params, start_pos=0, end_pos=end_pos)
     state = np.array([0.0, 0.0, 0.0])
     T = params.sampling_period
     substeps: int = 15  # number of integration substeps
     dt = T / substeps
+    horizon_duration = params.sampling_period * params.nb_timesteps
 
-    live_plot = LivePlot()
-    live_plot.add_line("pos")
+    live_plot = LivePlot(
+        xlim=(0, horizon_duration), ylim=(-0.2, end_pos + 0.2)
+    )
+    live_plot.add_line("pos", "b-")
     live_plot.add_line("initial_state", "ro", lw=2)
     live_plot.add_line("zmp", "r-")
     live_plot.add_line("zmp_min", "g:")
     live_plot.add_line("zmp_max", "b:")
-    horizon_duration = params.sampling_period * params.nb_timesteps
-    live_plot.axis.set_xlim(0, horizon_duration)
-    live_plot.axis.set_ylim(-0.5, 1.5)
 
-    rate = RateLimiter(frequency=1.0 / dt)
+    slowdown = 20.0
+    rate = RateLimiter(frequency=1.0 / (slowdown * dt))
     t = 0.0
     for _ in range(300):
         mpc_problem.set_initial_state(state)
         plan = solve_mpc(mpc_problem, solver="quadprog")
-        plot_plan(live_plot, params, mpc_problem, plan)
+        plot_plan(t, live_plot, params, mpc_problem, plan)
         for step in range(substeps):
             state = integrate(state, plan.inputs[0], dt)
             live_plot.update_line(
