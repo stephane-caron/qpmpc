@@ -319,4 +319,5 @@ if __name__ == "__main__":
             )
             live_plot.update()
             rate.sleep()
+        phase.advance()
         t += T
