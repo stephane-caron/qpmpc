@@ -295,21 +295,21 @@ if __name__ == "__main__":
     horizon_duration = params.sampling_period * params.nb_timesteps
 
     live_plot = LivePlot(
-        xlim=(0, horizon_duration),
+        xlim=(0, horizon_duration + T),
         ylim=tuple(params.strides),
     )
     live_plot.add_line("pos", "b-")
     live_plot.add_line("cur_pos", "bo", lw=2)
     live_plot.add_line("cur_dcm", "go", lw=2)
     live_plot.add_line("cur_zmp", "ro", lw=2)
+    live_plot.add_line("goal_pos", "ko", lw=2)
     live_plot.add_line("zmp", "r-")
     live_plot.add_line("zmp_min", "g:")
     live_plot.add_line("zmp_max", "b:")
 
-    slowdown = 5.0
+    slowdown = 50.0
     rate = RateLimiter(frequency=1.0 / (slowdown * dt))
     t = 0.0
-    t_slide_offset = 0.3
 
     phase = PhaseStepper(params)
     support_foot_pos = params.init_support_foot_pos
@@ -330,15 +330,16 @@ if __name__ == "__main__":
         for step in range(substeps):
             state = integrate(state, plan.inputs[0], dt)
             t2 = t + step * dt
-            if t2 >= t_slide_offset:
-                t3 = t2 - t_slide_offset
-                live_plot.axis.set_xlim(t3, t3 + horizon_duration)
+            if t2 >= T:
+                t3 = t2 - T
+                live_plot.axis.set_xlim(t3, t3 + horizon_duration + T)
             cur_pos = state[0]
             cur_dcm = params.dcm_from_state.dot(state)
             cur_zmp = params.zmp_from_state.dot(state)
             live_plot.update_line("cur_pos", [t2], [cur_pos])
             live_plot.update_line("cur_dcm", [t2], [cur_dcm])
             live_plot.update_line("cur_zmp", [t2], [cur_zmp])
+            live_plot.update_line("goal_pos", [t2 + horizon_duration], [0.0])
             live_plot.update()
             rate.sleep()
         phase.advance()
