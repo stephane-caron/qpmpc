@@ -51,12 +51,16 @@ class Parameters:
     strides = [-0.18, 0.18]  # [m]
 
     @property
-    def omega_square(self) -> float:
-        return self.gravity / self.com_height
+    def omega(self) -> float:
+        return np.sqrt(self.gravity / self.com_height)
+
+    @property
+    def dcm_from_state(self) -> np.ndarray:
+        return np.array([1.0, 1.0 / self.omega, 0.0])
 
     @property
     def zmp_from_state(self) -> np.ndarray:
-        return np.array([1.0, 0.0, -1.0 / self.omega_square])
+        return np.array([1.0, 0.0, -1.0 / self.omega**2])
 
 
 def build_mpc_problem(params: Parameters):
@@ -215,7 +219,7 @@ class LivePlot:
         canvas = figure.canvas
         plt.grid(True)
         plt.show(block=False)
-        plt.pause(0.12)
+        plt.pause(0.05)
         self.axis = axis
         self.background = None
         self.canvas = canvas
@@ -298,7 +302,9 @@ if __name__ == "__main__":
         ylim=tuple(params.strides),
     )
     live_plot.add_line("pos", "b-")
-    live_plot.add_line("initial_state", "ro", lw=2)
+    live_plot.add_line("cur_pos", "bo", lw=2)
+    live_plot.add_line("cur_dcm", "go", lw=2)
+    live_plot.add_line("cur_zmp", "ro", lw=2)
     live_plot.add_line("zmp", "r-")
     live_plot.add_line("zmp_min", "g:")
     live_plot.add_line("zmp_max", "b:")
@@ -312,9 +318,10 @@ if __name__ == "__main__":
     support_foot_pos = params.init_support_foot_pos
 
     # Skip edge cases of separate initial and final DSP durations (2/2): here
-    # we set the initial ZMP directly at the center of the initial foothold.
-    # See the lipm_walking_controller and its configuration for details.
-    init_accel = -params.omega_square * support_foot_pos
+    # we set some initial velocity and have the initial ZMP at the center of
+    # the initial foothold. See the lipm_walking_controller and its
+    # configuration for details on initial/final DSP phases.
+    init_accel = -params.omega**2 * support_foot_pos
     state = np.array([0.0, 0.1, init_accel])
 
     for _ in range(300):
@@ -328,11 +335,12 @@ if __name__ == "__main__":
             if t2 >= t_slide_offset:
                 t3 = t2 - t_slide_offset
                 live_plot.axis.set_xlim(t3, t3 + horizon_duration)
-            live_plot.update_line(
-                "initial_state",
-                [t2, t2 + dt],
-                [state[0], state[0] + dt * state[1]],
-            )
+            cur_pos = state[0]
+            cur_dcm = params.dcm_from_state.dot(state)
+            cur_zmp = params.zmp_from_state.dot(state)
+            live_plot.update_line("cur_pos", [t2], [cur_pos])
+            live_plot.update_line("cur_dcm", [t2], [cur_dcm])
+            live_plot.update_line("cur_zmp", [t2], [cur_zmp])
             live_plot.update()
             rate.sleep()
         phase.advance()
