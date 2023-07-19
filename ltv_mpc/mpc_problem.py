@@ -140,23 +140,7 @@ class MPCProblem:
         self.transition_input_matrix = transition_input_matrix
         self.transition_state_matrix = transition_state_matrix
         if initial_state is not None:
-            self.set_initial_state(initial_state)
-
-    def set_initial_state(self, initial_state: np.ndarray):
-        """Set the initial state.
-
-        Args:
-            initial_state: New initial state.
-
-        Raises:
-            StateError: if the initial state does not have the right dimension.
-        """
-        if initial_state.size != self.state_dim:
-            raise StateError(
-                f"Initial state of shape {initial_state.shape} "
-                f"does not match state dimension ({self.state_dim})"
-            )
-        self.initial_state = initial_state.flatten()
+            self.update_initial_state(initial_state)
 
     def get_transition_state_matrix(self, k) -> np.ndarray:
         """Get state-transition matrix at a given timestep.
@@ -232,3 +216,19 @@ class MPCProblem:
             if isinstance(self.ineq_vector, list)
             else self.ineq_vector
         )
+
+    def update_initial_state(self, initial_state: np.ndarray):
+        """Set the initial state.
+
+        Args:
+            initial_state: New initial state.
+
+        Raises:
+            StateError: if the initial state does not have the right dimension.
+        """
+        if initial_state.size != self.state_dim:
+            raise StateError(
+                f"Initial state of shape {initial_state.shape} "
+                f"does not match state dimension ({self.state_dim})"
+            )
+        self.initial_state = initial_state.flatten()
