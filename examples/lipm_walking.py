@@ -259,19 +259,18 @@ def plot_plan(t, live_plot, params, mpc_problem, plan) -> None:
     horizon_duration = params.sampling_period * params.nb_timesteps
     trange = np.linspace(t, t + horizon_duration, params.nb_timesteps + 1)
     X = plan.states
-    zmp_from_state = np.array([1.0, 0.0, -params.com_height / params.gravity])
-    zmp = X.dot(zmp_from_state)
+    zmp = X.dot(params.zmp_from_state)
     pos = X[:, 0]
     zmp_min = [
-        x[0] if abs(x[0]) < MAX_ZMP_DIST else None for x in mpc_problem.ineq_vector
+        x[0] if abs(x[0]) < MAX_ZMP_DIST else None
+        for x in mpc_problem.ineq_vector
     ]
     zmp_max = [
-        -x[1] if abs(x[1]) < MAX_ZMP_DIST else None for x in mpc_problem.ineq_vector
+        -x[1] if abs(x[1]) < MAX_ZMP_DIST else None
+        for x in mpc_problem.ineq_vector
     ]
     zmp_min.append(zmp_min[-1])
     zmp_max.append(zmp_max[-1])
-    print(f"{mpc_problem.ineq_vector=}")
-    print(f"{trange.shape=}, {pos.shape=}, {np.array(zmp_min).shape=}")
     live_plot.update_line("pos", trange, pos)
     live_plot.update_line("zmp", trange, zmp)
     live_plot.update_line("zmp_min", trange, zmp_min)
@@ -280,28 +279,35 @@ def plot_plan(t, live_plot, params, mpc_problem, plan) -> None:
 
 if __name__ == "__main__":
     params = Parameters()
-    end_pos = 0.5
-    mpc_problem = build_mpc_problem(params, start_pos=0, end_pos=end_pos)
-    state = np.array([0.0, 0.0, 0.0])
+    mpc_problem = build_mpc_problem(params)
     T = params.sampling_period
     substeps: int = 15  # number of integration substeps
     dt = T / substeps
     horizon_duration = params.sampling_period * params.nb_timesteps
 
-    live_plot = LivePlot(
-        xlim=(0, horizon_duration), ylim=(-0.2, end_pos + 0.2)
-    )
+    live_plot = LivePlot(xlim=(0, horizon_duration), ylim=(-1.0, 1.0))
     live_plot.add_line("pos", "b-")
     live_plot.add_line("initial_state", "ro", lw=2)
     live_plot.add_line("zmp", "r-")
     live_plot.add_line("zmp_min", "g:")
     live_plot.add_line("zmp_max", "b:")
 
-    slowdown = 20.0
+    slowdown = 50.0
     rate = RateLimiter(frequency=1.0 / (slowdown * dt))
     t = 0.0
+
+    phase = StepPhase(params)
+    support_foot_pos = params.init_support_foot_pos
+
+    # Skip the edge cases of separate initial and final DSP durations by
+    # setting the initial ZMP directly at the center of the initial foothold.
+    # See the lipm_walking_controller and its configuration for details.
+    init_accel = -params.omega_square * support_foot_pos
+    state = np.array([0.0, 0.0, init_accel])
+
     for _ in range(300):
-        mpc_problem.set_initial_state(state)
+        mpc_problem.update_initial_state(state)
+        update_constraints(mpc_problem, phase, support_foot_pos)
         plan = solve_mpc(mpc_problem, solver="quadprog")
         plot_plan(t, live_plot, params, mpc_problem, plan)
         for step in range(substeps):
