@@ -132,18 +132,18 @@ class StepPhase:
 
         nb_init_dsp_steps = self.nb_dsp_steps - offset
         if nb_init_dsp_steps <= 0:
-            offset -= self.nb_dsp_steps
             nb_init_dsp_steps = 0
+        offset = max(0, offset - self.nb_dsp_steps)
 
         nb_init_ssp_steps = self.nb_ssp_steps - offset
         if nb_init_ssp_steps <= 0:
-            offset -= self.nb_ssp_steps
             nb_init_ssp_steps = 0
+        offset = max(0, offset - self.nb_ssp_steps)
 
         nb_next_dsp_steps = self.nb_dsp_steps - offset
         if nb_next_dsp_steps <= 0:
-            offset -= self.nb_dsp_steps
             nb_next_dsp_steps = 0
+        offset = max(0, offset - self.nb_dsp_steps)
 
         if offset > self.nb_ssp_steps:
             raise ProblemDefinitionError(
