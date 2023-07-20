@@ -82,9 +82,8 @@ def build_qp(problem: MPCProblem, sparse: bool = False) -> qpsolvers.Problem:
             # in this case, the initial state constraint is violated and cannot
             # be compensated by any input (D_k is None)
             warn("initial state is unfeasible")
-        else:  # regular case, G is non-zero
-            G_list.append(G_k)
-            h_list.append(h_k)
+        G_list.append(G_k)
+        h_list.append(h_k)
         phi = A_k.dot(phi)
         psi = A_k.dot(psi)
         psi[:, input_slice] = B_k
