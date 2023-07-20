@@ -228,7 +228,7 @@ def integrate(state: np.ndarray, jerk: float, dt: float) -> np.ndarray:
             v_0 + dt * (a_0 + dt * (jerk / 2)),
             a_0 + dt * jerk,
         ]
-    )
+    ).flatten()
 
 
 class LivePlot:
