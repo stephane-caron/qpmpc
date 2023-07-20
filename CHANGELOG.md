@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
+- Always add state-input inequalities (even when unfeasible)
 - Don't assume a ``Problem`` is fully defined in constructor
 - Initial and goal states are now keyword arguments of ``MPCProblem``
 - Rename ``Problem`` to ``MPCProblem``
