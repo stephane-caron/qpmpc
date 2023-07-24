@@ -9,9 +9,10 @@ All notable changes to this project will be documented in this file.
 - Base class for exceptions raised by this library
 - Documentation checks using ``ruff``
 - Exception: ``ProblemDefinitionError``
+- MPCProblem: setter for the initial state
+- MPCProblem: target state trajectory for stage state cost
 - Plan: ``first_input`` getter
 - Plan: ``is_empty`` property
-- Problem: setter for the initial state
 
 ### Changed
 
