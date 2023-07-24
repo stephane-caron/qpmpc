@@ -19,12 +19,13 @@
 
 from .mpc_problem import MPCProblem
 from .plan import Plan
-from .solve_mpc import solve_mpc
+from .solve_mpc import build_mpc_qp, solve_mpc
 
 __all__ = [
     "MPCProblem",
     "Plan",
+    "build_mpc_qp",
     "solve_mpc",
 ]
 
-__version__ = "2.0.0rc0"
+__version__ = "2.0.0rc1"
