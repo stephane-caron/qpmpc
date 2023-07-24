@@ -19,8 +19,7 @@ SPHINXOPTS    = -W
 SPHINXBUILD   = sphinx-build
 SOURCEDIR     = src
 BUILDDIR      = build
-ONLINEDIR     = tasts-robots.org:public_html/doc/ltv-mpc
-PDFFILE       = ltv-mpc.pdf
+ONLINEDIR     = scaron.info:public_html/doc/ltv-mpc
 
 .PHONY: help Makefile upload
 
@@ -30,6 +29,5 @@ help:
 %: Makefile
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS)
 
-upload: clean html latexpdf
-	cp $(BUILDDIR)/latex/$(PDFFILE) $(BUILDDIR)/html/$(PDFFILE)
+upload: clean html
 	rsync -auvz --delete-after $(BUILDDIR)/html/ $(ONLINEDIR)/
