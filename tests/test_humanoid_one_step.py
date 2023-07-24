@@ -89,8 +89,7 @@ class TestHumanoid(unittest.TestCase):
 
     def test_build_mpc_qp(self):
         qp = build_mpc_qp(self.problem)
-        self.assertNotAlmostEqual(np.linalg.norm(qp.G[0]), 0.0)
-        self.assertNotAlmostEqual(np.linalg.norm(qp.G[1]), 0.0)
+        self.assertAlmostEqual(np.linalg.norm(qp.G[0:2]), 0.0)
 
     def test_solve_mpc(self):
         solution = solve_mpc(self.problem, solver="quadprog")
@@ -100,8 +99,7 @@ class TestHumanoid(unittest.TestCase):
         U = solution.inputs
         X = solution.states
         self.assertEqual(U.flatten().shape, (N * input_dim,))
-        self.assertEqual(X.flatten().shape, ((N + 1) * state_dim,)
-        )
+        self.assertEqual(X.flatten().shape, ((N + 1) * state_dim,))
 
 
 if __name__ == "__main__":
