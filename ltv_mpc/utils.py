@@ -15,6 +15,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from typing import Any, Dict
+
 import matplotlib
 from matplotlib import pyplot as plt
 
@@ -22,6 +24,9 @@ from .exceptions import LTVMPCException
 
 
 class LivePlot:
+
+    lines: Dict[str, Any]
+
     def __init__(self, xlim, ylim, ylim2=None, fast: bool = True):
         if fast:  # blitting doesn't work with all matplotlib backends
             matplotlib.use("TkAgg")
