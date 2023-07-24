@@ -92,7 +92,6 @@ if __name__ == "__main__":
     cart_pole = CartPole(
         params,
         initial_state=np.zeros(CartPole.STATE_DIM),
-        goal_state=np.zeros(CartPole.STATE_DIM),
     )
     cart_pole.init_live_plot(order=args.plot)
 
