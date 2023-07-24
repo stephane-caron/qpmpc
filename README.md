@@ -7,7 +7,7 @@
 
 Model predictive control (MPC) in Python for systems whose problems can be cast as a quadratic program (QP). This includes linear time-invariant (LTI) and time-variant (LTV) systems with linear constraints. The resulting QP has the form:
 
-> ![ltv-mpc](https://raw.githubusercontent.com/stephan-caron/ltv-mpc/main/doc/src/images/ltv-mpc.svg)
+> ![ltv-mpc](https://raw.githubusercontent.com/stephane-caron/ltv-mpc/main/doc/src/images/ltv-mpc.svg)
 
 This module is designed for prototyping. If you need performance, check out the [alternatives](#alternatives) below.
 
