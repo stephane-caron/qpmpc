@@ -84,7 +84,7 @@ class CartPole:
 
         B_disc = np.array(
             [
-                [T ** 2 / 2.0],
+                [T**2 / 2.0],
                 [-np.cosh(T * omega) / g + 1.0 / g],
                 [T],
                 [-omega * np.sinh(T * omega) / g],
@@ -135,7 +135,7 @@ class CartPole:
         """
         r_0, theta_0, rd_0, thetad_0 = state
         rdd_0 = ground_accel
-        thetadd_0 = params.omega ** 2 * (
+        thetadd_0 = params.omega**2 * (
             np.sin(theta_0) - (rdd_0 / CartPole.GRAVITY) * np.cos(theta_0)
         )
 
