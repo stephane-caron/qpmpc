@@ -23,6 +23,7 @@ All notable changes to this project will be documented in this file.
 - Rename ``Solution`` to ``Plan``
 - Rename ``stacked_inputs`` to just ``inputs`` in plans
 - Rename ``stacked_states`` to just ``states`` in plans
+- Rename ``build_qp`` to ``build_mpc_qp``
 - Solver keyword argument to ``solve_mpc`` is now mandatory
 - Use problem class from ``qpsolvers`` internally
 - Warn rather than raise an exception when initial state is unfeasible
