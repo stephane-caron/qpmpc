@@ -60,11 +60,21 @@ class CartPole:
     state: np.ndarray
 
     @staticmethod
-    def build_mpc_problem(params: Parameters) -> MPCProblem:
+    def build_mpc_problem(
+        params: Parameters,
+        stage_input_cost_weight: Optional[float] = 1e-3,
+        stage_state_cost_weight: Optional[float] = None,
+        terminal_cost_weight: Optional[float] = 1.0,
+    ) -> MPCProblem:
         """Build the model predictive control problem.
 
         Args:
             params: Problem parameters.
+            stage_input_cost_weight: Weight on cumulated control costs.
+            stage_state_cost_weight: Weight on cumulated state costs, or
+                ``None`` to disable (default).
+            terminal_cost_weight: Weight on terminal state cost, or ``None`` to
+                disable.
 
         Returns:
             Model predictive control problem.
@@ -84,7 +94,7 @@ class CartPole:
 
         B_disc = np.array(
             [
-                [T**2 / 2.0],
+                [T ** 2 / 2.0],
                 [-np.cosh(T * omega) / g + 1.0 / g],
                 [T],
                 [-omega * np.sinh(T * omega) / g],
@@ -107,9 +117,9 @@ class CartPole:
             ineq_vector=ground_accel_ineq_vector,
             goal_state=None,
             nb_timesteps=params.nb_timesteps,
-            terminal_cost_weight=1.0,
-            stage_state_cost_weight=None,
-            stage_input_cost_weight=1e-3,
+            terminal_cost_weight=terminal_cost_weight,
+            stage_state_cost_weight=stage_state_cost_weight,
+            stage_input_cost_weight=stage_input_cost_weight,
         )
 
     @staticmethod
@@ -135,7 +145,7 @@ class CartPole:
         """
         r_0, theta_0, rd_0, thetad_0 = state
         rdd_0 = ground_accel
-        thetadd_0 = params.omega**2 * (
+        thetadd_0 = params.omega ** 2 * (
             np.sin(theta_0) - (rdd_0 / CartPole.GRAVITY) * np.cos(theta_0)
         )
 

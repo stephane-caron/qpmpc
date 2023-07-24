@@ -23,9 +23,9 @@ This is one locomotion mode for Upkie: https://github.com/tasts-robots/upkie
 import argparse
 
 import numpy as np
+import qpsolvers
 from loop_rate_limiters import RateLimiter
 
-import qpsolvers
 from ltv_mpc import solve_mpc
 from ltv_mpc.systems import CartPole
 
@@ -87,7 +87,12 @@ def get_target_states(state: np.ndarray, target_vel: float):
 
 if __name__ == "__main__":
     args = parse_command_line_arguments()
-    mpc_problem = CartPole.build_mpc_problem(params)
+    mpc_problem = CartPole.build_mpc_problem(
+        params,
+        terminal_cost_weight=10.0,
+        stage_state_cost_weight=1.0,
+        stage_input_cost_weight=1e-3,
+    )
 
     cart_pole = CartPole(
         params,

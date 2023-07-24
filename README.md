@@ -110,7 +110,7 @@ This module is incomplete with regards to the following points:
 - Documentation: there are some undocumented functions
 - Test coverage: only one end-to-end test
 
-New [contributions](CONTRIBUTING.md) are welcome :)
+Check out the [contribution guidelines](CONTRIBUTING.md) if you are interested in lending a hand.
 
 ## Alternatives
 
