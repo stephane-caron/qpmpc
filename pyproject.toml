@@ -39,7 +39,7 @@ doc = [
 Documentation = "https://tasts-robots.org/doc/ltv-mpc/"
 Source = "https://github.com/tasts-robots/ltv-mpc"
 Tracker = "https://github.com/tasts-robots/ltv-mpc/issues"
-Changelog = "https://github.com/tasts-robots/ltv-mpc/blob/master/CHANGELOG.md"
+Changelog = "https://github.com/tasts-robots/ltv-mpc/blob/main/CHANGELOG.md"
 
 [tool.black]
 line-length = 79

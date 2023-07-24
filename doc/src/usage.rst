@@ -1,4 +1,4 @@
-:github_url: https://github.com/tasts-robots/ltv-mpc/tree/master/doc/src/usage.rst
+:github_url: https://github.com/tasts-robots/ltv-mpc/tree/main/doc/src/usage.rst
 
 *****
 Usage
