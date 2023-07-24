@@ -1,13 +1,13 @@
 # ltv-mpc
 
-[![Build](https://img.shields.io/github/actions/workflow/status/tasts-robots/ltv-mpc/build.yml?branch=main)](https://github.com/tasts-robots/ltv-mpc/actions)
-[![Coverage](https://coveralls.io/repos/github/tasts-robots/ltv-mpc/badge.svg?branch=main)](https://coveralls.io/github/tasts-robots/ltv-mpc?branch=main)
+[![Build](https://img.shields.io/github/actions/workflow/status/stephane-caron/ltv-mpc/build.yml?branch=main)](https://github.com/stephane-caron/ltv-mpc/actions)
+[![Coverage](https://coveralls.io/repos/github/stephane-caron/ltv-mpc/badge.svg?branch=main)](https://coveralls.io/github/stephane-caron/ltv-mpc?branch=main)
 [![Documentation](https://img.shields.io/badge/docs-online-brightgreen?logo=read-the-docs&style=flat)](https://tasts-robots.org/doc/ltv-mpc/)
 [![PyPI version](https://img.shields.io/pypi/v/ltv-mpc)](https://pypi.org/project/ltv-mpc/0.6.0/)
 
 Model predictive control (MPC) in Python for systems whose problems can be cast as a quadratic program (QP). This includes linear time-invariant (LTI) and time-variant (LTV) systems with linear constraints. The resulting QP has the form:
 
-> ![ltv-mpc](https://raw.githubusercontent.com/tasts-robots/ltv-mpc/main/doc/src/images/ltv-mpc.svg)
+> ![ltv-mpc](https://raw.githubusercontent.com/stephan-caron/ltv-mpc/main/doc/src/images/ltv-mpc.svg)
 
 This module is designed for prototyping. If you need performance, check out the [alternatives](#alternatives) below.
 
