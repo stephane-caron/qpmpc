@@ -17,8 +17,7 @@
 
 import re
 import sys
-
-from os.path import dirname, join, abspath
+from os.path import abspath, dirname, join
 
 sys.path.insert(0, abspath("../.."))
 
@@ -36,7 +35,7 @@ extensions = [
     "sphinx.ext.coverage",
     "sphinx-mathjax-offline",
     "sphinx.ext.napoleon",  # before sphinx_autodoc_typehints
-    "sphinx_autodoc_typehints"
+    "sphinx_autodoc_typehints",
 ]
 
 # List of modules to be mocked up
@@ -74,12 +73,10 @@ version = None  # read from __init__.py
 release = None  # read from __init__.py
 
 # Read version info directly from the module's __init__.py
-init_path = join(
-    dirname(dirname(dirname(str(abspath(__file__))))), "ltv_mpc"
-)
+init_path = join(dirname(dirname(dirname(str(abspath(__file__))))), "ltv_mpc")
 with open(f"{init_path}/__init__.py", "r") as fh:
     for line in fh:
-        match = re.match('__version__ = "((\\d.\\d).\\d)".*', line)
+        match = re.match('__version__ = "((\\d.\\d).\\d)[a-z0-9\\-]*".*', line)
         if match is not None:
             release = match.group(1)
             version = match.group(2)
@@ -90,7 +87,7 @@ with open(f"{init_path}/__init__.py", "r") as fh:
 #
 # This is also used if you do content translation via gettext catalogs.
 # Usually you set "language" from the command line for these cases.
-language = None
+language = "en"
 
 # There are two options for replacing |today|: either, you set today to some
 # non-false value, then it is used:
