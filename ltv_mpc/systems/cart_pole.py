@@ -15,6 +15,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""Cart-pole system."""
+
 from dataclasses import dataclass
 from typing import Optional
 
@@ -26,9 +28,7 @@ from ..utils import LivePlot
 
 
 class CartPole:
-    GRAVITY: float = 9.81  # m/s²
-    INPUT_DIM: int = 1
-    STATE_DIM: int = 4
+    """Cart-pole system."""
 
     @dataclass
     class Parameters:
@@ -41,11 +41,23 @@ class CartPole:
 
         @property
         def omega(self) -> float:
+            """Characteristic frequency of the inverted pendulum."""
             return np.sqrt(CartPole.GRAVITY / self.length)
 
         @property
         def horizon_duration(self) -> float:
+            """Duration of the receding horizon in seconds."""
             return self.sampling_period * self.nb_timesteps
+
+    # Constants
+    GRAVITY: float = 9.81  # m/s²
+    INPUT_DIM: int = 1
+    STATE_DIM: int = 4
+
+    # Attributes
+    live_plot: Optional[LivePlot]
+    params: Parameters
+    state: np.ndarray
 
     @staticmethod
     def build_mpc_problem(params: Parameters) -> MPCProblem:
@@ -72,7 +84,7 @@ class CartPole:
 
         B_disc = np.array(
             [
-                [T**2 / 2.0],
+                [T ** 2 / 2.0],
                 [-np.cosh(T * omega) / g + 1.0 / g],
                 [T],
                 [-omega * np.sinh(T * omega) / g],
@@ -123,7 +135,7 @@ class CartPole:
         """
         r_0, theta_0, rd_0, thetad_0 = state
         rdd_0 = ground_accel
-        thetadd_0 = params.omega**2 * (
+        thetadd_0 = params.omega ** 2 * (
             np.sin(theta_0) - (rdd_0 / CartPole.GRAVITY) * np.cos(theta_0)
         )
 
@@ -139,9 +151,14 @@ class CartPole:
     def __init__(
         self,
         params: Parameters,
-        initial_state: Optional[np.ndarray] = None,
-        goal_state: Optional[np.ndarray] = None,
+        initial_state: np.ndarray,
     ):
+        """Initialize a new cart-pole.
+
+        Args:
+            params: System description.
+            initial_state: Initial state, a four-dimensional vector.
+        """
         if initial_state is None:
             initial_state = np.zeros(CartPole.STATE_DIM)
         self.live_plot = None
@@ -178,8 +195,10 @@ class CartPole:
         live_plot.axis.set_ylabel(f"Ground {order} [m{ps}]", color="b")
         live_plot.axis.tick_params(axis="y", labelcolor="b")
         live_plot.add_rhs_line("rhs", "g-")
-        live_plot.rhs_axis.set_ylabel(f"Angular {order} [rad{ps}]", color="g")
-        live_plot.rhs_axis.tick_params(axis="y", labelcolor="g")
+        if live_plot.rhs_axis is not None:  # help mypy
+            label = f"Angular {order} [rad{ps}]"
+            live_plot.rhs_axis.set_ylabel(label, color="g")
+            live_plot.rhs_axis.tick_params(axis="y", labelcolor="g")
         live_plot.add_line("lhs_cur", "bo", lw=2)
         live_plot.add_line("lhs_goal", "b--", lw=1)
         live_plot.add_rhs_line("rhs_goal", "g--", lw=1)
@@ -189,7 +208,10 @@ class CartPole:
         self.live_plot = live_plot
 
     def update_live_plot(
-        self, plan: Plan, plan_time: float, state_time: float
+        self,
+        plan: Plan,
+        plan_time: float,
+        state_time: float,
     ) -> None:
         """Plot plan resulting from the MPC problem.
 
