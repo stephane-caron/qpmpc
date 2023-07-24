@@ -81,7 +81,10 @@ def build_qp(problem: MPCProblem, sparse: bool = False) -> qpsolvers.Problem:
         if k == 0 and D_k is None and np.any(h_k < 0.0):
             # in this case, the initial state constraint is violated and cannot
             # be compensated by any input (D_k is None)
-            warn("initial state is unfeasible")
+            warn(
+                "initial state is unfeasible: "
+                f"G_0 * x <= h_0 with G_0 == 0 and min(h_0) == {min(h_k)}"
+            )
         G_list.append(G_k)
         h_list.append(h_k)
         phi = A_k.dot(phi)
