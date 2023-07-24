@@ -1,4 +1,4 @@
-:github_url: https://github.com/tasts-robots/ltv-mpc/tree/master/doc/src/examples.rst
+:github_url: https://github.com/tasts-robots/ltv-mpc/tree/main/doc/src/examples.rst
 
 ********
 Examples
