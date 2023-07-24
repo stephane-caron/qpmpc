@@ -114,11 +114,12 @@ New [contributions](CONTRIBUTING.md) are welcome :)
 
 ## Alternatives
 
-This module is designed for prototyping. If you need performance, check out one of the following libraries, and [open a PR](https://github.com/tasts-robots/ltv-mpc/pulls) if you know other relevant ones:
+This module is designed for faster prototyping rather than performance. You can also check out the following open-source libraries:
 
-| Library                                                    | System                | Language   | License      |
+| Name                                                       | Systems               | Languages  | License      |
 |------------------------------------------------------------|-----------------------|------------|--------------|
-| [Copra (fork)](https://github.com/ANYbotics/copra)         | Linear time-variant   | C++        | BSD-2-Clause |
-| [Copra (original)](https://github.com/jrl-umi3218/copra)   | Linear time-invariant | C++        | BSD-2-Clause |
-| [Crocoddyl](https://github.com/loco-3d/crocoddyl)          | Nonlinear             | C++        | BSD-3-Clause |
-| [mpc\_interface](https://github.com/Gepetto/mpc-interface) | Linear time-variant   | C++/Python | BSD-2-Clause |
+| [Copra (LTV fork)](https://github.com/ANYbotics/copra)     | Linear time-variant   | Python/C++ | BSD-2-Clause |
+| [Copra (original)](https://github.com/jrl-umi3218/copra)   | Linear time-invariant | Python/C++ | BSD-2-Clause |
+| [Crocoddyl](https://github.com/loco-3d/crocoddyl)          | Nonlinear             | Python/C++ | BSD-3-Clause |
+| [mpc-interface](https://github.com/Gepetto/mpc-interface)  | Linear time-variant   | Python/C++ | BSD-2-Clause |
+| [pyMPC](https://github.com/forgi86/pyMPC)                  | Linear time-variant   | Python     | MIT          |
