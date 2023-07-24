@@ -106,10 +106,11 @@ def build_mpc_qp(
         problem.stage_state_cost_weight is not None
         and problem.stage_state_cost_weight > 1e-10
     ):
+        if problem.target_states is None:
+            raise ProblemDefinitionError("reference trajectory is undefined")
         Phi = np.vstack(phi_list)
         Psi = np.vstack(psi_list)
-        X_goal = np.hstack([problem.goal_state] * problem.nb_timesteps)
-        c = np.dot(Phi, problem.initial_state) - X_goal
+        c = np.dot(Phi, initial_state) - problem.target_states
         P += problem.stage_state_cost_weight * np.dot(Psi.T, Psi)
         q += problem.stage_state_cost_weight * np.dot(c.T, Psi)
 
