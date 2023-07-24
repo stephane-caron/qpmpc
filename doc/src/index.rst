@@ -26,5 +26,3 @@ The library provides a one-stop shop :func:`.solve_mpc` function that computes t
     usage.rst
     examples.rst
     developer-notes.rst
-
-You can download the full module documentation as a `PDF document <ltv-mpc.pdf>`_.

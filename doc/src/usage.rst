@@ -4,19 +4,19 @@
 Usage
 *****
 
-Defining a problem
-==================
+Defining an MPC problem
+=======================
 
-.. automodule:: ltv_mpc.problem
+.. automodule:: ltv_mpc.mpc_problem
     :members:
 
-Solving the problem
-===================
+Solving the MPC problem
+=======================
 
 .. autofunction:: ltv_mpc.solve_mpc.solve_mpc
 
 Reading the solution
 ====================
 
-.. automodule:: ltv_mpc.solution
+.. automodule:: ltv_mpc.plan
     :members:
