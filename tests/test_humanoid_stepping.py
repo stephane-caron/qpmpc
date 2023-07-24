@@ -21,7 +21,7 @@ from dataclasses import dataclass
 import numpy as np
 
 from ltv_mpc import MPCProblem, solve_mpc
-from ltv_mpc.solve_mpc import build_qp
+from ltv_mpc.solve_mpc import build_mpc_qp
 
 gravity = 9.81  # [m] / [s]^2
 
@@ -87,8 +87,8 @@ class TestHumanoid(unittest.TestCase):
         self.stepping_problem = problem
         self.problem = mpc_problem
 
-    def test_build_qp(self):
-        qp = build_qp(self.problem)
+    def test_build_mpc_qp(self):
+        qp = build_mpc_qp(self.problem)
         self.assertNotAlmostEqual(np.linalg.norm(qp.G[0]), 0.0)
         self.assertNotAlmostEqual(np.linalg.norm(qp.G[1]), 0.0)
 
