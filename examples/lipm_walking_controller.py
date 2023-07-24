@@ -15,7 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Model predictive control part of the lipm_walking_controller.
+"""Model predictive control part of the LIPM walking controller.
 
 See also: https://github.com/stephane-caron/lipm_walking_controller/
 """
@@ -71,7 +71,7 @@ def build_mpc_problem(params: Parameters):
         params: Problem parameters.
 
     For details on this problem and how open-loop model predictive control was
-    used in the lipm_walking_controller, see "Stair Climbing Stabilization of
+    used in the LIPM walking controller, see "Stair Climbing Stabilization of
     the HRP-4 Humanoid Robot using Whole-body Admittance Control" (Caron et
     al., 2019).
     """
@@ -353,7 +353,7 @@ if __name__ == "__main__":
 
     # Skip edge cases of separate initial and final DSP durations (2/2): here
     # we set the initial ZMP at the center of the initial foothold, and the
-    # initial DCM halfway. See the lipm_walking_controller and its
+    # initial DCM halfway. See the LIPM walking controller and its
     # configuration for details on initial/final DSP phases.
     init_accel = -params.omega**2 * support_foot_pos
     init_vel = 0.5 * params.omega * support_foot_pos
