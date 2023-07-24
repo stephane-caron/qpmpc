@@ -29,8 +29,11 @@ from .mpc_problem import MPCProblem
 from .plan import Plan
 
 
-def build_qp(problem: MPCProblem, sparse: bool = False) -> qpsolvers.Problem:
-    """Build the quadratic program corresponding to an LTV-MPC problem.
+def build_mpc_qp(
+    problem: MPCProblem,
+    sparse: bool = False,
+) -> qpsolvers.Problem:
+    """Build the quadratic program corresponding to an MPC problem.
 
     Args:
         problem: Model predictive control problem.
@@ -38,23 +41,18 @@ def build_qp(problem: MPCProblem, sparse: bool = False) -> qpsolvers.Problem:
             program. Enable it if you are calling a sparse solver afterwards.
 
     Returns:
-        Quadratic program representing the input problem.
+        Quadratic program representing the MPC problem.
 
     Notes:
-        In numerical analysis, there are three classes of methods to solve
-        boundary value problems: single shooting, multiple shooting and
-        collocation. The QP built by this function implements a `single
-        shooting method <https://en.wikipedia.org/wiki/Shooting_method>`_.
+        The QP built by this function implements a `single shooting method
+        <https://en.wikipedia.org/wiki/Shooting_method>`_.
     """
     input_dim = problem.input_dim
     state_dim = problem.state_dim
     stacked_input_dim = problem.input_dim * problem.nb_timesteps
     if problem.initial_state is None:
         raise ProblemDefinitionError("initial state is undefined")
-    if problem.goal_state is None:
-        raise ProblemDefinitionError("goal state is undefined")
     initial_state: np.ndarray = problem.initial_state
-    goal_state: np.ndarray = problem.goal_state
 
     phi = np.eye(state_dim)
     psi = np.zeros((state_dim, stacked_input_dim))
@@ -91,13 +89,17 @@ def build_qp(problem: MPCProblem, sparse: bool = False) -> qpsolvers.Problem:
         psi = A_k.dot(psi)
         psi[:, input_slice] = B_k
 
-    P: np.ndarray = problem.stage_input_cost_weight * np.eye(stacked_input_dim)
+    P: np.ndarray = problem.stage_input_cost_weight * np.eye(
+        stacked_input_dim,
+    )
     q: np.ndarray = np.zeros(stacked_input_dim)
     if (
         problem.terminal_cost_weight is not None
         and problem.terminal_cost_weight > 1e-10
     ):
-        c = np.dot(phi, problem.initial_state) - goal_state
+        if problem.goal_state is None:
+            raise ProblemDefinitionError("goal state is undefined")
+        c = np.dot(phi, initial_state) - problem.goal_state
         P += problem.terminal_cost_weight * np.dot(psi.T, psi)
         q += problem.terminal_cost_weight * np.dot(c.T, psi)
     if (
@@ -144,6 +146,6 @@ def solve_mpc(
     .. _solve_qp:
         https://qpsolvers.github.io/qpsolvers/quadratic-programming.html#qpsolvers.solve_qp
     """
-    qp = build_qp(problem, sparse=sparse)
+    qp = build_mpc_qp(problem, sparse=sparse)
     qpsol = solve_problem(qp, solver=solver, **kwargs)
     return Plan(problem, qpsol)
