@@ -15,7 +15,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from typing import Any, Dict
+"""Utility functions and classes."""
+
+from typing import Any, Dict, Sequence
 
 import matplotlib
 from matplotlib import pyplot as plt
@@ -24,10 +26,19 @@ from .exceptions import LTVMPCException
 
 
 class LivePlot:
+    """Live plot using matplotlib."""
 
     lines: Dict[str, Any]
 
     def __init__(self, xlim, ylim, ylim2=None, fast: bool = True):
+        """Initialize live plot.
+
+        Args:
+            xlim: Limits for the x-axis.
+            ylim: Limits for left y-axis.
+            ylim2: Limits for the right y-axis.
+            fast: If set, use blitting.
+        """
         if fast:  # blitting doesn't work with all matplotlib backends
             matplotlib.use("TkAgg")
         figure, axis = plt.subplots()
@@ -42,47 +53,74 @@ class LivePlot:
         self.axis = axis
         self.background = None
         self.canvas = figure.canvas
-        self.canvas.mpl_connect("draw_event", self.on_draw)
+        self.canvas.mpl_connect("draw_event", self.__on_draw)
         self.fast = fast
         self.figure = figure
         self.lines = {}
         self.rhs_axis = rhs_axis
 
-    def add_line(self, name, *args, **kwargs):
+    def add_line(self, name, *args, **kwargs) -> None:
+        """Add a line-plot to the left axis.
+
+        Args:
+            name: Name to refer to this line, for updates.
+            args: Forwarded to ``pyplot.plot``.
+            kwargs: Forwarded to ``pyplot.plot``.
+        """
         kwargs["animated"] = True
         (line,) = self.axis.plot([], *args, **kwargs)
         self.lines[name] = line
 
-    def add_rhs_line(self, name, *args, **kwargs):
+    def add_rhs_line(self, name, *args, **kwargs) -> None:
+        """Add a line-plot to the right axis.
+
+        Args:
+            name: Name to refer to this line, for updates.
+            args: Forwarded to ``pyplot.plot``.
+            kwargs: Forwarded to ``pyplot.plot``.
+        """
         if self.rhs_axis is None:
             raise LTVMPCException("right-hand side axis not initialized")
         kwargs["animated"] = True
         (line,) = self.rhs_axis.plot([], *args, **kwargs)
         self.lines[name] = line
 
-    def legend(self, legend):
+    def legend(self, legend: Sequence[str]) -> None:
+        """Add a legend to the plot.
+
+        Args:
+            legend: Legend.
+        """
         self.axis.legend(legend)
 
-    def update_line(self, name, xdata, ydata):
+    def update_line(self, name: str, xdata, ydata) -> None:
+        """Update a previously-added line.
+
+        Args:
+            name: Name of the line to update.
+            xdata: New x-axis data.
+            ydata: New y-axis data.
+        """
         self.lines[name].set_data(xdata, ydata)
 
-    def on_draw(self, event):
+    def __draw_lines(self):
+        for line in self.lines.values():
+            self.figure.draw_artist(line)
+
+    def __on_draw(self, event):
         if event is not None:
             if event.canvas != self.canvas:
                 raise RuntimeError
         self.background = self.canvas.copy_from_bbox(self.figure.bbox)
-        self.draw_lines()
+        self.__draw_lines()
 
-    def draw_lines(self):
-        for line in self.lines.values():
-            self.figure.draw_artist(line)
-
-    def update(self):
+    def update(self) -> None:
+        """Update the output figure."""
         if self.background is None:
-            self.on_draw(None)
+            self.__on_draw(None)
         elif self.fast:
             self.canvas.restore_region(self.background)
-            self.draw_lines()
+            self.__draw_lines()
             self.canvas.blit(self.figure.bbox)
         else:  # slow mode, if blitting doesn't work
             self.canvas.draw()

@@ -273,6 +273,7 @@ class MPCProblem:
         self.target_states = target_states.flatten()
 
     def __repr__(self) -> str:
+        """String representation of the MPC problem."""
         return (
             f"MPCProblem("
             f"goal_state={self.goal_state}, "
