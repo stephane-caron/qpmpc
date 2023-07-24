@@ -23,13 +23,12 @@ See also: https://github.com/stephane-caron/lipm_walking_controller/
 import argparse
 from dataclasses import dataclass
 
-import matplotlib
 import numpy as np
 from loop_rate_limiters import RateLimiter
-from matplotlib import pyplot as plt
 
 from ltv_mpc import MPCProblem, solve_mpc
 from ltv_mpc.exceptions import ProblemDefinitionError
+from ltv_mpc.utils import LivePlot
 
 MAX_ZMP_DIST = 100.0  # [m]
 
@@ -61,7 +60,7 @@ class Parameters:
 
     @property
     def zmp_from_state(self) -> np.ndarray:
-        return np.array([1.0, 0.0, -1.0 / self.omega**2])
+        return np.array([1.0, 0.0, -1.0 / self.omega ** 2])
 
 
 def build_mpc_problem(params: Parameters):
@@ -78,15 +77,15 @@ def build_mpc_problem(params: Parameters):
     T = params.sampling_period
     state_matrix = np.array(
         [
-            [1.0, T, T**2 / 2.0],
+            [1.0, T, T ** 2 / 2.0],
             [0.0, 1.0, T],
             [0.0, 0.0, 1.0],
         ]
     )
     input_matrix = np.array(
         [
-            T**3 / 6.0,
-            T**2 / 2.0,
+            T ** 3 / 6.0,
+            T ** 2 / 2.0,
             T,
         ]
     ).reshape((3, 1))
@@ -229,56 +228,6 @@ def integrate(state: np.ndarray, jerk: float, dt: float) -> np.ndarray:
             a_0 + dt * jerk,
         ]
     ).flatten()
-
-
-class LivePlot:
-    def __init__(self, xlim, ylim, fast: bool = True):
-        if fast:  # blitting doesn't work with all matplotlib backends
-            matplotlib.use("TkAgg")
-        figure, axis = plt.subplots()
-        axis.set_xlim(*xlim)
-        axis.set_ylim(*ylim)
-        canvas = figure.canvas
-        plt.grid(True)
-        plt.show(block=False)
-        plt.pause(0.05)
-        self.axis = axis
-        self.background = None
-        self.canvas = canvas
-        self.canvas.mpl_connect("draw_event", self.on_draw)
-        self.fast = fast
-        self.figure = figure
-        self.lines = {}
-
-    def add_line(self, name, *args, **kwargs):
-        kwargs["animated"] = True
-        (line,) = self.axis.plot([], *args, **kwargs)
-        self.lines[name] = line
-
-    def update_line(self, name, xdata, ydata):
-        self.lines[name].set_data(xdata, ydata)
-
-    def on_draw(self, event):
-        if event is not None:
-            if event.canvas != self.canvas:
-                raise RuntimeError
-        self.background = self.canvas.copy_from_bbox(self.figure.bbox)
-        self.draw_lines()
-
-    def draw_lines(self):
-        for line in self.lines.values():
-            self.figure.draw_artist(line)
-
-    def update(self):
-        if self.background is None:
-            self.on_draw(None)
-        elif self.fast:
-            self.canvas.restore_region(self.background)
-            self.draw_lines()
-            self.canvas.blit(self.figure.bbox)
-        else:  # slow mode, if blitting doesn't work
-            self.canvas.draw()
-        self.canvas.flush_events()
 
 
 def plot_plan(t, live_plot, params, mpc_problem, plan) -> None:
