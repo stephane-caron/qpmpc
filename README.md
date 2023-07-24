@@ -5,7 +5,7 @@
 [![Documentation](https://img.shields.io/badge/docs-online-brightgreen?logo=read-the-docs&style=flat)](https://tasts-robots.org/doc/ltv-mpc/)
 [![PyPI version](https://img.shields.io/pypi/v/ltv-mpc)](https://pypi.org/project/ltv-mpc/0.6.0/)
 
-Linear time-variant (LTV) model predictive control in Python. Solve a quadratic program of the form:
+Model predictive control (MPC) in Python for systems whose problems can be cast as a quadratic program (QP). This includes linear time-invariant (LTI) and time-variant (LTV) systems with linear constraints. The resulting QP has the form:
 
 > ![ltv-mpc](https://raw.githubusercontent.com/tasts-robots/ltv-mpc/main/doc/src/images/ltv-mpc.svg)
 
