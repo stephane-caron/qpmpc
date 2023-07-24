@@ -79,7 +79,7 @@ class MPCProblem:
         transition_state_matrix: State linear dynamics matrix.
     """
 
-    goal_state: np.ndarray
+    goal_state: Optional[np.ndarray]
     ineq_input_matrix: Union[None, np.ndarray, List[np.ndarray]]
     ineq_state_matrix: Union[None, np.ndarray, List[np.ndarray]]
     ineq_vector: Union[np.ndarray, List[np.ndarray]]
@@ -89,6 +89,7 @@ class MPCProblem:
     stage_input_cost_weight: float
     stage_state_cost_weight: Optional[float]
     state_dim: int
+    target_states: Optional[np.ndarray]
     terminal_cost_weight: Optional[float]
     transition_input_matrix: Union[np.ndarray, List[np.ndarray]]
     transition_state_matrix: Union[np.ndarray, List[np.ndarray]]
@@ -106,11 +107,12 @@ class MPCProblem:
         stage_input_cost_weight: float,
         initial_state: Optional[np.ndarray] = None,
         goal_state: Optional[np.ndarray] = None,
+        target_states: Optional[np.ndarray] = None,
     ) -> None:
         """Start a new model predictive control problem."""
         if stage_input_cost_weight <= 0.0:
             raise ProblemDefinitionError(
-                "non-negative control weight needed for regularization"
+                "stage non-negative control weight needed for regularization"
             )
         if terminal_cost_weight is None and stage_state_cost_weight is None:
             raise ProblemDefinitionError(
@@ -133,6 +135,7 @@ class MPCProblem:
         self.initial_state = None  # initialized below
         self.input_dim = input_dim
         self.nb_timesteps = nb_timesteps
+        self.target_states = None  # initialized below
         self.stage_input_cost_weight = stage_input_cost_weight
         self.stage_state_cost_weight = stage_state_cost_weight
         self.state_dim = state_dim
@@ -219,7 +222,7 @@ class MPCProblem:
             else self.ineq_vector
         )
 
-    def update_goal_state(self, goal_state: np.ndarray):
+    def update_goal_state(self, goal_state: np.ndarray) -> None:
         """Set the goal state.
 
         Args:
@@ -235,7 +238,7 @@ class MPCProblem:
             )
         self.goal_state = goal_state.flatten()
 
-    def update_initial_state(self, initial_state: np.ndarray):
+    def update_initial_state(self, initial_state: np.ndarray) -> None:
         """Set the initial state.
 
         Args:
@@ -250,3 +253,39 @@ class MPCProblem:
                 f"does not match state dimension ({self.state_dim})"
             )
         self.initial_state = initial_state.flatten()
+
+    def update_target_states(self, target_states: np.ndarray) -> None:
+        """Set the reference state trajectory to track.
+
+        Args:
+            target_states: Reference state trajectory.
+
+        Raises:
+            StateError: if the initial state does not have the right dimension.
+        """
+        if target_states.size != self.state_dim * self.nb_timesteps:
+            raise StateError(
+                f"Reference state trajectory of shape {target_states.shape} "
+                "does not match nb_timesteps * state dimension = "
+                f"{self.nb_timesteps} * {self.state_dim} = "
+                f"{self.nb_timesteps * self.state_dim}"
+            )
+        self.target_states = target_states.flatten()
+
+    def __repr__(self) -> str:
+        return (
+            f"MPCProblem("
+            f"goal_state={self.goal_state}, "
+            f"ineq_input_matrix={self.ineq_input_matrix}, "
+            f"ineq_state_matrix={self.ineq_state_matrix}, "
+            f"ineq_vector={self.ineq_vector}, "
+            f"initial_state={self.initial_state}, "
+            f"input_dim={self.input_dim}, "
+            f"nb_timesteps={self.nb_timesteps}, "
+            f"stage_input_cost_weight={self.stage_input_cost_weight}, "
+            f"stage_state_cost_weight={self.stage_state_cost_weight}, "
+            f"state_dim={self.state_dim}, "
+            f"terminal_cost_weight={self.terminal_cost_weight}, "
+            f"transition_input_matrix={self.transition_input_matrix}, "
+            f"transition_state_matrix={self.transition_state_matrix})"
+        )
