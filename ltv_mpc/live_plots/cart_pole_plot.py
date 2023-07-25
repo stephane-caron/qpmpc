@@ -26,6 +26,8 @@ from .live_plot import LivePlot
 
 
 class CartPolePlot:
+    """Live plot for the cart-pole system."""
+
     live_plot: LivePlot
     cart_pole: CartPole
     lhs_index: int
@@ -64,7 +66,13 @@ class CartPolePlot:
         self.live_plot = live_plot
         self.rhs_index = rhs_index
 
-    def update_plan(self, plan: Plan, plan_time: float):
+    def update_plan(self, plan: Plan, plan_time: float) -> None:
+        """Update live-plot from plan.
+
+        Args:
+            plan: Solution to the MPC problem.
+            plan_time: Time corresponding to the initial state.
+        """
         if plan.states is None:
             raise PlanError("No state trajectory in plan")
         X = plan.states
@@ -74,7 +82,10 @@ class CartPolePlot:
         trange = np.linspace(t, t + horizon_duration, nb_timesteps + 1)
         self.live_plot.update_line("lhs", trange, X[:, self.lhs_index])
         self.live_plot.update_line("rhs", trange, X[:, self.rhs_index])
-        if plan.problem.target_states is None or plan.problem.goal_state is None:
+        if (
+            plan.problem.target_states is None
+            or plan.problem.goal_state is None
+        ):
             return
         self.live_plot.update_line(
             "lhs_goal",
@@ -98,6 +109,12 @@ class CartPolePlot:
         )
 
     def update_state(self, state: np.ndarray, state_time: float):
+        """Update live-plot from current state.
+
+        Args:
+            state: Current state of the system.
+            state_time: Time corresponding to the state.
+        """
         horizon_duration = self.cart_pole.horizon_duration
         T = self.cart_pole.sampling_period
         if state_time >= T:
