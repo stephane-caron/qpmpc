@@ -26,5 +26,9 @@ class ProblemDefinitionError(LTVMPCException):
     """Problem definition is incorrect."""
 
 
+class PlanError(LTVMPCException):
+    """Plan is not correct."""
+
+
 class StateError(LTVMPCException):
     """Report an ill-formed state."""

@@ -19,6 +19,7 @@
 
 import numpy as np
 
+from ..exceptions import PlanError
 from ..plan import Plan
 from ..systems import CartPole
 from .live_plot import LivePlot
@@ -64,6 +65,8 @@ class CartPolePlot:
         self.rhs_index = rhs_index
 
     def update_plan(self, plan: Plan, plan_time: float):
+        if plan.states is None:
+            raise PlanError("No state trajectory in plan")
         X = plan.states
         t = plan_time
         horizon_duration = self.cart_pole.horizon_duration
@@ -71,27 +74,28 @@ class CartPolePlot:
         trange = np.linspace(t, t + horizon_duration, nb_timesteps + 1)
         self.live_plot.update_line("lhs", trange, X[:, self.lhs_index])
         self.live_plot.update_line("rhs", trange, X[:, self.rhs_index])
-        if plan.problem.target_states is not None:
-            self.live_plot.update_line(
-                "lhs_goal",
-                trange,
-                np.hstack(
-                    [
-                        plan.problem.target_states[self.lhs_index :: 4],
-                        plan.problem.goal_state[self.lhs_index],
-                    ]
-                ),
-            )
-            self.live_plot.update_line(
-                "rhs_goal",
-                trange,
-                np.hstack(
-                    [
-                        plan.problem.target_states[self.rhs_index :: 4],
-                        plan.problem.goal_state[self.rhs_index],
-                    ]
-                ),
-            )
+        if plan.problem.target_states is None or plan.problem.goal_state is None:
+            return
+        self.live_plot.update_line(
+            "lhs_goal",
+            trange,
+            np.hstack(
+                [
+                    plan.problem.target_states[self.lhs_index :: 4],
+                    plan.problem.goal_state[self.lhs_index],
+                ]
+            ),
+        )
+        self.live_plot.update_line(
+            "rhs_goal",
+            trange,
+            np.hstack(
+                [
+                    plan.problem.target_states[self.rhs_index :: 4],
+                    plan.problem.goal_state[self.rhs_index],
+                ]
+            ),
+        )
 
     def update_state(self, state: np.ndarray, state_time: float):
         horizon_duration = self.cart_pole.horizon_duration
