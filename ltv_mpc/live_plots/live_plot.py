@@ -22,7 +22,7 @@ from typing import Any, Dict, Sequence
 import matplotlib
 from matplotlib import pyplot as plt
 
-from .exceptions import LTVMPCException
+from ..exceptions import LTVMPCException
 
 
 class LivePlot:
