@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 - MPCProblem: target state trajectory for stage state cost
 - Plan: ``first_input`` getter
 - Plan: ``is_empty`` property
+- Started ``ltv_mpc.live_plots`` submodule
 - Started ``ltv_mpc.systems`` submodule
 
 ### Changed
