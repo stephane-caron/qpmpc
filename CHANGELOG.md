@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 - Exception: ``ProblemDefinitionError``
 - MPCProblem: setter for the initial state
 - MPCProblem: target state trajectory for stage state cost
+- MPCQP class to update cost vectors during execution
 - Plan: ``first_input`` getter
 - Plan: ``is_empty`` property
 - Started ``ltv_mpc.live_plots`` submodule
