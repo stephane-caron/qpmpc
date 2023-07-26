@@ -20,8 +20,11 @@
 from logging import warn
 
 import numpy as np
+import qpsolvers
+from scipy.sparse import csc_matrix
 
 from .exceptions import ProblemDefinitionError
+from .mpc_problem import MPCProblem
 
 
 class MPCQP:
@@ -31,27 +34,27 @@ class MPCQP:
     linear inequality vectors.
     """
 
-    def __init__(self, problem) -> None:
-        input_dim = problem.input_dim
-        state_dim = problem.state_dim
-        stacked_input_dim = problem.input_dim * problem.nb_timesteps
-        if problem.initial_state is None:
+    def __init__(self, mpc_problem: MPCProblem, sparse: bool = False) -> None:
+        input_dim = mpc_problem.input_dim
+        state_dim = mpc_problem.state_dim
+        stacked_input_dim = mpc_problem.input_dim * mpc_problem.nb_timesteps
+        if mpc_problem.initial_state is None:
             raise ProblemDefinitionError("initial state is undefined")
-        initial_state: np.ndarray = problem.initial_state
+        initial_state: np.ndarray = mpc_problem.initial_state
 
         phi = np.eye(state_dim)
         psi = np.zeros((state_dim, stacked_input_dim))
         G_list, h_list = [], []
         phi_list, psi_list = [], []
-        for k in range(problem.nb_timesteps):
+        for k in range(mpc_problem.nb_timesteps):
             # Loop invariant: x == psi * U + phi * x_init
             phi_list.append(phi)
             psi_list.append(psi)
-            A_k = problem.get_transition_state_matrix(k)
-            B_k = problem.get_transition_input_matrix(k)
-            C_k = problem.get_ineq_state_matrix(k)
-            D_k = problem.get_ineq_input_matrix(k)
-            e_k = problem.get_ineq_vector(k)
+            A_k = mpc_problem.get_transition_state_matrix(k)
+            B_k = mpc_problem.get_transition_input_matrix(k)
+            C_k = mpc_problem.get_ineq_state_matrix(k)
+            D_k = mpc_problem.get_ineq_input_matrix(k)
+            e_k = mpc_problem.get_ineq_vector(k)
             G_k = np.zeros((e_k.shape[0], stacked_input_dim))
             h_k = (
                 e_k
@@ -76,52 +79,58 @@ class MPCQP:
             phi = A_k.dot(phi)
             psi = A_k.dot(psi)
             psi[:, input_slice] = B_k
-
+        G: np.ndarray = np.vstack(G_list)
+        h: np.ndarray = np.hstack(h_list)
         Phi = np.vstack(phi_list)
         Psi = np.vstack(psi_list)
-        P: np.ndarray = problem.stage_input_cost_weight * np.eye(
+
+        P: np.ndarray = mpc_problem.stage_input_cost_weight * np.eye(
             stacked_input_dim,
         )
         q: np.ndarray = np.zeros(stacked_input_dim)
-        if problem.has_terminal_cost:
-            if problem.goal_state is None:
+        if mpc_problem.has_terminal_cost:
+            if mpc_problem.goal_state is None:
                 raise ProblemDefinitionError("goal state is undefined")
-            P += problem.terminal_cost_weight * np.dot(psi.T, psi)
-        if problem.has_stage_state_cost:
-            if problem.target_states is None:
+            P += mpc_problem.terminal_cost_weight * np.dot(psi.T, psi)
+        if mpc_problem.has_stage_state_cost:
+            if mpc_problem.target_states is None:
                 raise ProblemDefinitionError(
                     "reference trajectory is undefined"
                 )
-            P += problem.stage_state_cost_weight * np.dot(Psi.T, Psi)
+            P += mpc_problem.stage_state_cost_weight * np.dot(Psi.T, Psi)
 
-        self.G: np.ndarray = np.vstack(G_list)
-        self.P = P
+        self.P = csc_matrix(P) if sparse else P
+        self.G = csc_matrix(G) if sparse else G
         self.Phi = Phi
         self.Psi = Psi
-        self.h: np.ndarray = np.hstack(h_list)
+        self.h = h
         self.phi_last = phi
         self.psi_last = psi
         self.q = q  # initialized below
         #
-        self.recompute_cost_vector(problem)
+        self.recompute_cost_vector(mpc_problem)
 
-    def update_cost_vector(self, problem) -> None:
-        if problem.initial_state is None:
+    @property
+    def problem(self) -> qpsolvers.Problem:
+        """Get quadratic program to call a QP solver."""
+        return qpsolvers.Problem(self.P, self.q, self.G, self.h)
+
+    def update_cost_vector(self, mpc_problem) -> None:
+        if mpc_problem.initial_state is None:
             raise ProblemDefinitionError("initial state is undefined")
-        initial_state = problem.initial
+        initial_state = mpc_problem.initial
+        goal_state = mpc_problem.goal_state
         self.q[:] = 0.0
-        if problem.has_terminal_cost:
-            if problem.goal_state is None:
-                raise ProblemDefinitionError("goal state is undefined")
-            c = np.dot(self.phi_last, initial_state) - problem.goal_state
-            self.q += problem.terminal_cost_weight * np.dot(c.T, self.psi_last)
-        if problem.has_stage_state_cost:
-            if problem.target_states is None:
-                raise ProblemDefinitionError(
-                    "reference trajectory is undefined"
-                )
-            c = np.dot(self.Phi, problem.initial_state) - problem.target_states
-            self.q += problem.stage_state_cost_weight * np.dot(c.T, self.Psi)
+        if mpc_problem.has_terminal_cost:
+            c = np.dot(self.phi_last, initial_state) - goal_state
+            self.q += mpc_problem.terminal_cost_weight * np.dot(
+                c.T, self.psi_last
+            )
+        if mpc_problem.has_stage_state_cost:
+            c = np.dot(self.Phi, initial_state) - mpc_problem.target_states
+            self.q += mpc_problem.stage_state_cost_weight * np.dot(
+                c.T, self.Psi
+            )
 
     def update_constraint_vector(self, problem) -> None:
         raise NotImplementedError(
