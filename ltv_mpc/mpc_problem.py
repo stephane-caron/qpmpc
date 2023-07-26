@@ -150,18 +150,30 @@ class MPCProblem:
     @property
     def has_terminal_cost(self) -> bool:
         """Check whether the problem has a terminal cost."""
-        return (
+        cost_is_set = (
             self.terminal_cost_weight is not None
             and self.terminal_cost_weight > 1e-10
         )
+        if cost_is_set and self.goal_state is None:
+            raise ProblemDefinitionError(
+                "MPC problem has terminal cost "
+                "but the goal state is undefined"
+            )
+        return cost_is_set
 
     @property
     def has_stage_state_cost(self) -> bool:
         """Check whether the problem has a stage state cost."""
-        return (
+        cost_is_set = (
             self.stage_state_cost_weight is not None
             and self.stage_state_cost_weight > 1e-10
         )
+        if cost_is_set and self.target_states is None:
+            raise ProblemDefinitionError(
+                "MPC problem has a stage state cost "
+                "but the reference trajectory is undefined"
+            )
+        return cost_is_set
 
     def get_transition_state_matrix(self, k) -> np.ndarray:
         """Get state-transition matrix at a given timestep.
