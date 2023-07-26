@@ -147,6 +147,22 @@ class MPCProblem:
         if initial_state is not None:
             self.update_initial_state(initial_state)
 
+    @property
+    def has_terminal_cost(self) -> bool:
+        """Check whether the problem has a terminal cost."""
+        return (
+            self.terminal_cost_weight is not None
+            and self.terminal_cost_weight > 1e-10
+        )
+
+    @property
+    def has_stage_state_cost(self) -> bool:
+        """Check whether the problem has a stage state cost."""
+        return (
+            self.stage_state_cost_weight is not None
+            and self.stage_state_cost_weight > 1e-10
+        )
+
     def get_transition_state_matrix(self, k) -> np.ndarray:
         """Get state-transition matrix at a given timestep.
 
