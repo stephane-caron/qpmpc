@@ -18,9 +18,9 @@
 """Linear time-variant model predictive control in Python."""
 
 from .mpc_problem import MPCProblem
+from .mpc_qp import MPCQP
 from .plan import Plan
 from .solve_mpc import solve_mpc
-from .mpc_qp import MPCQP
 
 __all__ = [
     "MPCProblem",

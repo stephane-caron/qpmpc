@@ -17,13 +17,8 @@
 
 """Solve model predictive control problems."""
 
-from logging import warn
-
-import numpy as np
-import qpsolvers
 from qpsolvers import solve_problem
 
-from .exceptions import ProblemDefinitionError
 from .mpc_problem import MPCProblem
 from .mpc_qp import MPCQP
 from .plan import Plan

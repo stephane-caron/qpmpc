@@ -34,7 +34,22 @@ class MPCQP:
     linear inequality vectors.
     """
 
+    G: np.ndarray
+    P: np.ndarray
+    Phi: np.ndarray
+    Psi: np.ndarray
+    h: np.ndarray
+    phi_last: np.ndarray
+    psi_last: np.ndarray
+    q: np.ndarray
+
     def __init__(self, mpc_problem: MPCProblem, sparse: bool = False) -> None:
+        """Create a new QP representation.
+
+        Args:
+            mpc_problem: Model predictive control problem to cast as a QP.
+            sparse: If set, use sparse matrix representation.
+        """
         input_dim = mpc_problem.input_dim
         state_dim = mpc_problem.state_dim
         stacked_input_dim = mpc_problem.input_dim * mpc_problem.nb_timesteps
@@ -108,17 +123,23 @@ class MPCQP:
         self.psi_last = psi
         self.q = q  # initialized below
         #
-        self.recompute_cost_vector(mpc_problem)
+        self.update_cost_vector(mpc_problem)
 
     @property
     def problem(self) -> qpsolvers.Problem:
         """Get quadratic program to call a QP solver."""
         return qpsolvers.Problem(self.P, self.q, self.G, self.h)
 
-    def update_cost_vector(self, mpc_problem) -> None:
+    def update_cost_vector(self, mpc_problem: MPCProblem) -> None:
+        """Update the gradient vector in the cost function.
+
+        Args:
+            mpc_problem: New model predictive control problem. It should have
+                the same structure as the one used to initialize the MPCQP.
+        """
         if mpc_problem.initial_state is None:
             raise ProblemDefinitionError("initial state is undefined")
-        initial_state = mpc_problem.initial
+        initial_state = mpc_problem.initial_state
         goal_state = mpc_problem.goal_state
         self.q[:] = 0.0
         if mpc_problem.has_terminal_cost:
@@ -132,7 +153,13 @@ class MPCQP:
                 c.T, self.Psi
             )
 
-    def update_constraint_vector(self, problem) -> None:
+    def update_constraint_vector(self, mpc_problem: MPCProblem) -> None:
+        """Update the inequality constraint vector.
+
+        Args:
+            mpc_problem: New model predictive control problem. It should have
+                the same structure as the one used to initialize the MPCQP.
+        """
         raise NotImplementedError(
             "Time-varying constraints are handled cold-start for now"
         )
