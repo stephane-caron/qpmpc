@@ -7,6 +7,6 @@ Developer notes
 Quadratic program
 =================
 
-Internally, :func:`.solve_mpc` builds a quadratic program before calling a QP solver. You can retrieve the QP corresponding to the input problem by calling the internal :func:`.build_mpc_qp` function:
+Internally, :func:`.solve_mpc` builds a quadratic program before calling a QP solver. You can retrieve the QP corresponding to the input problem by creating an instance of the intermediate :func:`.MPCQP` representation:
 
-.. autofunction:: ltv_mpc.solve_mpc.build_mpc_qp
+.. autoclass:: ltv_mpc.mpc_qp.MPCQP

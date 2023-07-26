@@ -19,12 +19,13 @@
 
 from .mpc_problem import MPCProblem
 from .plan import Plan
-from .solve_mpc import build_mpc_qp, solve_mpc
+from .solve_mpc import solve_mpc
+from .mpc_qp import MPCQP
 
 __all__ = [
     "MPCProblem",
+    "MPCQP",
     "Plan",
-    "build_mpc_qp",
     "solve_mpc",
 ]
 

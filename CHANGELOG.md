@@ -22,11 +22,11 @@ All notable changes to this project will be documented in this file.
 - Always add state-input inequalities (even when unfeasible)
 - Don't assume a ``Problem`` is fully defined in constructor
 - Initial and goal states are now keyword arguments of ``MPCProblem``
+- Refactor``build_qp`` into a new ``MPCQP`` class
 - Rename ``Problem`` to ``MPCProblem``
 - Rename ``Solution`` to ``Plan``
 - Rename ``stacked_inputs`` to just ``inputs`` in plans
 - Rename ``stacked_states`` to just ``states`` in plans
-- Rename ``build_qp`` to ``build_mpc_qp``
 - Solver keyword argument to ``solve_mpc`` is now mandatory
 - Use problem class from ``qpsolvers`` internally
 - Warn rather than raise an exception when initial state is unfeasible
