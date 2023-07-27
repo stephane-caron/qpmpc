@@ -117,7 +117,10 @@ class MPCQP:
         self.psi_last = psi
         self.q = q  # initialized below
         #
-        self.update_cost_vector(mpc_problem)
+        try:
+            self.update_cost_vector(mpc_problem)
+        except ProblemDefinitionError:
+            pass
 
     @property
     def problem(self) -> qpsolvers.Problem:
