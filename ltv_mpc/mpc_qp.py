@@ -137,10 +137,9 @@ class MPCQP:
         if mpc_problem.initial_state is None:
             raise ProblemDefinitionError("initial state is undefined")
         initial_state = mpc_problem.initial_state
-        goal_state = mpc_problem.goal_state
         self.q[:] = 0.0
         if mpc_problem.has_terminal_cost:
-            c = np.dot(self.phi_last, initial_state) - goal_state
+            c = np.dot(self.phi_last, initial_state) - mpc_problem.goal_state
             self.q += mpc_problem.terminal_cost_weight * np.dot(
                 c.T, self.psi_last
             )
