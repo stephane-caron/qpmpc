@@ -108,8 +108,8 @@ class MPCQP:
             P += mpc_problem.stage_state_cost_weight * np.dot(Psi.T, Psi)
         q: np.ndarray = np.zeros(stacked_input_dim)
 
-        self.P = csc_matrix(P) if sparse else P
         self.G = csc_matrix(G) if sparse else G
+        self.P = csc_matrix(P) if sparse else P
         self.Phi = Phi
         self.Psi = Psi
         self.h = h

@@ -121,11 +121,13 @@ class CartPole:
             ineq_state_matrix=None,
             ineq_input_matrix=ground_accel_ineq_matrix,
             ineq_vector=ground_accel_ineq_vector,
-            goal_state=None,
             nb_timesteps=self.nb_timesteps,
             terminal_cost_weight=terminal_cost_weight,
             stage_state_cost_weight=stage_state_cost_weight,
             stage_input_cost_weight=stage_input_cost_weight,
+            initial_state=None,
+            goal_state=None,
+            target_states=None,
         )
 
     def integrate(
