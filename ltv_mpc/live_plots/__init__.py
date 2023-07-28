@@ -18,7 +18,9 @@
 """Set of system-specific live plots provided for reference and examples."""
 
 from .cart_pole_plot import CartPolePlot
+from .live_plot import LivePlot
 
 __all__ = [
     "CartPolePlot",
+    "LivePlot",
 ]
