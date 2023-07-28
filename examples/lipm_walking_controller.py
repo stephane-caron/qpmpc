@@ -28,7 +28,7 @@ from loop_rate_limiters import RateLimiter
 
 from ltv_mpc import MPCProblem, solve_mpc
 from ltv_mpc.exceptions import ProblemDefinitionError
-from ltv_mpc.utils import LivePlot
+from ltv_mpc.live_plots.live_plot import LivePlot
 
 MAX_ZMP_DIST = 100.0  # [m]
 
@@ -294,7 +294,7 @@ if __name__ == "__main__":
     live_plot.add_line("zmp_min", "g:")
     live_plot.add_line("zmp_max", "b:")
 
-    rate = RateLimiter(frequency=1.0 / (args.slowdown * dt))
+    rate = RateLimiter(frequency=1.0 / (args.slowdown * dt), warn=False)
     t = 0.0
 
     phase = PhaseStepper(params)
