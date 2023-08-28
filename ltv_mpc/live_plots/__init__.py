@@ -17,8 +17,8 @@
 
 """Set of system-specific live plots provided for reference and examples."""
 
-from .wheeled_inverted_pendulum_plot import WheeledInvertedPendulumPlot
 from .live_plot import LivePlot
+from .wheeled_inverted_pendulum_plot import WheeledInvertedPendulumPlot
 
 __all__ = [
     "WheeledInvertedPendulumPlot",
