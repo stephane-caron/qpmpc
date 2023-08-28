@@ -31,8 +31,8 @@ dependencies = [
 keywords = ["model", "predictive", "control", "linear", "time-varying"]
 
 [project.optional-dependencies]
-doc = [
-    "sphinx",
+extras = [
+    "loop-rate-limiters",
 ]
 
 [project.urls]

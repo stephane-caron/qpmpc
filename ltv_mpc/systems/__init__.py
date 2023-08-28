@@ -17,8 +17,8 @@
 
 """Set of standard systems provided for reference and examples."""
 
-from .cart_pole import CartPole
+from .wheeled_inverted_pendulum import WheeledInvertedPendulum
 
 __all__ = [
-    "CartPole",
+    "WheeledInvertedPendulum",
 ]

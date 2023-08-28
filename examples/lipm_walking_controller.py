@@ -24,7 +24,14 @@ import argparse
 from dataclasses import dataclass
 
 import numpy as np
-from loop_rate_limiters import RateLimiter
+
+try:
+    from loop_rate_limiters import RateLimiter
+except ImportError:
+    raise ImportError(
+        "This example requires an extra dependency. "
+        "You can install it by `pip install ltv-mpc[extras]`"
+    )
 
 from ltv_mpc import MPCProblem, solve_mpc
 from ltv_mpc.exceptions import ProblemDefinitionError
@@ -60,7 +67,7 @@ class Parameters:
 
     @property
     def zmp_from_state(self) -> np.ndarray:
-        return np.array([1.0, 0.0, -1.0 / self.omega ** 2])
+        return np.array([1.0, 0.0, -1.0 / self.omega**2])
 
 
 def build_mpc_problem(params: Parameters):
@@ -77,15 +84,15 @@ def build_mpc_problem(params: Parameters):
     T = params.sampling_period
     state_matrix = np.array(
         [
-            [1.0, T, T ** 2 / 2.0],
+            [1.0, T, T**2 / 2.0],
             [0.0, 1.0, T],
             [0.0, 0.0, 1.0],
         ]
     )
     input_matrix = np.array(
         [
-            T ** 3 / 6.0,
-            T ** 2 / 2.0,
+            T**3 / 6.0,
+            T**2 / 2.0,
             T,
         ]
     ).reshape((3, 1))

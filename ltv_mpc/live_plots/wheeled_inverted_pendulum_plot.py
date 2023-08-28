@@ -21,31 +21,31 @@ import numpy as np
 
 from ..exceptions import PlanError
 from ..plan import Plan
-from ..systems import CartPole
+from ..systems import WheeledInvertedPendulum
 from .live_plot import LivePlot
 
 
-class CartPolePlot:
+class WheeledInvertedPendulumPlot:
     """Live plot for the cart-pole system."""
 
     live_plot: LivePlot
-    cart_pole: CartPole
+    pendulum: WheeledInvertedPendulum
     lhs_index: int
     rhs_index: int
 
-    def __init__(self, cart_pole: CartPole, order: str) -> None:
+    def __init__(self, pendulum: WheeledInvertedPendulum, order: str) -> None:
         """Initialize live plot.
 
         Args:
-            cart_pole: Cart-pole system.
+            pendulum: Wheeled inverted pendulum system.
             order: Order of things to plot, "positions" or "velocities".
         """
         lhs_index = 0 if order == "positions" else 2
         rhs_index = 1 if order == "positions" else 3
         ps = "" if order == "positions" else "/s"
-        T = cart_pole.sampling_period
+        T = pendulum.sampling_period
         live_plot = LivePlot(
-            xlim=(0.0, cart_pole.horizon_duration + T),
+            xlim=(0.0, pendulum.horizon_duration + T),
             ylim=(-0.5, 1.0),
             ylim2=(-1.0, 1.0),
         )
@@ -61,7 +61,7 @@ class CartPolePlot:
         live_plot.add_line("lhs_goal", "b--", lw=1)
         live_plot.add_rhs_line("rhs_goal", "g--", lw=1)
         live_plot.add_rhs_line("rhs_cur", "go", lw=2)
-        self.cart_pole = cart_pole
+        self.pendulum = pendulum
         self.lhs_index = lhs_index
         self.live_plot = live_plot
         self.rhs_index = rhs_index
@@ -77,8 +77,8 @@ class CartPolePlot:
             raise PlanError("No state trajectory in plan")
         X = plan.states
         t = plan_time
-        horizon_duration = self.cart_pole.horizon_duration
-        nb_timesteps = self.cart_pole.nb_timesteps
+        horizon_duration = self.pendulum.horizon_duration
+        nb_timesteps = self.pendulum.nb_timesteps
         trange = np.linspace(t, t + horizon_duration, nb_timesteps + 1)
         self.live_plot.update_line("lhs", trange, X[:, self.lhs_index])
         self.live_plot.update_line("rhs", trange, X[:, self.rhs_index])
@@ -115,8 +115,8 @@ class CartPolePlot:
             state: Current state of the system.
             state_time: Time corresponding to the state.
         """
-        horizon_duration = self.cart_pole.horizon_duration
-        T = self.cart_pole.sampling_period
+        horizon_duration = self.pendulum.horizon_duration
+        T = self.pendulum.sampling_period
         if state_time >= T:
             t2 = state_time - T
             self.live_plot.axis.set_xlim(t2, t2 + horizon_duration + T)

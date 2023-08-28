@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+### Changed
+
+- Renamed the "cart pole" system (misnomer) to "wheeled inverted pendulum"
+
 ## [2.0.0] - 2023/07/28
 
 ### Added

@@ -24,8 +24,13 @@ import numpy as np
 from ..mpc_problem import MPCProblem
 
 
-class CartPole:
-    """Cart-pole system and receding horizon."""
+class WheeledInvertedPendulum:
+    """Wheeled inverted pendulum system and receding horizon.
+
+    Modeling, linearization and discretization of this system are for instance
+    detailed in:
+        https://scaron.info/robotics/wheeled-inverted-pendulum-model.html
+    """
 
     GRAVITY: float = 9.81  # m/s²
     INPUT_DIM: int = 1
@@ -100,7 +105,7 @@ class CartPole:
 
         B_disc = np.array(
             [
-                [T ** 2 / 2.0],
+                [T**2 / 2.0],
                 [-np.cosh(T * omega) / g + 1.0 / g],
                 [T],
                 [-omega * np.sinh(T * omega) / g],
@@ -152,7 +157,7 @@ class CartPole:
         """
         r_0, theta_0, rd_0, thetad_0 = state
         rdd_0 = ground_accel
-        thetadd_0 = self.omega ** 2 * (
+        thetadd_0 = self.omega**2 * (
             np.sin(theta_0) - (rdd_0 / self.GRAVITY) * np.cos(theta_0)
         )
 

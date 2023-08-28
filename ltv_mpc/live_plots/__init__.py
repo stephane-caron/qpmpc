@@ -17,10 +17,10 @@
 
 """Set of system-specific live plots provided for reference and examples."""
 
-from .cart_pole_plot import CartPolePlot
+from .wheeled_inverted_pendulum_plot import WheeledInvertedPendulumPlot
 from .live_plot import LivePlot
 
 __all__ = [
-    "CartPolePlot",
+    "WheeledInvertedPendulumPlot",
     "LivePlot",
 ]

@@ -24,11 +24,18 @@ import argparse
 
 import numpy as np
 import qpsolvers
-from loop_rate_limiters import RateLimiter
+
+try:
+    from loop_rate_limiters import RateLimiter
+except ImportError:
+    raise ImportError(
+        "This example requires an extra dependency. "
+        "You can install it by `pip install ltv-mpc[extras]`"
+    )
 
 from ltv_mpc import solve_mpc
-from ltv_mpc.live_plots import CartPolePlot
-from ltv_mpc.systems import CartPole
+from ltv_mpc.live_plots import WheeledInvertedPendulumPlot
+from ltv_mpc.systems import WheeledInvertedPendulum
 
 EXAMPLE_DURATION: float = 10.0  # seconds
 NB_SUBSTEPS: int = 15  # number of integration substeps
@@ -66,7 +73,7 @@ def parse_command_line_arguments() -> argparse.Namespace:
 
 
 def get_target_states(
-    cart_pole: CartPole, state: np.ndarray, target_vel: float
+    pendulum: WheeledInvertedPendulum, state: np.ndarray, target_vel: float
 ):
     """Define the reference state trajectory over the receding horizon.
 
@@ -77,10 +84,10 @@ def get_target_states(
     Returns:
         Goal state at the end of the horizon.
     """
-    nx = cart_pole.STATE_DIM
-    T = cart_pole.sampling_period
-    target_states = np.zeros((cart_pole.nb_timesteps + 1) * nx)
-    for k in range(cart_pole.nb_timesteps + 1):
+    nx = pendulum.STATE_DIM
+    T = pendulum.sampling_period
+    target_states = np.zeros((pendulum.nb_timesteps + 1) * nx)
+    for k in range(pendulum.nb_timesteps + 1):
         target_states[k * nx] = state[0] + (k * T) * target_vel
         target_states[k * nx + 2] = target_vel
     return target_states
@@ -88,27 +95,31 @@ def get_target_states(
 
 if __name__ == "__main__":
     args = parse_command_line_arguments()
-    cart_pole = CartPole()
-    live_plot = CartPolePlot(cart_pole, order=args.plot)
-    mpc_problem = CartPole.build_mpc_problem(
-        cart_pole,
+    pendulum = WheeledInvertedPendulum()
+    live_plot = WheeledInvertedPendulumPlot(pendulum, order=args.plot)
+    mpc_problem = WheeledInvertedPendulum.build_mpc_problem(
+        pendulum,
         terminal_cost_weight=10.0,
         stage_state_cost_weight=1.0,
         stage_input_cost_weight=1e-3,
     )
 
-    dt = cart_pole.sampling_period / NB_SUBSTEPS
+    dt = pendulum.sampling_period / NB_SUBSTEPS
     rate = RateLimiter(frequency=1.0 / (args.slowdown * dt), warn=False)
-    state = np.zeros(cart_pole.STATE_DIM)
-    for t in np.arange(0.0, EXAMPLE_DURATION, cart_pole.sampling_period):
+    state = np.zeros(pendulum.STATE_DIM)
+    for t in np.arange(0.0, EXAMPLE_DURATION, pendulum.sampling_period):
         target_vel = 0.5 + (np.cos(t / 2.0) if args.tv_vel else 0.0)
-        target_states = get_target_states(cart_pole, state, target_vel)
+        target_states = get_target_states(pendulum, state, target_vel)
         mpc_problem.update_initial_state(state)
-        mpc_problem.update_goal_state(target_states[-CartPole.STATE_DIM :])
-        mpc_problem.update_target_states(target_states[: -CartPole.STATE_DIM])
+        mpc_problem.update_goal_state(
+            target_states[-WheeledInvertedPendulum.STATE_DIM :]
+        )
+        mpc_problem.update_target_states(
+            target_states[: -WheeledInvertedPendulum.STATE_DIM]
+        )
         plan = solve_mpc(mpc_problem, solver=args.solver)
         for step in range(NB_SUBSTEPS):
-            state = cart_pole.integrate(state, plan.first_input, dt)
+            state = pendulum.integrate(state, plan.first_input, dt)
             live_plot.update(
                 plan=plan,
                 plan_time=t,
