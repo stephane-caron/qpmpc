@@ -20,7 +20,7 @@
 import numpy as np
 import pylab
 
-from ltv_mpc import MPCProblem, solve_mpc
+from qpmpc import MPCProblem, solve_mpc
 
 if __name__ == "__main__":
     horizon_duration = 1.0

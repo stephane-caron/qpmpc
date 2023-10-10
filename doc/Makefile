@@ -19,7 +19,7 @@ SPHINXOPTS    = -W
 SPHINXBUILD   = sphinx-build
 SOURCEDIR     = src
 BUILDDIR      = build
-ONLINEDIR     = scaron.info:public_html/doc/ltv-mpc
+ONLINEDIR     = scaron.info:public_html/doc/qpmpc
 
 .PHONY: help Makefile upload
 

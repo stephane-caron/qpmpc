@@ -28,7 +28,7 @@ from .mpc_problem import MPCProblem
 class Plan:
     r"""State and input trajectories that optimize an MPC problem.
 
-    See also the :class:`ltv_mpc.problem.Problem` class.
+    See also the :class:`qpmpc.problem.Problem` class.
 
     Attributes:
         problem: Model predictive control problem that was solved.

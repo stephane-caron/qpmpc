@@ -3,7 +3,7 @@ requires = ["flit_core >=2,<4"]
 build-backend = "flit_core.buildapi"
 
 [project]
-name = "ltv-mpc"
+name = "qpmpc"
 readme = "README.md"
 license = {file = "LICENSE"}
 authors = [
@@ -36,16 +36,16 @@ extras = [
 ]
 
 [project.urls]
-Documentation = "https://tasts-robots.org/doc/ltv-mpc/"
-Source = "https://github.com/tasts-robots/ltv-mpc"
-Tracker = "https://github.com/tasts-robots/ltv-mpc/issues"
-Changelog = "https://github.com/tasts-robots/ltv-mpc/blob/main/CHANGELOG.md"
+Documentation = "https://tasts-robots.org/doc/qpmpc/"
+Source = "https://github.com/tasts-robots/qpmpc"
+Tracker = "https://github.com/tasts-robots/qpmpc/issues"
+Changelog = "https://github.com/tasts-robots/qpmpc/blob/main/CHANGELOG.md"
 
 [tool.black]
 line-length = 79
 
 [tool.flit.module]
-name = "ltv_mpc"
+name = "qpmpc"
 
 [tool.ruff]
 line-length = 79

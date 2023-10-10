@@ -1,9 +1,9 @@
-:github_url: https://github.com/tasts-robots/ltv-mpc/tree/main/doc/src/index.rst
+:github_url: https://github.com/tasts-robots/qpmpc/tree/main/doc/src/index.rst
 
 .. title:: Table of Contents
 
 #######
-ltv-mpc
+qpmpc
 #######
 
 Linear time-variant (LTV) model predictive control in Python. Solve a quadratic

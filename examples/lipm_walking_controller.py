@@ -30,12 +30,12 @@ try:
 except ImportError:
     raise ImportError(
         "This example requires an extra dependency. "
-        "You can install it by `pip install ltv-mpc[extras]`"
+        "You can install it by `pip install qpmpc[extras]`"
     )
 
-from ltv_mpc import MPCProblem, solve_mpc
-from ltv_mpc.exceptions import ProblemDefinitionError
-from ltv_mpc.live_plots.live_plot import LivePlot
+from qpmpc import MPCProblem, solve_mpc
+from qpmpc.exceptions import ProblemDefinitionError
+from qpmpc.live_plots.live_plot import LivePlot
 
 MAX_ZMP_DIST = 100.0  # [m]
 

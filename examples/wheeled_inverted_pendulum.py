@@ -30,12 +30,12 @@ try:
 except ImportError:
     raise ImportError(
         "This example requires an extra dependency. "
-        "You can install it by `pip install ltv-mpc[extras]`"
+        "You can install it by `pip install qpmpc[extras]`"
     )
 
-from ltv_mpc import solve_mpc
-from ltv_mpc.live_plots import WheeledInvertedPendulumPlot
-from ltv_mpc.systems import WheeledInvertedPendulum
+from qpmpc import solve_mpc
+from qpmpc.live_plots import WheeledInvertedPendulumPlot
+from qpmpc.systems import WheeledInvertedPendulum
 
 EXAMPLE_DURATION: float = 10.0  # seconds
 NB_SUBSTEPS: int = 15  # number of integration substeps

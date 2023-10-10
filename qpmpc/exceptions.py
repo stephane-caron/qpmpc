@@ -19,7 +19,7 @@
 
 
 class LTVMPCException(Exception):
-    """Base class for exceptions from ltv-mpc."""
+    """Base class for exceptions from this library."""
 
 
 class ProblemDefinitionError(LTVMPCException):

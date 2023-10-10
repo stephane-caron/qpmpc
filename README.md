@@ -1,20 +1,20 @@
-# ltv-mpc
+# qpmpc
 
-[![Build](https://img.shields.io/github/actions/workflow/status/stephane-caron/ltv-mpc/build.yml?branch=main)](https://github.com/stephane-caron/ltv-mpc/actions)
-[![Coverage](https://coveralls.io/repos/github/stephane-caron/ltv-mpc/badge.svg?branch=main)](https://coveralls.io/github/stephane-caron/ltv-mpc?branch=main)
-[![Documentation](https://img.shields.io/badge/docs-online-brightgreen?logo=read-the-docs&style=flat)](https://tasts-robots.org/doc/ltv-mpc/)
-[![PyPI version](https://img.shields.io/pypi/v/ltv-mpc)](https://pypi.org/project/ltv-mpc/0.6.0/)
+[![Build](https://img.shields.io/github/actions/workflow/status/stephane-caron/qpmpc/build.yml?branch=main)](https://github.com/stephane-caron/qpmpc/actions)
+[![Coverage](https://coveralls.io/repos/github/stephane-caron/qpmpc/badge.svg?branch=main)](https://coveralls.io/github/stephane-caron/qpmpc?branch=main)
+[![Documentation](https://img.shields.io/badge/docs-online-brightgreen?logo=read-the-docs&style=flat)](https://tasts-robots.org/doc/qpmpc/)
+[![PyPI version](https://img.shields.io/pypi/v/qpmpc)](https://pypi.org/project/qpmpc/0.6.0/)
 
 Model predictive control (MPC) in Python for systems whose problems can be cast as a quadratic program (QP). This includes linear time-invariant (LTI) and time-variant (LTV) systems with linear constraints. The resulting QP has the form:
 
-> ![ltv-mpc](https://raw.githubusercontent.com/stephane-caron/ltv-mpc/main/doc/src/images/ltv-mpc.svg)
+> ![qpmpc](https://raw.githubusercontent.com/stephane-caron/qpmpc/main/doc/src/images/qpmpc.svg)
 
 This module is designed for prototyping. If you need performance, check out the [alternatives](#alternatives) below.
 
 ## Installation
 
 ```sh
-pip install ltv-mpc
+pip install qpmpc
 ```
 
 ## Usage
@@ -25,7 +25,7 @@ This module defines a one-stop shop function:
 solve_mpc(problem: MPCProblem, solver: str) -> Plan
 ```
 
-The [``MPCProblem``](https://tasts-robots.org/doc/ltv-mpc/usage.html#ltv_mpc.mpc_problem.MPCProblem) defines the model predictive control problem (LTV system, LTV constraints, initial state and cost function to optimize) while the returned [``Plan``](https://tasts-robots.org/doc/ltv-mpc/usage.html#ltv_mpc.plan.Plan) holds the state and input trajectories that result from optimizing the problem (if a solution exists). The ``solver`` string is used to select the backend [quadratic programming solver](https://github.com/stephane-caron/qpsolvers#solvers).
+The [``MPCProblem``](https://tasts-robots.org/doc/qpmpc/usage.html#qpmpc.mpc_problem.MPCProblem) defines the model predictive control problem (LTV system, LTV constraints, initial state and cost function to optimize) while the returned [``Plan``](https://tasts-robots.org/doc/qpmpc/usage.html#qpmpc.plan.Plan) holds the state and input trajectories that result from optimizing the problem (if a solution exists). The ``solver`` string is used to select the backend [quadratic programming solver](https://github.com/stephane-caron/qpsolvers#solvers).
 
 ## Example
 
@@ -53,7 +53,7 @@ Suppose for the sake of example that acceleration is the main constraint acting 
 This leads us to the following linear MPC problem:
 
 ```python
-    from ltv_mpc import MPCProblem
+    from qpmpc import MPCProblem
 
     x_init = np.array([0.0, 0.0, 0.0])
     x_goal = np.array([1.0, 0.0, 0.0])
@@ -75,7 +75,7 @@ This leads us to the following linear MPC problem:
 We can solve it with:
 
 ```python
-    from ltv_mpc import solve_mpc
+    from qpmpc import solve_mpc
 
     solution = solve_mpc(problem, solver="quadprog")
 ```

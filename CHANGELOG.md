@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 
 - Renamed the "cart pole" system (misnomer) to "wheeled inverted pendulum"
+- Renamed the library to "qpmpc"
 
 ## [2.0.0] - 2023/07/28
 
@@ -20,8 +21,8 @@ All notable changes to this project will be documented in this file.
 - MPCQP class to update cost vectors during execution
 - Plan: ``first_input`` getter
 - Plan: ``is_empty`` property
-- Started ``ltv_mpc.live_plots`` submodule
-- Started ``ltv_mpc.systems`` submodule
+- Started ``live_plots`` submodule
+- Started ``systems`` submodule
 
 ### Changed
 

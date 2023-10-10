@@ -5,5 +5,5 @@
 .tox
 dist
 doc/build
-examples/ltv_mpc
+examples/qpmpc
 examples/qpsolvers

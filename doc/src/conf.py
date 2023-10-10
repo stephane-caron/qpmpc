@@ -58,7 +58,7 @@ source_suffix = ".rst"
 master_doc = "index"
 
 # General information about the project.
-project = "ltv-mpc"
+project = "qpmpc"
 copyright = "2022 Stéphane Caron"
 author = "Stéphane Caron"
 
@@ -73,7 +73,7 @@ version = None  # read from __init__.py
 release = None  # read from __init__.py
 
 # Read version info directly from the module's __init__.py
-init_path = join(dirname(dirname(dirname(str(abspath(__file__))))), "ltv_mpc")
+init_path = join(dirname(dirname(dirname(str(abspath(__file__))))), "qpmpc")
 with open(f"{init_path}/__init__.py", "r") as fh:
     for line in fh:
         match = re.match('__version__ = "((\\d.\\d).\\d)[a-z0-9\\-]*".*', line)
@@ -253,7 +253,7 @@ html_css_files = []
 # html_search_scorer = 'scorer.js'
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = "ltv-mpc" + "doc"
+htmlhelp_basename = "qpmpc" + "doc"
 
 # -- Options for LaTeX output ---------------------------------------------
 

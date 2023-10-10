@@ -1,4 +1,4 @@
-:github_url: https://github.com/tasts-robots/ltv-mpc/tree/main/doc/src/examples.rst
+:github_url: https://github.com/tasts-robots/qpmpc/tree/main/doc/src/examples.rst
 
 ********
 Examples
@@ -32,11 +32,11 @@ This leads us to the following linear MPC problem:
 
 .. code:: python
 
-    from ltv_mpc import MPCProblem
+    from qpmpc import MPCProblem
 
     initial_pos = 0.0
     goal_pos = 1.0
-    problem = ltv_mpc.MPCProblem(
+    problem = qpmpc.MPCProblem(
         transition_state_matrix=A,
         transition_input_matrix=B,
         ineq_state_matrix=ineq_matrix,
@@ -54,7 +54,7 @@ We can solve it with:
 
 .. code:: python
 
-    from ltv_mpc import solve_mpc
+    from qpmpc import solve_mpc
 
     plan = solve_mpc(problem, mpc)
 

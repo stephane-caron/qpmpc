@@ -20,8 +20,8 @@ from dataclasses import dataclass
 
 import numpy as np
 
-from ltv_mpc import MPCProblem, solve_mpc
-from ltv_mpc.solve_mpc import MPCQP
+from qpmpc import MPCProblem, solve_mpc
+from qpmpc.solve_mpc import MPCQP
 
 gravity = 9.81  # [m] / [s]^2
 
