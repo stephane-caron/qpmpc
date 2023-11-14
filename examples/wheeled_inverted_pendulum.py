@@ -17,12 +17,13 @@
 
 """Model predictive control of a wheeled inverted pendulum.
 
-This is one locomotion mode for Upkie: https://github.com/tasts-robots/upkie
+This is one locomotion mode for Upkie: https://github.com/upkie/upkie
 """
 
 import argparse
 
 import numpy as np
+
 import qpsolvers
 
 try:

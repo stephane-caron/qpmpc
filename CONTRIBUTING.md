@@ -2,7 +2,7 @@
 
 There are many ways you can contribute, all of them welcome! Here are some ideas of increasing difficulty:
 
-- Check out the [documentation](https://tasts-robots.org/doc/qpmpc/) and report mistakes or ask questions
+- Check out the [documentation](https://scaron.info/doc/qpmpc/) and report mistakes or ask questions
 - Try out the [examples](examples) and report any issue
 - Write your own MPC example and add it to the collection
 - Suggests improvements to simplify the API

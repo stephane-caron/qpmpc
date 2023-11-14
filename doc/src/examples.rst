@@ -1,4 +1,4 @@
-:github_url: https://github.com/tasts-robots/qpmpc/tree/main/doc/src/examples.rst
+:github_url: https://github.com/stephane-caron/qpmpc/tree/main/doc/src/examples.rst
 
 ********
 Examples

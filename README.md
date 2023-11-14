@@ -2,7 +2,7 @@
 
 [![Build](https://img.shields.io/github/actions/workflow/status/stephane-caron/qpmpc/build.yml?branch=main)](https://github.com/stephane-caron/qpmpc/actions)
 [![Coverage](https://coveralls.io/repos/github/stephane-caron/qpmpc/badge.svg?branch=main)](https://coveralls.io/github/stephane-caron/qpmpc?branch=main)
-[![Documentation](https://img.shields.io/badge/docs-online-brightgreen?logo=read-the-docs&style=flat)](https://tasts-robots.org/doc/qpmpc/)
+[![Documentation](https://img.shields.io/badge/docs-online-brightgreen?logo=read-the-docs&style=flat)](https://scaron.info/doc/qpmpc/)
 [![PyPI version](https://img.shields.io/pypi/v/qpmpc)](https://pypi.org/project/qpmpc/0.6.0/)
 
 Model predictive control (MPC) in Python for optimal-control problems that are quadratic programs (QP). This includes linear time-invariant (LTI) and time-variant (LTV) systems with linear constraints. The corresponding QP has the form:
@@ -25,7 +25,7 @@ This module defines a one-stop shop function:
 solve_mpc(problem: MPCProblem, solver: str) -> Plan
 ```
 
-The [``MPCProblem``](https://tasts-robots.org/doc/qpmpc/usage.html#qpmpc.mpc_problem.MPCProblem) defines the model predictive control problem (LTV system, LTV constraints, initial state and cost function to optimize) while the returned [``Plan``](https://tasts-robots.org/doc/qpmpc/usage.html#qpmpc.plan.Plan) holds the state and input trajectories that result from optimizing the problem (if a solution exists). The ``solver`` string is used to select the backend [quadratic programming solver](https://github.com/stephane-caron/qpsolvers#solvers).
+The [``MPCProblem``](https://scaron.info/doc/qpmpc/usage.html#qpmpc.mpc_problem.MPCProblem) defines the model predictive control problem (LTV system, LTV constraints, initial state and cost function to optimize) while the returned [``Plan``](https://tasts-robots.org/doc/qpmpc/usage.html#qpmpc.plan.Plan) holds the state and input trajectories that result from optimizing the problem (if a solution exists). The ``solver`` string is used to select the backend [quadratic programming solver](https://github.com/stephane-caron/qpsolvers#solvers).
 
 ## Example
 

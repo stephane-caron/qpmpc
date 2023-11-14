@@ -36,10 +36,10 @@ extras = [
 ]
 
 [project.urls]
-Documentation = "https://tasts-robots.org/doc/qpmpc/"
-Source = "https://github.com/tasts-robots/qpmpc"
-Tracker = "https://github.com/tasts-robots/qpmpc/issues"
-Changelog = "https://github.com/tasts-robots/qpmpc/blob/main/CHANGELOG.md"
+Documentation = "https://scaron.info/doc/qpmpc/"
+Source = "https://github.com/stephane-caron/qpmpc"
+Tracker = "https://github.com/stephane-caron/qpmpc/issues"
+Changelog = "https://github.com/stephane-caron/qpmpc/blob/main/CHANGELOG.md"
 
 [tool.black]
 line-length = 79
