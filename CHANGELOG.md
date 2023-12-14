@@ -15,7 +15,7 @@ All notable changes to this project will be documented in this file.
 - Renamed the "cart pole" system (misnomer) to "wheeled inverted pendulum"
 - Renamed the library to "qpmpc"
 
-## [2.0.0] - 2023/07/28
+## [2.0.0] - 2023-07-28
 
 ### Added
 
@@ -44,7 +44,7 @@ All notable changes to this project will be documented in this file.
 - Use problem class from ``qpsolvers`` internally
 - Warn rather than raise an exception when initial state is unfeasible
 
-## [1.0.0] - 2022/08/12
+## [1.0.0] - 2022-08-12
 
 ### Added
 
@@ -58,7 +58,7 @@ All notable changes to this project will be documented in this file.
 
 - Unit tests for the new ``solver`` keyword argument
 
-## [0.7.0] - 2022/04/03
+## [0.7.0] - 2022-04-03
 
 ### Added
 
@@ -73,7 +73,7 @@ All notable changes to this project will be documented in this file.
 
 - Edge case where inputs don't affect the first inequality constraints
 
-## [0.6.0] - 2022/03/30
+## [0.6.0] - 2022-03-30
 
 ### Added
 
@@ -84,3 +84,10 @@ All notable changes to this project will be documented in this file.
 ### Changed
 
 - Extend to time-varying state and input transition matrices
+
+[unreleased]: https://github.com/stephane-caron/qpmpc/compare/v3.0.0...HEAD
+[3.0.0]: https://github.com/stephane-caron/qpmpc/compare/v2.0.0...v3.0.0
+[2.0.0]: https://github.com/stephane-caron/qpmpc/compare/v1.0.0...v2.0.0
+[1.0.0]: https://github.com/stephane-caron/qpmpc/compare/v0.7.0...v1.0.0
+[0.7.0]: https://github.com/stephane-caron/qpmpc/compare/v0.6.0...v0.7.0
+[0.6.0]: https://github.com/stephane-caron/qpmpc/releases/tag/v0.6.0
