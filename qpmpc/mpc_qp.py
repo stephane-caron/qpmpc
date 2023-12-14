@@ -17,7 +17,7 @@
 
 """MPC problem represented as a quadratic program."""
 
-from logging import warn
+import logging
 
 import numpy as np
 import qpsolvers
@@ -85,7 +85,7 @@ class MPCQP:
             if k == 0 and D_k is None and np.any(h_k < 0.0):
                 # in this case, the initial state constraint is violated and
                 # cannot be compensated by any input (D_k is None)
-                warn(
+                logging.warning(
                     "initial state is unfeasible: "
                     f"G_0 * x <= h_0 with G_0 == 0 and min(h_0) == {min(h_k)}"
                 )
