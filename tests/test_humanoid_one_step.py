@@ -12,8 +12,6 @@ import numpy as np
 from qpmpc import MPCProblem, solve_mpc
 from qpmpc.solve_mpc import MPCQP
 
-gravity = 9.81  # [m] / [s]^2
-
 
 @dataclass
 class HumanoidSteppingProblem:
@@ -39,7 +37,7 @@ class TestHumanoid(unittest.TestCase):
         )
         input_matrix = np.array([T**3 / 6.0, T**2 / 2.0, T])
         input_matrix = input_matrix.reshape((3, 1))
-        zmp_from_state = np.array([1.0, 0.0, -problem.com_height / gravity])
+        zmp_from_state = np.array([1.0, 0.0, -problem.com_height / 9.81])
         ineq_matrix = np.array([+zmp_from_state, -zmp_from_state])
         cur_max = problem.start_pos + 0.5 * problem.foot_length
         cur_min = problem.start_pos - 0.5 * problem.foot_length
