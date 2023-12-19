@@ -29,9 +29,6 @@ class HumanoidSteppingProblem:
 
 class TestHumanoid(unittest.TestCase):
     def setUp(self):
-        """
-        Prepare test fixture.
-        """
         problem = HumanoidSteppingProblem()
         T = problem.horizon_duration / problem.nb_timesteps
         nb_init_dsp_steps = int(round(problem.dsp_duration / T))
@@ -71,7 +68,6 @@ class TestHumanoid(unittest.TestCase):
             stage_state_cost_weight=None,
             stage_input_cost_weight=1e-3,
         )
-        #
         self.stepping_problem = problem
         self.problem = mpc_problem
 
@@ -81,7 +77,7 @@ class TestHumanoid(unittest.TestCase):
         self.assertAlmostEqual(np.linalg.norm(qp.G[0:2]), 0.0)
 
     def test_solve_mpc(self):
-        solution = solve_mpc(self.problem, solver="quadprog")
+        solution = solve_mpc(self.problem, solver="proxqp")
         N = self.problem.nb_timesteps
         input_dim = self.problem.input_dim
         state_dim = self.problem.state_dim

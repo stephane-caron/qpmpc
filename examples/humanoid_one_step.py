@@ -115,5 +115,5 @@ def plot_plan(params, mpc_problem, plan):
 if __name__ == "__main__":
     params = Parameters()
     mpc_problem = build_mpc_problem(params)
-    plan = solve_mpc(mpc_problem, solver="quadprog")
+    plan = solve_mpc(mpc_problem, solver="proxqp")
     plot_plan(params, mpc_problem, plan)

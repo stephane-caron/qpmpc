@@ -77,7 +77,7 @@ We can solve it with:
 ```python
     from qpmpc import solve_mpc
 
-    solution = solve_mpc(problem, solver="quadprog")
+    solution = solve_mpc(problem, solver="proxqp")
 ```
 
 The solution holds complete state and input trajectories as stacked vectors. For instance, we can plot positions, velocities and accelerations as follows:
