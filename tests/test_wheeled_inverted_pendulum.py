@@ -37,7 +37,6 @@ class TestWheeledInvertedPendulum(unittest.TestCase):
         self.assertIsNotNone(plan)
         self.assertIsNotNone(plan.first_input)
         dt = self.pendulum.sampling_period
-        print(f"{plan.first_input=}")
         state = self.pendulum.integrate(initial_state, plan.first_input, dt)
         self.assertTrue(np.allclose(state, initial_state))
 
