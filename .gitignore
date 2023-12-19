@@ -7,3 +7,4 @@ dist
 doc/build
 examples/qpmpc
 examples/qpsolvers
+htmlcov/
