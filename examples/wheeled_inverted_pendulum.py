@@ -87,8 +87,7 @@ if __name__ == "__main__":
     args = parse_command_line_arguments()
     pendulum = WheeledInvertedPendulum()
     live_plot = WheeledInvertedPendulumPlot(pendulum, order=args.plot)
-    mpc_problem = WheeledInvertedPendulum.build_mpc_problem(
-        pendulum,
+    mpc_problem = pendulum.build_mpc_problem(
         terminal_cost_weight=10.0,
         stage_state_cost_weight=1.0,
         stage_input_cost_weight=1e-3,
