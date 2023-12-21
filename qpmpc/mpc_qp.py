@@ -83,10 +83,10 @@ class MPCQP:
             phi = A_k.dot(phi)
             psi = A_k.dot(psi)
             psi[:, input_slice] = B_k
-        G: np.ndarray = np.vstack(G_list)
-        h: np.ndarray = np.hstack(h_list)
-        Phi = np.vstack(phi_list)
-        Psi = np.vstack(psi_list)
+        G: np.ndarray = np.vstack(G_list, dtype=float)
+        h: np.ndarray = np.hstack(h_list, dtype=float)
+        Phi = np.vstack(phi_list, dtype=float)
+        Psi = np.vstack(psi_list, dtype=float)
 
         P: np.ndarray = mpc_problem.stage_input_cost_weight * np.eye(
             stacked_input_dim,
