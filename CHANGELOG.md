@@ -4,9 +4,13 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [3.0.1] - 2023-12-21
+
 ### Fixed
 
 - Deprecation warning from using `logging.warn`
+- Make sure stacked MPC matrices have floating-point data type
+- Type of inequality vectors in wheeled inverted pendulum MPC
 
 ## [3.0.0] - 2023-10-10
 
@@ -85,7 +89,8 @@ All notable changes to this project will be documented in this file.
 
 - Extend to time-varying state and input transition matrices
 
-[unreleased]: https://github.com/stephane-caron/qpmpc/compare/v3.0.0...HEAD
+[unreleased]: https://github.com/stephane-caron/qpmpc/compare/v3.0.1...HEAD
+[3.0.1]: https://github.com/stephane-caron/qpmpc/compare/v3.0.0...v3.0.1
 [3.0.0]: https://github.com/stephane-caron/qpmpc/compare/v2.0.0...v3.0.0
 [2.0.0]: https://github.com/stephane-caron/qpmpc/compare/v1.0.0...v2.0.0
 [1.0.0]: https://github.com/stephane-caron/qpmpc/compare/v0.7.0...v1.0.0
