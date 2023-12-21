@@ -33,7 +33,7 @@ class WheeledInvertedPendulum:
     def __init__(
         self,
         length: float = 0.6,
-        max_ground_accel: float = 10,
+        max_ground_accel: float = 10.0,
         nb_timesteps: int = 12,
         sampling_period: float = 0.1,
     ):
