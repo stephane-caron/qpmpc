@@ -4,14 +4,14 @@
 Usage
 *****
 
-Defining an MPC problem
-=======================
+Defining an optimal control problem
+===================================
 
 .. automodule:: qpmpc.mpc_problem
     :members:
 
-Solving the MPC problem
-=======================
+Solving the optimal control problem
+===================================
 
 .. autofunction:: qpmpc.solve_mpc.solve_mpc
 
