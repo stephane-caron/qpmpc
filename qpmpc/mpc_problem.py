@@ -24,25 +24,27 @@ class MPCProblem:
 
     where :math:`x` is assumed to be the first-order state of a configuration
     variable :math:`p`, i.e., it stacks both the position :math:`p` and its
-    time-derivative :math:`\\dot{p}`. Meanwhile, the system is linearly
+    time-derivative :math:`\dot{p}`. Meanwhile, the system is linearly
     constrained by:
 
     .. math::
 
-        x_0 & = x_\\mathrm{init} \\\\
-        \\forall k, \\ C_k x_k + D_k u_k & \\leq e_k \\\\
+        \begin{align*}
+        x_0 & = x_\mathrm{init} \\
+        \forall k, \ C_k x_k + D_k u_k & \leq e_k \\
+        \end{align*}
 
     The output control law minimizes a weighted combination of two types of
     costs:
 
     - Terminal state error
-        :math:`\\|x_\\mathrm{nb\\_steps} - x_\\mathrm{goal}\\|^2`
+        :math:`\|x_\mathrm{nb\_steps} - x_\mathrm{goal}\|^2`
         with weight :math:`w_{xt}`.
     - Cumulated state error:
-        :math:`\\sum_k \\|x_k - x_\\mathrm{goal}\\|^2`
+        :math:`\sum_k \|x_k - x_\mathrm{goal}\|^2`
         with weight :math:`w_{xc}`.
     - Cumulated control costs:
-        :math:`\\sum_k \\|u_k\\|^2`
+        :math:`\sum_k \|u_k\|^2`
         with weight :math:`w_{u}`.
 
     Attributes:
