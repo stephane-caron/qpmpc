@@ -25,7 +25,7 @@ This module defines a one-stop shop function:
 solve_mpc(problem: MPCProblem, solver: str) -> Plan
 ```
 
-The [``MPCProblem``](https://scaron.info/doc/qpmpc/usage.html#qpmpc.mpc_problem.MPCProblem) defines the model predictive control problem (LTV system, LTV constraints, initial state and cost function to optimize) while the returned [``Plan``](https://tasts-robots.org/doc/qpmpc/usage.html#qpmpc.plan.Plan) holds the state and input trajectories that result from optimizing the problem (if a solution exists). The ``solver`` string is used to select the backend [quadratic programming solver](https://github.com/stephane-caron/qpsolvers#solvers).
+The [``MPCProblem``](https://scaron.info/doc/qpmpc/usage.html#qpmpc.mpc_problem.MPCProblem) defines the model predictive control problem (LTV system, LTV constraints, initial state and cost function to optimize) while the returned [``Plan``](https://scaron.info/doc/qpmpc/usage.html#qpmpc.plan.Plan) holds the state and input trajectories that result from optimizing the problem (if a solution exists). The ``solver`` string is used to select the backend [quadratic programming solver](https://github.com/stephane-caron/qpsolvers#solvers).
 
 ## Example
 
