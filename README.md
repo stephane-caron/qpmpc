@@ -1,6 +1,6 @@
 # qpmpc
 
-[![Build](https://img.shields.io/github/actions/workflow/status/stephane-caron/qpmpc/build.yml?branch=main)](https://github.com/stephane-caron/qpmpc/actions)
+[![CI](https://github.com/stephane-caron/qpmpc/actions/workflows/ci.yml/badge.svg)](https://github.com/stephane-caron/qpmpc/actions/workflows/ci.yml)
 [![Coverage](https://coveralls.io/repos/github/stephane-caron/qpmpc/badge.svg?branch=main)](https://coveralls.io/github/stephane-caron/qpmpc?branch=main)
 [![Documentation](https://img.shields.io/badge/docs-online-brightgreen?logo=read-the-docs&style=flat)](https://scaron.info/doc/qpmpc/)
 [![PyPI version](https://img.shields.io/pypi/v/qpmpc)](https://pypi.org/project/qpmpc/0.6.0/)
