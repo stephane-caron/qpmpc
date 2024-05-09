@@ -11,8 +11,6 @@ jobs:
     coverage:
         name: "Coverage"
         runs-on: ubuntu-latest
-        needs: [check-secrets]
-        if: needs.check-secrets.outputs.has-secrets == 'true'
 
         steps:
             - name: "Checkout sources"
