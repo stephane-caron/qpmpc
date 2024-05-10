@@ -47,8 +47,10 @@ line-length = 79
 [tool.flit.module]
 name = "qpmpc"
 
-[tool.lint]
+[tool.ruff]
 line-length = 79
+
+[tool.lint]
 select = [
     # pyflakes
     "F",
