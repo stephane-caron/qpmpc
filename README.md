@@ -1,8 +1,9 @@
 # qpmpc
 
-[![CI](https://github.com/stephane-caron/qpmpc/actions/workflows/ci.yml/badge.svg)](https://github.com/stephane-caron/qpmpc/actions/workflows/ci.yml)
+[![CI](https://img.shields.io/github/actions/workflow/status/stephane-caron/qpmpc/ci.yml?branch=main)](https://github.com/stephane-caron/qpmpc/actions)
+[![Documentation](https://img.shields.io/github/actions/workflow/status/stephane-caron/qpmpc/docs.yml?branch=main&label=docs)](https://scaron.info/doc/qpmpc/)
 [![Coverage](https://coveralls.io/repos/github/stephane-caron/qpmpc/badge.svg?branch=main)](https://coveralls.io/github/stephane-caron/qpmpc?branch=main)
-[![Documentation](https://img.shields.io/badge/docs-online-brightgreen?logo=read-the-docs&style=flat)](https://scaron.info/doc/qpmpc/)
+[![Conda version](https://img.shields.io/conda/vn/conda-forge/qpmpc.svg?color=blue)](https://anaconda.org/conda-forge/qpmpc)
 [![PyPI version](https://img.shields.io/pypi/v/qpmpc)](https://pypi.org/project/qpmpc/0.6.0/)
 
 Model predictive control (MPC) in Python for optimal-control problems that are quadratic programs (QP). This includes linear time-invariant (LTI) and time-variant (LTV) systems with linear constraints. The corresponding QP has the form:
