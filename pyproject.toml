@@ -37,6 +37,7 @@ extras = [
 ]
 
 [project.urls]
+Homepage = "https://github.com/stephane-caron/qpmpc"
 Documentation = "https://scaron.info/doc/qpmpc/"
 Source = "https://github.com/stephane-caron/qpmpc"
 Tracker = "https://github.com/stephane-caron/qpmpc/issues"
