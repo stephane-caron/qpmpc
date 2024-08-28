@@ -68,7 +68,7 @@ def get_target_states(
     """Define the reference state trajectory over the receding horizon.
 
     Args:
-        state: Cart-pole state at the beginning of the horizon.
+        state: Pendulum state at the beginning of the horizon.
         target_vel: Target ground velocity in m/s.
 
     Returns:
