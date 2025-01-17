@@ -115,12 +115,21 @@ Check out the [contribution guidelines](CONTRIBUTING.md) if you are interested i
 
 ## Alternatives
 
-This module is designed for faster prototyping rather than performance. You can also check out the following open-source libraries:
+You can also check out the following open-source libraries:
 
-| Name                                                       | Systems               | Languages  | License      |
-|------------------------------------------------------------|-----------------------|------------|--------------|
-| [Copra (LTV fork)](https://github.com/ANYbotics/copra)     | Linear time-variant   | Python/C++ | BSD-2-Clause |
-| [Copra (original)](https://github.com/jrl-umi3218/copra)   | Linear time-invariant | Python/C++ | BSD-2-Clause |
-| [Crocoddyl](https://github.com/loco-3d/crocoddyl)          | Nonlinear             | Python/C++ | BSD-3-Clause |
-| [mpc-interface](https://github.com/Gepetto/mpc-interface)  | Linear time-variant   | Python/C++ | BSD-2-Clause |
-| [pyMPC](https://github.com/forgi86/pyMPC)                  | Linear time-variant   | Python     | MIT          |
+### Linear model predictive control
+
+| Name                                                       | Systems               | Languages   | License      |
+|------------------------------------------------------------|-----------------------|-------------|--------------|
+| [Copra (LTV fork)](https://github.com/ANYbotics/copra)     | Linear time-variant   | C++, Python | BSD-2-Clause |
+| [Copra (original)](https://github.com/jrl-umi3218/copra)   | Linear time-invariant | C++, Python | BSD-2-Clause |
+| [mpc-interface](https://github.com/Gepetto/mpc-interface)  | Linear time-variant   | C++, Python | BSD-2-Clause |
+| [pyMPC](https://github.com/forgi86/pyMPC)                  | Linear time-variant   | Python      | MIT          |
+
+### Nonlinear model predictive control
+
+| Name                                                       | Systems               | Languages           | License      |
+|------------------------------------------------------------|-----------------------|---------------------|--------------|
+| [acados](https://github.com/acados/acados)                 | Nonlinear             | C++, Matlab, Python | BSD-2-Clause |
+| [Aligator](https://github.com/Simple-Robotics/aligator/)   | Nonlinear             | C++, Python         | BSD-2-Clause |
+| [Crocoddyl](https://github.com/loco-3d/crocoddyl)          | Nonlinear             | C++, Python         | BSD-3-Clause |
