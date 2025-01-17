@@ -43,9 +43,6 @@ Source = "https://github.com/stephane-caron/qpmpc"
 Tracker = "https://github.com/stephane-caron/qpmpc/issues"
 Changelog = "https://github.com/stephane-caron/qpmpc/blob/main/CHANGELOG.md"
 
-[tool.black]
-line-length = 79
-
 [tool.flit.module]
 name = "qpmpc"
 
