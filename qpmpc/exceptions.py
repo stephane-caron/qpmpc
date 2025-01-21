@@ -7,17 +7,17 @@
 """Exceptions raised by this library."""
 
 
-class LTVMPCException(Exception):
+class QPMPCException(Exception):
     """Base class for exceptions from this library."""
 
 
-class ProblemDefinitionError(LTVMPCException):
+class ProblemDefinitionError(QPMPCException):
     """Problem definition is incorrect."""
 
 
-class PlanError(LTVMPCException):
+class PlanError(QPMPCException):
     """Plan is not correct."""
 
 
-class StateError(LTVMPCException):
+class StateError(QPMPCException):
     """Report an ill-formed state."""

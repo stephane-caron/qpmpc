@@ -11,7 +11,7 @@ from typing import Any, Dict, Sequence
 import matplotlib
 from matplotlib import pyplot as plt
 
-from ..exceptions import LTVMPCException
+from ..exceptions import QPMPCException
 
 
 class LivePlot:
@@ -69,7 +69,7 @@ class LivePlot:
             kwargs: Forwarded to ``pyplot.plot``.
         """
         if self.rhs_axis is None:
-            raise LTVMPCException("right-hand side axis not initialized")
+            raise QPMPCException("right-hand side axis not initialized")
         kwargs["animated"] = True
         (line,) = self.rhs_axis.plot([], *args, **kwargs)
         self.lines[name] = line
