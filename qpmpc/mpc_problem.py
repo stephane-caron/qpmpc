@@ -147,8 +147,7 @@ class MPCProblem:
         )
         if cost_is_set and self.goal_state is None:
             raise ProblemDefinitionError(
-                "MPC problem has terminal cost "
-                "but the goal state is undefined"
+                "MPC problem has terminal cost but the goal state is undefined"
             )
         return cost_is_set
 
