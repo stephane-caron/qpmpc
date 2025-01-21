@@ -63,14 +63,14 @@ class MPCQP:
             h_k = (
                 e_k
                 if C_k is None
-                else e_k - np.dot(C_k.dot(phi), initial_state)
+                else e_k - np.dot(C_k.dot(phi), initial_state)  # type: ignore
             )
             input_slice = slice(k * input_dim, (k + 1) * input_dim)
             if D_k is not None:
                 # we rely on G == 0 to avoid a slower +=
                 G_k[:, input_slice] = D_k
             if C_k is not None:
-                G_k += C_k.dot(psi)
+                G_k += C_k.dot(psi)  # type: ignore
             if k == 0 and D_k is None and np.any(h_k < 0.0):
                 # in this case, the initial state constraint is violated and
                 # cannot be compensated by any input (D_k is None)
