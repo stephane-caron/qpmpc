@@ -196,7 +196,9 @@ class MPCProblem:
             else self.transition_input_matrix
         )
 
-    def get_ineq_state_matrix(self, k) -> np.ndarray:
+    def get_ineq_state_matrix(
+        self, k
+    ) -> Union[None, np.ndarray, List[np.ndarray]]:
         """Get state inequality matrix at a given timestep.
 
         Args:
@@ -211,7 +213,9 @@ class MPCProblem:
             else self.ineq_state_matrix
         )
 
-    def get_ineq_input_matrix(self, k) -> np.ndarray:
+    def get_ineq_input_matrix(
+        self, k
+    ) -> Union[None, np.ndarray, List[np.ndarray]]:
         """Get input inequality matrix at a given timestep.
 
         Args:
