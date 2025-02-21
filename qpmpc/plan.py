@@ -98,14 +98,7 @@ class Plan:
         """
         if self.__inputs is None:  # same as is_empty, helps mypy
             return None
-        if self.__states is not None:
-            return self.__states
-        U = self.__inputs
-        X = np.zeros((self.problem.nb_timesteps + 1, self.problem.state_dim))
-        X[0] = self.problem.initial_state
-        for k in range(self.problem.nb_timesteps):
-            A_k = self.problem.get_transition_state_matrix(k)
-            B_k = self.problem.get_transition_input_matrix(k)
-            X[k + 1] = A_k.dot(X[k]) + B_k.dot(U[k])
-        self.__states = X
-        return X
+        if self.__states is None:
+            x_init = self.problem.initial_state
+            self.__states = self.problem.integrate(x_init, self.__inputs)
+        return self.__states

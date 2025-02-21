@@ -312,3 +312,24 @@ class MPCProblem:
             f"transition_input_matrix={self.transition_input_matrix}, "
             f"transition_state_matrix={self.transition_state_matrix})"
         )
+
+    def integrate(
+        self, initial_state: np.ndarray, inputs: np.ndarray
+    ) -> np.ndarray:
+        """Integrate a sequence of input from a given state.
+
+        Args:
+            initial_state: State to integrate from.
+            inputs: Sequence of inputs.
+
+        Returns:
+            State trajectory as a stacked vector.
+        """
+        U = inputs
+        X = np.zeros((self.nb_timesteps + 1, self.state_dim))
+        X[0] = initial_state
+        for k in range(self.nb_timesteps):
+            A_k = self.get_transition_state_matrix(k)
+            B_k = self.get_transition_input_matrix(k)
+            X[k + 1] = A_k.dot(X[k]) + B_k.dot(U[k])
+        return X
