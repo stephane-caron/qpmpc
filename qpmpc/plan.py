@@ -6,6 +6,7 @@
 
 """Process solutions to a model predictive control problem."""
 
+import logging
 from typing import Optional
 
 import numpy as np
@@ -100,5 +101,9 @@ class Plan:
             return None
         if self.__states is None:
             x_init = self.problem.initial_state
-            self.__states = self.problem.integrate(x_init, self.__inputs)
+            if x_init is not None:
+                self.__states = self.problem.integrate(x_init, self.__inputs)
+            else:  # undefined initial state
+                logging.warning("Problem has undefined initial state")
+                return None
         return self.__states
