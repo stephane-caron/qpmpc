@@ -11,6 +11,7 @@ import logging
 import numpy as np
 import qpsolvers
 from scipy.sparse import csc_matrix
+from scipy.linalg import block_diag
 
 from .exceptions import ProblemDefinitionError
 from .mpc_problem import MPCProblem
@@ -50,6 +51,7 @@ class MPCQP:
         psi = np.zeros((state_dim, stacked_input_dim))
         G_list, h_list = [], []
         phi_list, psi_list = [], []
+        e_list, C_list = [], []
         for k in range(mpc_problem.nb_timesteps):
             # Loop invariant: x == psi * U + phi * x_init
             phi_list.append(phi)
@@ -83,11 +85,17 @@ class MPCQP:
             phi = A_k.dot(phi)
             psi = A_k.dot(psi)
             psi[:, input_slice] = B_k
+            e_list.append(e_k)
+            C_list.append(C_k)
         G: np.ndarray = np.vstack(G_list, dtype=float)
         h: np.ndarray = np.hstack(h_list, dtype=float)
         Phi = np.vstack(phi_list, dtype=float)
         Psi = np.vstack(psi_list, dtype=float)
-
+        if C_list != []:
+            C = block_diag(*C_list)
+        else : 
+            C = None
+        e = np.hstack(e_list, dtype=float)
         P: np.ndarray = mpc_problem.stage_input_cost_weight * np.eye(
             stacked_input_dim,
         )
@@ -104,6 +112,8 @@ class MPCQP:
         self.h = h
         self.phi_last = phi
         self.psi_last = psi
+        self.e = e
+        self.C = C
         self.q = q  # initialized below
         #
         try:
@@ -145,6 +155,9 @@ class MPCQP:
             mpc_problem: New model predictive control problem. It should have
                 the same structure as the one used to initialize the MPCQP.
         """
-        raise NotImplementedError(
-            "Time-varying constraints are handled cold-start for now"
-        )
+        if mpc_problem.initial_state is None:
+            raise ProblemDefinitionError("initial state is undefined")
+        
+        if self.C is not None:
+            h= self.e - self.C@self.Phi@mpc_problem.initial_state
+            self.h = h.flatten()
