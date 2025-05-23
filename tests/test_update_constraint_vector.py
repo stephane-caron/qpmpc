@@ -66,17 +66,18 @@ class TestHumanoid(unittest.TestCase):
             stage_state_cost_weight=None,
             stage_input_cost_weight=1e-3,
         )
-        mpcqp = MPCQP(mpc_problem)
-        self.h_constructor = mpcqp.h.copy()
-        mpcqp.update_constraint_vector(mpc_problem)
-        self.h_update = mpcqp.h
+        self.mpc_problem = mpc_problem
         
     def test_update_constraint_vector(self):
         """
         Test that the constraint vector is updated correctly.
         """
         # Check that the constraint vector is updated correctly
-        np.testing.assert_array_equal(self.h_constructor, self.h_update)
+        mpcqp = MPCQP(self.mpc_problem)
+        h_constructor = mpcqp.h.copy()
+        mpcqp.update_constraint_vector(self.mpc_problem)
+        h_update = mpcqp.h
+        np.testing.assert_array_equal(h_constructor, h_update)
 
 
 if __name__ == "__main__":
