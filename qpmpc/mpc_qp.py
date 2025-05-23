@@ -159,5 +159,5 @@ class MPCQP:
             raise ProblemDefinitionError("initial state is undefined")
 
         if self.C is not None:
-            h= self.e - self.C @ self.Phi @ mpc_problem.initial_state
+            h = self.e - self.C @ self.Phi @ mpc_problem.initial_state
             self.h = h.flatten()
