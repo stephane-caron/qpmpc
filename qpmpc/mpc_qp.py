@@ -7,6 +7,7 @@
 """MPC problem represented as a quadratic program."""
 
 import logging
+from typing import Optional
 
 import numpy as np
 import qpsolvers
@@ -33,7 +34,7 @@ class MPCQP:
     psi_last: np.ndarray
     q: np.ndarray
     e: np.ndarray
-    C: np.ndarray
+    C: Optional[np.ndarray]
 
     def __init__(self, mpc_problem: MPCProblem, sparse: bool = False) -> None:
         """Create a new QP representation.
