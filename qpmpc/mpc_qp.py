@@ -32,6 +32,8 @@ class MPCQP:
     phi_last: np.ndarray
     psi_last: np.ndarray
     q: np.ndarray
+    e: np.ndarray
+    C: np.ndarray
 
     def __init__(self, mpc_problem: MPCProblem, sparse: bool = False) -> None:
         """Create a new QP representation.
@@ -91,10 +93,7 @@ class MPCQP:
         h: np.ndarray = np.hstack(h_list, dtype=float)
         Phi = np.vstack(phi_list, dtype=float)
         Psi = np.vstack(psi_list, dtype=float)
-        if C_list != []:
-            C = block_diag(*C_list)
-        else : 
-            C = None
+        C = block_diag(*C_list) if C_list else None
         e = np.hstack(e_list, dtype=float)
         P: np.ndarray = mpc_problem.stage_input_cost_weight * np.eye(
             stacked_input_dim,
@@ -159,5 +158,5 @@ class MPCQP:
             raise ProblemDefinitionError("initial state is undefined")
         
         if self.C is not None:
-            h= self.e - self.C@self.Phi@mpc_problem.initial_state
+            h= self.e - self.C @ self.Phi @ mpc_problem.initial_state
             self.h = h.flatten()
