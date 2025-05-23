@@ -68,7 +68,7 @@ class TestHumanoid(unittest.TestCase):
         )
         mpcqp = MPCQP(mpc_problem)
         self.h_constructor = mpcqp.h
-        mpcqp.update_constraint_vector()
+        mpcqp.update_constraint_vector(mpc_problem)
         self.h_update = mpcqp.h
         
     def test_update_constraint_vector(self):
