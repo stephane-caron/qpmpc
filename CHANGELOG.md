@@ -7,7 +7,9 @@ All notable changes to this project will be documented in this file.
 ### Added
 
 - Add `MPCProblem.integrate` function
-- Add `MPCQP.update_constraint_vector` function
+- Add `MPCQP.update_constraint_vector` function (thanks to @Tordjx)
+- CICD: Add Python 3.11 checks
+- CICD: Add Python 3.12 checks
 
 ### Changed
 
