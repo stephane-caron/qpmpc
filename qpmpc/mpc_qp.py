@@ -11,8 +11,8 @@ from typing import Optional
 
 import numpy as np
 import qpsolvers
-from scipy.sparse import csc_matrix
 from scipy.linalg import block_diag
+from scipy.sparse import csc_matrix
 
 from .exceptions import ProblemDefinitionError
 from .mpc_problem import MPCProblem
@@ -157,7 +157,7 @@ class MPCQP:
         """
         if mpc_problem.initial_state is None:
             raise ProblemDefinitionError("initial state is undefined")
-        
+
         if self.C is not None:
             h= self.e - self.C @ self.Phi @ mpc_problem.initial_state
             self.h = h.flatten()
