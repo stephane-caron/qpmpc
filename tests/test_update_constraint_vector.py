@@ -67,7 +67,7 @@ class TestHumanoid(unittest.TestCase):
             stage_input_cost_weight=1e-3,
         )
         mpcqp = MPCQP(mpc_problem)
-        self.h_constructor = mpcqp.h
+        self.h_constructor = mpcqp.h.copy()
         mpcqp.update_constraint_vector(mpc_problem)
         self.h_update = mpcqp.h
         
