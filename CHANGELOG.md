@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [3.1.0] - 2025-05-23
+
 ### Added
 
 - Add `MPCProblem.integrate` function
@@ -100,7 +102,8 @@ All notable changes to this project will be documented in this file.
 
 - Extend to time-varying state and input transition matrices
 
-[unreleased]: https://github.com/stephane-caron/qpmpc/compare/v3.0.1...HEAD
+[unreleased]: https://github.com/stephane-caron/qpmpc/compare/v3.1.0...HEAD
+[3.1.0]: https://github.com/stephane-caron/qpmpc/compare/v3.0.1...v3.1.0
 [3.0.1]: https://github.com/stephane-caron/qpmpc/compare/v3.0.0...v3.0.1
 [3.0.0]: https://github.com/stephane-caron/qpmpc/compare/v2.0.0...v3.0.0
 [2.0.0]: https://github.com/stephane-caron/qpmpc/compare/v1.0.0...v2.0.0
