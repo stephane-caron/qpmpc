@@ -7,7 +7,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 
 - Add `MPCProblem.integrate` function
-
+- Add `MPCQP.update_constraint_vector` function
 ### Changed
 
 - CICD: Update checkout action to v4
