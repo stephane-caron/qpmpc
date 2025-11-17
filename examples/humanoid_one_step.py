@@ -3,13 +3,17 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 # Copyright 2022 Stéphane Caron
+#
+# /// script
+# dependencies = ["matplotlib", "proxsuite", "qpmpc"]
+# ///
 
 """Humanoid planning to walk a single step ahead."""
 
 from dataclasses import dataclass
 
+import matplotlib.pyplot as plt
 import numpy as np
-import pylab
 
 from qpmpc import MPCProblem, solve_mpc
 
@@ -44,9 +48,9 @@ def build_mpc_problem(params: Parameters):
     nb_init_ssp_steps = int(round(params.ssp_duration / T))
     nb_dsp_steps = int(round(params.dsp_duration / T))
     state_matrix = np.array(
-        [[1.0, T, T ** 2 / 2.0], [0.0, 1.0, T], [0.0, 0.0, 1.0]]
+        [[1.0, T, T**2 / 2.0], [0.0, 1.0, T], [0.0, 0.0, 1.0]]
     )
-    input_matrix = np.array([T ** 3 / 6.0, T ** 2 / 2.0, T])
+    input_matrix = np.array([T**3 / 6.0, T**2 / 2.0, T])
     input_matrix = input_matrix.reshape((3, 1))
     eta = params.com_height / params.gravity
     zmp_from_state = np.array([1.0, 0.0, -eta])
@@ -56,13 +60,19 @@ def build_mpc_problem(params: Parameters):
     next_max = params.end_pos + 0.5 * params.foot_length
     next_min = params.end_pos - 0.5 * params.foot_length
     ineq_vector = [
-        np.array([+1000.0, +1000.0])
-        if i < nb_init_dsp_steps
-        else np.array([+cur_max, -cur_min])
-        if i - nb_init_dsp_steps <= nb_init_ssp_steps
-        else np.array([+1000.0, +1000.0])
-        if i - nb_init_dsp_steps - nb_init_ssp_steps < nb_dsp_steps
-        else np.array([+next_max, -next_min])
+        (
+            np.array([+1000.0, +1000.0])
+            if i < nb_init_dsp_steps
+            else (
+                np.array([+cur_max, -cur_min])
+                if i - nb_init_dsp_steps <= nb_init_ssp_steps
+                else (
+                    np.array([+1000.0, +1000.0])
+                    if i - nb_init_dsp_steps - nb_init_ssp_steps < nb_dsp_steps
+                    else np.array([+next_max, -next_min])
+                )
+            )
+        )
         for i in range(params.nb_timesteps)
     ]
     return MPCProblem(
@@ -102,14 +112,14 @@ def plot_plan(params, mpc_problem, plan):
     ]
     zmp_min.append(zmp_min[-1])
     zmp_max.append(zmp_max[-1])
-    pylab.ion()
-    pylab.clf()
-    pylab.plot(t, pos)
-    pylab.plot(t, zmp, "r-")
-    pylab.plot(t, zmp_min, "g:")
-    pylab.plot(t, zmp_max, "b:")
-    pylab.grid(True)
-    pylab.show(block=True)
+    plt.ion()
+    plt.clf()
+    plt.plot(t, pos)
+    plt.plot(t, zmp, "r-")
+    plt.plot(t, zmp_min, "g:")
+    plt.plot(t, zmp_max, "b:")
+    plt.grid(True)
+    plt.show(block=True)
 
 
 if __name__ == "__main__":

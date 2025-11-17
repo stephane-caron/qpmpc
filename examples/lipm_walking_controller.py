@@ -3,6 +3,10 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 # Copyright 2022 Stéphane Caron
+#
+# /// script
+# dependencies = ["loop_rate_limiters", "matplotlib", "proxsuite", "qpmpc"]
+# ///
 
 """Model predictive control part of the LIPM walking controller.
 
@@ -13,14 +17,7 @@ import argparse
 from dataclasses import dataclass
 
 import numpy as np
-
-try:
-    from loop_rate_limiters import RateLimiter
-except ImportError:
-    raise ImportError(
-        "This example requires an extra dependency. "
-        "You can install it by `pip install qpmpc[extras]`"
-    )
+from loop_rate_limiters import RateLimiter
 
 from qpmpc import MPCProblem, solve_mpc
 from qpmpc.exceptions import ProblemDefinitionError

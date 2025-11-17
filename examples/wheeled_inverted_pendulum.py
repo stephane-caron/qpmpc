@@ -3,6 +3,10 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 # Copyright 2022 Stéphane Caron
+#
+# /// script
+# dependencies = ["loop_rate_limiters", "matplotlib", "proxsuite", "qpmpc"]
+# ///
 
 """Model predictive control of a wheeled inverted pendulum.
 
@@ -12,16 +16,8 @@ This is one locomotion mode for Upkie: https://github.com/upkie/upkie
 import argparse
 
 import numpy as np
-
 import qpsolvers
-
-try:
-    from loop_rate_limiters import RateLimiter
-except ImportError:
-    raise ImportError(
-        "This example requires an extra dependency. "
-        "You can install it by `pip install qpmpc[extras]`"
-    )
+from loop_rate_limiters import RateLimiter
 
 from qpmpc import solve_mpc
 from qpmpc.live_plots import WheeledInvertedPendulumPlot

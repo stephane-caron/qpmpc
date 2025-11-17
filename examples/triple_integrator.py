@@ -3,11 +3,15 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 # Copyright 2022 Stéphane Caron
+#
+# /// script
+# dependencies = ["matplotlib", "osqp", "qpmpc"]
+# ///
 
 """Triple integrator LTV system."""
 
+import matplotlib.pyplot as plt
 import numpy as np
-import pylab
 
 from qpmpc import MPCProblem, solve_mpc
 
@@ -15,8 +19,8 @@ if __name__ == "__main__":
     horizon_duration = 1.0
     nb_timesteps = 16
     T = horizon_duration / nb_timesteps
-    A = np.array([[1.0, T, T ** 2 / 2.0], [0.0, 1.0, T], [0.0, 0.0, 1.0]])
-    B = np.array([T ** 3 / 6.0, T ** 2 / 2.0, T]).reshape((3, 1))
+    A = np.array([[1.0, T, T**2 / 2.0], [0.0, 1.0, T], [0.0, 0.0, 1.0]])
+    B = np.array([T**3 / 6.0, T**2 / 2.0, T]).reshape((3, 1))
 
     # Acceleration limits
     accel_from_state = np.array([0.0, 0.0, 1.0])
@@ -48,10 +52,10 @@ if __name__ == "__main__":
     t = np.linspace(0.0, horizon_duration, nb_timesteps + 1)
     X = plan.states
     positions, velocities, accelerations = X[:, 0], X[:, 1], X[:, 2]
-    pylab.ion()
-    pylab.clf()
-    pylab.plot(t, positions)
-    pylab.plot(t, velocities)
-    pylab.plot(t, accelerations)
-    pylab.grid(True)
-    pylab.legend(("position", "velocity", "acceleration"))
+    plt.ion()
+    plt.clf()
+    plt.plot(t, positions)
+    plt.plot(t, velocities)
+    plt.plot(t, accelerations)
+    plt.grid(True)
+    plt.legend(("position", "velocity", "acceleration"))
