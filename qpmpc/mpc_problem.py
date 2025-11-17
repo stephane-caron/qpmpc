@@ -137,6 +137,8 @@ class MPCProblem:
             self.update_goal_state(goal_state)
         if initial_state is not None:
             self.update_initial_state(initial_state)
+        if target_states is not None:
+            self.update_target_states(target_states)
 
     @property
     def has_terminal_cost(self) -> bool:
