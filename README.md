@@ -84,17 +84,17 @@ We can solve it with:
 The solution holds complete state and input trajectories as stacked vectors. For instance, we can plot positions, velocities and accelerations as follows:
 
 ```python
-    import pylab
+    import matplotlib.pyplot as plt
 
     t = np.linspace(0.0, horizon_duration, N + 1)
     X = solution.states
     positions, velocities, accelerations = X[:, 0], X[:, 1], X[:, 2]
-    pylab.ion()
-    pylab.plot(t, positions)
-    pylab.plot(t, velocities)
-    pylab.plot(t, accelerations)
-    pylab.grid(True)
-    pylab.legend(("position", "velocity", "acceleration"))
+    plt.ion()
+    plt.plot(t, positions)
+    plt.plot(t, velocities)
+    plt.plot(t, accelerations)
+    plt.grid(True)
+    plt.legend(("position", "velocity", "acceleration"))
 ```
 
 This example produces the following trajectory:
