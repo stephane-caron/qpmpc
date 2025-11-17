@@ -42,6 +42,9 @@ class MPCQP:
         Args:
             mpc_problem: Model predictive control problem to cast as a QP.
             sparse: If set, use sparse matrix representation.
+
+        Raises:
+            ProblemDefinitionError: if the provided MPC problem is incomplete.
         """
         input_dim = mpc_problem.input_dim
         state_dim = mpc_problem.state_dim
