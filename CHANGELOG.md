@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+
+- Allow `uv run` of examples
+
+### Changed
+
+- Don't catch ProblemDefinitionError exceptions in MPCQP constructor
+
+### Fixed
+
+- Set target states properly in MPC problem constructor (thanks to @Tordjx)
+
 ## [3.1.0] - 2025-05-23
 
 ### Added
