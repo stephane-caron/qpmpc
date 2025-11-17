@@ -116,10 +116,7 @@ class MPCQP:
         self.C = C
         self.q = q  # initialized below
         #
-        try:
-            self.update_cost_vector(mpc_problem)
-        except ProblemDefinitionError:
-            pass
+        self.update_cost_vector(mpc_problem)
 
     @property
     def problem(self) -> qpsolvers.Problem:
