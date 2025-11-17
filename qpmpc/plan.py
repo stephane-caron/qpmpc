@@ -33,7 +33,7 @@ class Plan:
     def __init__(self, problem: MPCProblem, qpsol: qpsolvers.Solution):
         """Test."""
         inputs = None
-        if qpsol.found:
+        if qpsol.found and qpsol.x is not None:
             U = qpsol.x
             U = U.reshape((problem.nb_timesteps, problem.input_dim))
             inputs = U
