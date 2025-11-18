@@ -4,7 +4,7 @@
 [![Documentation](https://img.shields.io/badge/docs-online-brightgreen?style=flat)](https://scaron.info/doc/qpmpc/)
 [![Coverage](https://coveralls.io/repos/github/stephane-caron/qpmpc/badge.svg?branch=main)](https://coveralls.io/github/stephane-caron/qpmpc?branch=main)
 [![Conda version](https://img.shields.io/conda/vn/conda-forge/qpmpc.svg?color=blue)](https://anaconda.org/conda-forge/qpmpc)
-[![PyPI version](https://img.shields.io/pypi/v/qpmpc)](https://pypi.org/project/qpmpc/0.6.0/)
+[![PyPI version](https://img.shields.io/pypi/v/qpmpc)](https://pypi.org/project/qpmpc/)
 
 Model predictive control (MPC) in Python for optimal-control problems that are quadratic programs (QP). This includes linear time-invariant (LTI) and time-variant (LTV) systems with linear constraints. The corresponding QP has the form:
 
