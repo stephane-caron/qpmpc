@@ -34,18 +34,20 @@ class MPCProblem:
         \forall k, \ C_k x_k + D_k u_k & \leq e_k \\
         \end{align*}
 
-    The output control law minimizes a weighted combination of two types of
+    The output control law minimizes a weighted combination of the following
     costs:
 
     - Terminal state error
         :math:`\|x_\mathrm{nb\_steps} - x_\mathrm{goal}\|^2`
         with weight :math:`w_{xt}`.
     - Cumulated state error:
-        :math:`\sum_k \|x_k - x_\mathrm{goal}\|^2`
-        with weight :math:`w_{xc}`.
+        :math:`\sum_k \|x_k - x^\mathrm{ref}_k\|^2`
+        with weight :math:`w_{xc}` (``target_states`` provides the per-step
+        reference :math:`x^\mathrm{ref}_k`).
     - Cumulated control costs:
-        :math:`\sum_k \|u_k\|^2`
-        with weight :math:`w_{u}`.
+        :math:`\sum_k \|u_k - u^\mathrm{ref}_k\|^2`
+        with weight :math:`w_{u}`. When ``target_inputs`` is ``None`` the
+        reference is taken to be zero, recovering :math:`\sum_k \|u_k\|^2`.
 
     Attributes:
         goal_state: Goal state as stacked position and velocity.
@@ -64,6 +66,12 @@ class MPCProblem:
         stage_state_cost_weight: Weight on cumulated state costs, or ``None``
             to disable (default).
         state_dim: Dimension of a state vector.
+        target_inputs: Optional reference trajectory for inputs. When set,
+            the stage input cost becomes :math:`\sum_k \|u_k -
+            u^\mathrm{ref}_k\|^2` instead of the default :math:`\sum_k
+            \|u_k\|^2`.
+        target_states: Reference trajectory for states; required when
+            ``stage_state_cost_weight`` is set.
         terminal_cost_weight: Weight on terminal state cost, or ``None`` to
             disable.
         transition_input_matrix: Control linear dynamics matrix.
@@ -80,6 +88,7 @@ class MPCProblem:
     stage_input_cost_weight: float
     stage_state_cost_weight: Optional[float]
     state_dim: int
+    target_inputs: Optional[np.ndarray]
     target_states: Optional[np.ndarray]
     terminal_cost_weight: Optional[float]
     transition_input_matrix: Union[np.ndarray, List[np.ndarray]]
@@ -99,6 +108,7 @@ class MPCProblem:
         initial_state: Optional[np.ndarray] = None,
         goal_state: Optional[np.ndarray] = None,
         target_states: Optional[np.ndarray] = None,
+        target_inputs: Optional[np.ndarray] = None,
     ) -> None:
         """Start a new model predictive control problem."""
         if stage_input_cost_weight <= 0.0:
@@ -126,6 +136,7 @@ class MPCProblem:
         self.initial_state = None  # initialized below
         self.input_dim = input_dim
         self.nb_timesteps = nb_timesteps
+        self.target_inputs = None  # initialized below
         self.target_states = None  # initialized below
         self.stage_input_cost_weight = stage_input_cost_weight
         self.stage_state_cost_weight = stage_state_cost_weight
@@ -139,6 +150,8 @@ class MPCProblem:
             self.update_initial_state(initial_state)
         if target_states is not None:
             self.update_target_states(target_states)
+        if target_inputs is not None:
+            self.update_target_inputs(target_inputs)
 
     @property
     def has_terminal_cost(self) -> bool:
@@ -166,6 +179,11 @@ class MPCProblem:
                 "but the reference trajectory is undefined"
             )
         return cost_is_set
+
+    @property
+    def has_stage_input_target(self) -> bool:
+        r"""Check whether cost has a per-step input reference."""
+        return self.target_inputs is not None
 
     def get_transition_state_matrix(self, k) -> np.ndarray:
         """Get state-transition matrix at a given timestep.
@@ -296,6 +314,25 @@ class MPCProblem:
             )
         self.target_states = target_states.flatten()
 
+    def update_target_inputs(self, target_inputs: np.ndarray) -> None:
+        """Set the reference input trajectory to track.
+
+        Args:
+            target_inputs: Reference input trajectory; shape must be
+                broadcastable to ``(nb_timesteps, input_dim)``.
+
+        Raises:
+            StateError: if the trajectory does not have the right dimension.
+        """
+        if target_inputs.size != self.input_dim * self.nb_timesteps:
+            raise StateError(
+                f"Reference input trajectory of shape {target_inputs.shape} "
+                "does not match nb_timesteps * input dimension = "
+                f"{self.nb_timesteps} * {self.input_dim} = "
+                f"{self.nb_timesteps * self.input_dim}"
+            )
+        self.target_inputs = target_inputs.flatten()
+
     def __repr__(self) -> str:
         """String representation of the MPC problem."""
         return (
@@ -310,6 +347,8 @@ class MPCProblem:
             f"stage_input_cost_weight={self.stage_input_cost_weight}, "
             f"stage_state_cost_weight={self.stage_state_cost_weight}, "
             f"state_dim={self.state_dim}, "
+            f"target_inputs={self.target_inputs}, "
+            f"target_states={self.target_states}, "
             f"terminal_cost_weight={self.terminal_cost_weight}, "
             f"transition_input_matrix={self.transition_input_matrix}, "
             f"transition_state_matrix={self.transition_state_matrix})"

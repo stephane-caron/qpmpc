@@ -7,6 +7,8 @@ All notable changes to this project will be documented in this file.
 ### Added
 
 - Allow `uv run` of examples
+- MPCProblem: Handle target inputs in the cost: new `target_inputs` field, `update_target_inputs` setter and `has_stage_input_target` property
+- MPCProblem: Constructor now wires both target_states and target_inputs from kwargs
 
 ### Changed
 
