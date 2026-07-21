@@ -8,7 +8,14 @@
 
 Model predictive control (MPC) in Python for optimal-control problems that are quadratic programs (QP). This includes linear time-invariant (LTI) and time-variant (LTV) systems with linear constraints. The corresponding QP has the form:
 
-> ![qpmpc](https://raw.githubusercontent.com/stephane-caron/qpmpc/main/doc/src/images/qpmpc.svg)
+```math
+\begin{array}{rl}
+\underset{x_k, u_k}{\min} \quad & w_{t} \|x_N - x_{\mathit{goal}}\|_2^2 + w_x \sum_{k=0}^{N-1} \| x_k - x_{\mathit{goal}} \|_2^2  + w_u \sum_{k=0}^{N-1} \| u_k \|^2_2 \\
+\mathrm{s.t.} \quad & x_{k+1} = A_k x_k + B_k u_k \\
+& C_k x_k + D_k u_k \leq e_k \\
+& x_0 = x_{\mathit{init}}
+\end{array}
+```
 
 This module is designed for prototyping. If you need performance, check out the [alternatives](#alternatives) below.
 
