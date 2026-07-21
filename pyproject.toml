@@ -68,3 +68,62 @@ ignore = [
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"
+
+[tool.mypy]
+ignore_missing_imports = true
+
+[tool.pylint.'messages control']
+# C0103: Argument name doesn't conform to snake_case naming style (qpsolvers
+#        uses uppercase for matrices)
+# E1130: bad operand type for unary - (false positives fixed in newer versions
+#        of pylint, see https://github.com/PyCQA/pylint/issues/2436)
+disable = ["C0103", "E1130", "import-error"]
+
+[tool.pixi.workspace]
+channels = ["conda-forge"]
+platforms = ["linux-64", "osx-64", "osx-arm64", "win-64"]
+
+[tool.pixi.pypi-dependencies]
+qpmpc = { path = ".", editable = true }
+
+[tool.pixi.dependencies]
+python = ">=3.8"
+qpsolvers = ">=3.4.0"
+
+[tool.pixi.feature.test.dependencies]
+matplotlib = ">=3.7.0"
+proxsuite = ">=0.6.1"
+
+[tool.pixi.feature.test.tasks]
+test = "python -m unittest discover"
+
+[tool.pixi.feature.coverage.dependencies]
+coverage = ">=5.5"
+matplotlib = ">=3.7.0"
+proxsuite = ">=0.6.1"
+qpsolvers = ">=3.4.0"
+
+[tool.pixi.feature.coverage.tasks]
+coverage-erase = "coverage erase"
+coverage-run = { cmd = "coverage run -m unittest discover", depends-on = ["coverage-erase"] }
+coverage = { cmd = "coverage report --include=\"qpmpc/*\"", depends-on = ["coverage-run"] }
+
+[tool.pixi.feature.lint.dependencies]
+matplotlib = ">=3.7.0"
+mypy = ">=0.812"
+proxsuite = ">=0.6.1"
+pylint = ">=2.8.2"
+qpsolvers = ">=3.4.0"
+ruff = ">=0.2.2"
+
+[tool.pixi.feature.lint.tasks]
+lint-mypy = "mypy qpmpc"
+lint-pylint = "pylint qpmpc --exit-zero"
+lint-ruff = "ruff check qpmpc"
+lint-ruff-format = "ruff format --check qpmpc"
+lint = { depends-on = ["lint-mypy", "lint-pylint", "lint-ruff", "lint-ruff-format"] }
+
+[tool.pixi.environments]
+default = { features = ["test"], solve-group = "default" }
+coverage = { features = ["coverage"], solve-group = "default" }
+lint = { features = ["lint"], solve-group = "default" }
