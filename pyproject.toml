@@ -13,17 +13,18 @@ maintainers = [
     {name = "Stéphane Caron", email = "stephane.caron@normalesup.org"},
 ]
 dynamic = ['version', 'description']
-requires-python = ">=3.8"
+requires-python = ">=3.10"
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
     "Intended Audience :: Science/Research",
     "License :: OSI Approved :: Apache Software License",
     "Operating System :: OS Independent",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Topic :: Scientific/Engineering :: Mathematics",
 ]
 dependencies = [
@@ -87,7 +88,7 @@ platforms = ["linux-64", "osx-64", "osx-arm64", "win-64"]
 qpmpc = { path = ".", editable = true }
 
 [tool.pixi.dependencies]
-python = ">=3.8"
+python = ">=3.10"
 qpsolvers = ">=3.4.0"
 
 [tool.pixi.feature.test.dependencies]
@@ -123,7 +124,29 @@ lint-ruff = "ruff check qpmpc"
 lint-ruff-format = "ruff format --check qpmpc"
 lint = { depends-on = ["lint-mypy", "lint-pylint", "lint-ruff", "lint-ruff-format"] }
 
+# Per-version features to exercise the supported Python range in CI. These
+# cannot share the "default" solve-group as each pins a different interpreter.
+[tool.pixi.feature.py310.dependencies]
+python = "3.10.*"
+
+[tool.pixi.feature.py311.dependencies]
+python = "3.11.*"
+
+[tool.pixi.feature.py312.dependencies]
+python = "3.12.*"
+
+[tool.pixi.feature.py313.dependencies]
+python = "3.13.*"
+
+[tool.pixi.feature.py314.dependencies]
+python = "3.14.*"
+
 [tool.pixi.environments]
 default = { features = ["test"], solve-group = "default" }
 coverage = { features = ["coverage"], solve-group = "default" }
 lint = { features = ["lint"], solve-group = "default" }
+py310 = ["py310", "test"]
+py311 = ["py311", "test"]
+py312 = ["py312", "test"]
+py313 = ["py313", "test"]
+py314 = ["py314", "test"]
