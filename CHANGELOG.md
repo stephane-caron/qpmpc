@@ -9,8 +9,8 @@ All notable changes to this project will be documented in this file.
 - Allow `uv run` of examples
 - CICD: Run unit tests against Python 3.13
 - CICD: Run unit tests against Python 3.14
+- MPCProblem: Constructor now wires both `target_states` and `target_inputs` from keyword arguments
 - MPCProblem: Handle target inputs in the cost: new `target_inputs` field, `update_target_inputs` setter and `has_stage_input_target` property
-- MPCProblem: Constructor now wires both target_states and target_inputs from kwargs
 
 ### Changed
 
