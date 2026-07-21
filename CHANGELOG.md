@@ -7,12 +7,21 @@ All notable changes to this project will be documented in this file.
 ### Added
 
 - Allow `uv run` of examples
+- CICD: Run unit tests against Python 3.13
+- CICD: Run unit tests against Python 3.14
 - MPCProblem: Handle target inputs in the cost: new `target_inputs` field, `update_target_inputs` setter and `has_stage_input_target` property
 - MPCProblem: Constructor now wires both target_states and target_inputs from kwargs
 
 ### Changed
 
+- Bump minimum supported Python version to 3.10
+- CICD: Switch project tooling from tox to pixi
 - Don't catch ProblemDefinitionError exceptions in MPCQP constructor
+
+### Removed
+
+- CICD: Drop Python 3.8 support (reached end of life)
+- CICD: Drop Python 3.9 support (reached end of life)
 
 ### Fixed
 
