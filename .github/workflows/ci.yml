@@ -51,12 +51,13 @@ jobs:
                   pixi run -e lint lint
 
     test:
-        name: "Test ${{ matrix.os }}"
+        name: "Test ${{ matrix.os }} with ${{ matrix.environment }}"
         runs-on: ${{ matrix.os }}
 
         strategy:
             matrix:
                 os: [ubuntu-latest]
+                environment: [py310, py311, py312, py313, py314]
 
         steps:
             - name: "Checkout sources"
@@ -64,10 +65,12 @@ jobs:
 
             - name: "Set up pixi"
               uses: prefix-dev/setup-pixi@v0.8.1
+              with:
+                  environments: ${{ matrix.environment }}
 
             - name: "Run unit tests"
               run: |
-                  pixi run test
+                  pixi run -e ${{ matrix.environment }} test
 
     ci_success:
         name: "CI success"
