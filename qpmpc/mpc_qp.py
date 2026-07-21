@@ -148,9 +148,9 @@ class MPCQP:
                 c.T, self.Psi
             )
         if mpc_problem.has_stage_input_target:
-            self.q -= mpc_problem.stage_input_cost_weight * (
-                mpc_problem.target_inputs
-            )
+            target_inputs = mpc_problem.target_inputs
+            assert target_inputs is not None  # via has_stage_input_target
+            self.q -= mpc_problem.stage_input_cost_weight * target_inputs
 
     def update_constraint_vector(self, mpc_problem: MPCProblem) -> None:
         """Update the inequality constraint vector.
