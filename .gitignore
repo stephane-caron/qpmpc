@@ -1,8 +1,8 @@
 *.pyc
 *.pyo
 .coverage
+.pixi
 .ropeproject
-.tox
 dist
 doc/build
 examples/qpmpc
