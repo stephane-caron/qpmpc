@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [3.2.0] - 2026-07-21
+
 ### Added
 
 - Allow `uv run` of examples
@@ -125,11 +127,12 @@ All notable changes to this project will be documented in this file.
 
 - Extend to time-varying state and input transition matrices
 
-[unreleased]: https://github.com/stephane-caron/qpmpc/compare/v3.1.0...HEAD
-[3.1.0]: https://github.com/stephane-caron/qpmpc/compare/v3.0.1...v3.1.0
-[3.0.1]: https://github.com/stephane-caron/qpmpc/compare/v3.0.0...v3.0.1
-[3.0.0]: https://github.com/stephane-caron/qpmpc/compare/v2.0.0...v3.0.0
-[2.0.0]: https://github.com/stephane-caron/qpmpc/compare/v1.0.0...v2.0.0
-[1.0.0]: https://github.com/stephane-caron/qpmpc/compare/v0.7.0...v1.0.0
-[0.7.0]: https://github.com/stephane-caron/qpmpc/compare/v0.6.0...v0.7.0
+[unreleased]: https://github.com/stephane-caron/qpmpc/compare/v3.2.0...HEAD
+[3.2.0]: https://github.com/stephane-caron/qpmpc/releases/tag/v3.2.0
+[3.1.0]: https://github.com/stephane-caron/qpmpc/releases/tag/v3.1.0
+[3.0.1]: https://github.com/stephane-caron/qpmpc/releases/tag/v3.0.1
+[3.0.0]: https://github.com/stephane-caron/qpmpc/releases/tag/v3.0.0
+[2.0.0]: https://github.com/stephane-caron/qpmpc/releases/tag/v2.0.0
+[1.0.0]: https://github.com/stephane-caron/qpmpc/releases/tag/v1.0.0
+[0.7.0]: https://github.com/stephane-caron/qpmpc/releases/tag/v0.7.0
 [0.6.0]: https://github.com/stephane-caron/qpmpc/releases/tag/v0.6.0
