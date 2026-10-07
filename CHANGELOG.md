@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Fixed
+
+- Keep positive terminal and stage tracking costs consistent under cost rescaling.
+
 ## [3.2.0] - 2026-07-21
 
 ### Added

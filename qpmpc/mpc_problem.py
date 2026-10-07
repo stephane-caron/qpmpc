@@ -157,7 +157,7 @@ class MPCProblem:
         """Check whether the problem has a terminal cost."""
         cost_is_set = (
             self.terminal_cost_weight is not None
-            and self.terminal_cost_weight > 1e-10
+            and self.terminal_cost_weight > 0.0
         )
         if cost_is_set and self.goal_state is None:
             raise ProblemDefinitionError(
@@ -170,7 +170,7 @@ class MPCProblem:
         """Check whether the problem has a stage state cost."""
         cost_is_set = (
             self.stage_state_cost_weight is not None
-            and self.stage_state_cost_weight > 1e-10
+            and self.stage_state_cost_weight > 0.0
         )
         if cost_is_set and self.target_states is None:
             raise ProblemDefinitionError(
