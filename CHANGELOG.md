@@ -4,9 +4,13 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+
+- examples: Solving an updated MPC problem and comparing computation times
+
 ### Fixed
 
-- Fix input-only constraint updates by preserving absent state constraints.
+- Fix input-only constraint updates by preserving absent state constraints (thanks to @Afloat16)
 
 ## [3.2.0] - 2026-07-21
 
