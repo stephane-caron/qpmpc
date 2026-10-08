@@ -1,6 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-#
 # SPDX-License-Identifier: Apache-2.0
 
 import unittest
@@ -8,7 +5,7 @@ from dataclasses import dataclass
 
 import numpy as np
 
-from qpmpc import MPCProblem, solve_mpc
+from qpmpc import MPCProblem
 from qpmpc.solve_mpc import MPCQP
 
 
@@ -66,11 +63,9 @@ class TestHumanoid(unittest.TestCase):
             stage_input_cost_weight=1e-3,
         )
         self.mpc_problem = mpc_problem
-        
+
     def test_update_constraint_vector(self):
-        """
-        Test that the constraint vector is updated correctly.
-        """
+        """Test that the constraint vector is updated correctly."""
         # Check that the constraint vector is updated correctly
         mpcqp = MPCQP(self.mpc_problem)
         h_constructor = mpcqp.h.copy()

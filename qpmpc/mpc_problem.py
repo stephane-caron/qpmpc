@@ -1,6 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-#
 # SPDX-License-Identifier: Apache-2.0
 
 """Define model predictive control problems."""
@@ -113,6 +110,17 @@ class MPCProblem:
         if stage_input_cost_weight <= 0.0:
             raise ProblemDefinitionError(
                 "stage non-negative control weight needed for regularization"
+            )
+        if terminal_cost_weight is not None and terminal_cost_weight < 0.0:
+            raise ProblemDefinitionError(
+                "terminal cost weight should be non-negative"
+            )
+        if (
+            stage_state_cost_weight is not None
+            and stage_state_cost_weight < 0.0
+        ):
+            raise ProblemDefinitionError(
+                "stage state cost weight should be non-negative"
             )
         if terminal_cost_weight is None and stage_state_cost_weight is None:
             raise ProblemDefinitionError(

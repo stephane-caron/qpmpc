@@ -1,6 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-#
 # SPDX-License-Identifier: Apache-2.0
 
 """MPC problem represented as a quadratic program."""
@@ -96,14 +93,20 @@ class MPCQP:
         h: np.ndarray = np.hstack(h_list, dtype=float)
         Phi = np.vstack(phi_list, dtype=float)
         Psi = np.vstack(psi_list, dtype=float)
-        C = block_diag(*C_list) if C_list else None
+        C = (
+            block_diag(*C_list)
+            if C_list and mpc_problem.ineq_state_matrix is not None
+            else None
+        )
         e = np.hstack(e_list, dtype=float)
         P: np.ndarray = mpc_problem.stage_input_cost_weight * np.eye(
             stacked_input_dim,
         )
-        if mpc_problem.terminal_cost_weight is not None:
+        if mpc_problem.has_terminal_cost:
+            assert mpc_problem.terminal_cost_weight is not None
             P += mpc_problem.terminal_cost_weight * np.dot(psi.T, psi)
-        if mpc_problem.stage_state_cost_weight is not None:
+        if mpc_problem.has_stage_state_cost:
+            assert mpc_problem.stage_state_cost_weight is not None
             P += mpc_problem.stage_state_cost_weight * np.dot(Psi.T, Psi)
         q: np.ndarray = np.zeros(stacked_input_dim)
 

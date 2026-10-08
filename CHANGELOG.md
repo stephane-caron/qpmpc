@@ -4,9 +4,14 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+
+- examples: Solving an updated MPC problem and comparing computation times
+
 ### Fixed
 
-- Keep positive terminal and stage tracking costs consistent under cost rescaling.
+- Fix input-only constraint updates by preserving absent state constraints (thanks to @Afloat16)
+- Keep positive terminal and stage tracking costs consistent under cost rescaling, and reject negative state cost weights.
 
 ## [3.2.0] - 2026-07-21
 
