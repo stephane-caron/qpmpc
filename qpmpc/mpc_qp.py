@@ -102,9 +102,11 @@ class MPCQP:
         P: np.ndarray = mpc_problem.stage_input_cost_weight * np.eye(
             stacked_input_dim,
         )
-        if mpc_problem.terminal_cost_weight is not None:
+        if mpc_problem.has_terminal_cost:
+            assert mpc_problem.terminal_cost_weight is not None
             P += mpc_problem.terminal_cost_weight * np.dot(psi.T, psi)
-        if mpc_problem.stage_state_cost_weight is not None:
+        if mpc_problem.has_stage_state_cost:
+            assert mpc_problem.stage_state_cost_weight is not None
             P += mpc_problem.stage_state_cost_weight * np.dot(Psi.T, Psi)
         q: np.ndarray = np.zeros(stacked_input_dim)
 
