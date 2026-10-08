@@ -96,7 +96,11 @@ class MPCQP:
         h: np.ndarray = np.hstack(h_list, dtype=float)
         Phi = np.vstack(phi_list, dtype=float)
         Psi = np.vstack(psi_list, dtype=float)
-        C = block_diag(*C_list) if C_list else None
+        C = (
+            block_diag(*C_list)
+            if C_list and mpc_problem.ineq_state_matrix is not None
+            else None
+        )
         e = np.hstack(e_list, dtype=float)
         P: np.ndarray = mpc_problem.stage_input_cost_weight * np.eye(
             stacked_input_dim,

@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Fixed
+
+- Fix input-only constraint updates by preserving absent state constraints.
+
 ## [3.2.0] - 2026-07-21
 
 ### Added
