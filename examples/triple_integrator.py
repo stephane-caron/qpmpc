@@ -1,6 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-#
 # SPDX-License-Identifier: Apache-2.0
 #
 # /// script
@@ -58,3 +55,4 @@ if __name__ == "__main__":
     plt.plot(t, accelerations)
     plt.grid(True)
     plt.legend(("position", "velocity", "acceleration"))
+    plt.show(block=True)

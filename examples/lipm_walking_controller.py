@@ -1,6 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-#
 # SPDX-License-Identifier: Apache-2.0
 #
 # /// script
@@ -296,7 +293,7 @@ if __name__ == "__main__":
     # we set the initial ZMP at the center of the initial foothold, and the
     # initial DCM halfway. See the LIPM walking controller and its
     # configuration for details on initial/final DSP phases.
-    init_accel = -params.omega**2 * support_foot_pos
+    init_accel = -(params.omega**2) * support_foot_pos
     init_vel = 0.5 * params.omega * support_foot_pos
     state = np.array([0.0, init_vel, init_accel])
 
