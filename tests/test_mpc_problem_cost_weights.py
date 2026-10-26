@@ -69,7 +69,7 @@ class TestMPCProblemCostWeights(unittest.TestCase):
                             MPCQP(problem)
 
     def test_invalid_cost_weights(self):
-        """Reject None or NaN misuses of cost weights."""
+        """Reject None, NaN or non-positive misuses of cost weights."""
         valid_kwargs = dict(
             transition_state_matrix=np.eye(1),
             transition_input_matrix=np.eye(1),
@@ -89,6 +89,9 @@ class TestMPCProblemCostWeights(unittest.TestCase):
             {"terminal_cost_weight": np.nan},
             {"stage_state_cost_weight": np.nan},
             {"stage_input_cost_weight": np.nan},
+            {"stage_input_cost_weight": None},
+            {"stage_input_cost_weight": 0.0},
+            {"stage_input_cost_weight": -1e-12},
             {"terminal_cost_weight": None, "stage_state_cost_weight": None},
         ):
             with self.subTest(**misuse):

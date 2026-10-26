@@ -108,9 +108,12 @@ class MPCProblem:
     ) -> None:
         """Start a new model predictive control problem."""
         # Negated comparisons below also reject NaN weights
-        if not stage_input_cost_weight > 0.0:
+        if (
+            stage_input_cost_weight is None
+            or not stage_input_cost_weight > 0.0
+        ):
             raise ProblemDefinitionError(
-                "stage non-negative control weight needed for regularization"
+                "stage input cost weight should be positive for regularization"
             )
         if (
             terminal_cost_weight is not None

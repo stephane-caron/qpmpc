@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 
 - MPCProblem: Reject negative terminal and stage state cost weights (thanks to @Afloat16)
 - MPCProblem: Reject NaN cost weights
+- MPCProblem: Raise `ProblemDefinitionError` rather than `TypeError` when the stage input cost weight is `None`
 - MPCProblem: Any positive state cost weight, even below 1e-10, now enables its cost and requires a goal state or target states (thanks to @Afloat16)
 
 ### Fixed
