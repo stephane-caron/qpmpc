@@ -91,7 +91,7 @@ class WheeledInvertedPendulum:
         B_disc = np.array(
             [
                 [T**2 / 2.0],
-                [-np.cosh(T * omega) / g + 1.0 / g],
+                [-2.0 / g * np.sinh(T * omega / 2.0) ** 2],
                 [T],
                 [-omega * np.sinh(T * omega) / g],
             ]

@@ -19,6 +19,8 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
+- Preserve short-period angular input coupling in the wheeled inverted pendulum
+
 - Fix input-only constraint updates by preserving absent state constraints (thanks to @Afloat16)
 - MPCQP: Use the same activation rule for terminal and stage state costs in both the cost matrix and vector (thanks to @Afloat16)
 
