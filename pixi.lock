@@ -20818,6 +20818,6 @@ packages:
 - pypi: ./
   name: qpmpc
   requires_dist:
-  - qpsolvers>=1.8.0
+  - qpsolvers>=3.0.0
   - loop-rate-limiters ; extra == 'extras'
   requires_python: '>=3.11'
