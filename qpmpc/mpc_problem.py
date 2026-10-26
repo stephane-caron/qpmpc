@@ -166,7 +166,15 @@ class MPCProblem:
 
     @property
     def has_terminal_cost(self) -> bool:
-        """Check whether the problem has a terminal cost."""
+        """Check whether the problem has a terminal cost.
+
+        Returns:
+            True if and only if the terminal cost weight is set and positive.
+
+        Raises:
+            ProblemDefinitionError: If the problem has a terminal cost but
+                its goal state is undefined.
+        """
         cost_is_set = (
             self.terminal_cost_weight is not None
             and self.terminal_cost_weight > 0.0
@@ -179,7 +187,16 @@ class MPCProblem:
 
     @property
     def has_stage_state_cost(self) -> bool:
-        """Check whether the problem has a stage state cost."""
+        """Check whether the problem has a stage state cost.
+
+        Returns:
+            True if and only if the stage state cost weight is set and
+            positive.
+
+        Raises:
+            ProblemDefinitionError: If the problem has a stage state cost but
+                its target states are undefined.
+        """
         cost_is_set = (
             self.stage_state_cost_weight is not None
             and self.stage_state_cost_weight > 0.0
@@ -193,7 +210,11 @@ class MPCProblem:
 
     @property
     def has_stage_input_target(self) -> bool:
-        r"""Check whether cost has a per-step input reference."""
+        r"""Check whether cost has a per-step input reference.
+
+        Returns:
+            True if and only if target inputs are set.
+        """
         return self.target_inputs is not None
 
     def get_transition_state_matrix(self, k) -> np.ndarray:
