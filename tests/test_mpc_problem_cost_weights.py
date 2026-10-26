@@ -11,8 +11,8 @@ from qpmpc.exceptions import ProblemDefinitionError
 from qpmpc.mpc_qp import MPCQP
 
 
-class TestSmallPositiveCostWeights(unittest.TestCase):
-    """Reject negative state weights and retain positive tracking terms."""
+class TestMPCProblemCostWeights(unittest.TestCase):
+    """Test cost weights of MPC problems."""
 
     def test_state_cost_weights(self):
         """Use the same cost activation rule for P, q, and references."""
