@@ -8,10 +8,16 @@ All notable changes to this project will be documented in this file.
 
 - examples: Solving an updated MPC problem and comparing computation times
 
+### Changed
+
+- MPCProblem: Reject negative terminal and stage state cost weights (thanks to @Afloat16)
+- MPCProblem: Reject NaN cost weights
+- MPCProblem: Any positive state cost weight, even below 1e-10, now enables its cost and requires a goal state or target states (thanks to @Afloat16)
+
 ### Fixed
 
 - Fix input-only constraint updates by preserving absent state constraints (thanks to @Afloat16)
-- Keep positive terminal and stage tracking costs consistent under cost rescaling, and reject negative state cost weights.
+- MPCQP: Use the same activation rule for terminal and stage state costs in both the cost matrix and vector (thanks to @Afloat16)
 
 ## [3.2.0] - 2026-07-21
 
