@@ -28,7 +28,7 @@ classifiers = [
     "Topic :: Scientific/Engineering :: Mathematics",
 ]
 dependencies = [
-    "qpsolvers >=1.8.0",
+    "qpsolvers >=3.0.0",
 ]
 keywords = ["model", "predictive", "control", "linear", "time-varying"]
 

@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## Fixed
+
+- Update minimum version of qpsolvers to 3.0.0
+
 ## [3.3.0] - 2026-10-26
 
 ### Added
