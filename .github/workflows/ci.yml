@@ -57,7 +57,7 @@ jobs:
         strategy:
             matrix:
                 os: [ubuntu-latest]
-                environment: [py311, py312, py313, py314]
+                environment: [py311, py312, py313, py314, py315]
 
         steps:
             - name: "Checkout sources"

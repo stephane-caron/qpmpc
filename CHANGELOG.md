@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
+- Support Python 3.15
 - examples: Solving an updated MPC problem and comparing computation times
 
 ### Changed
