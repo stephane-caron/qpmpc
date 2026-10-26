@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 ## Fixed
 
 - Update minimum version of qpsolvers to 3.0.0
+- docs: Fix the triple integrator example
 
 ## [3.3.0] - 2026-10-26
 

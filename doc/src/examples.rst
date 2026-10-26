@@ -36,7 +36,7 @@ This leads us to the following linear MPC problem:
 
     initial_pos = 0.0
     goal_pos = 1.0
-    problem = qpmpc.MPCProblem(
+    problem = MPCProblem(
         transition_state_matrix=A,
         transition_input_matrix=B,
         ineq_state_matrix=ineq_matrix,
@@ -56,7 +56,7 @@ We can solve it with:
 
     from qpmpc import solve_mpc
 
-    plan = solve_mpc(problem, mpc)
+    plan = solve_mpc(problem, solver="proxqp")
 
 The resulting plan holds complete state and input trajectories as stacked vectors. For instance, we can plot positions, velocities and accelerations as follows:
 
@@ -78,4 +78,4 @@ This example produces the following trajectory:
 
 .. image:: https://user-images.githubusercontent.com/1189580/160871543-3734ec65-fe74-4a6f-8452-a877aa4050b1.png
 
-The behavior is a weighted compromis between reaching the goal state (weight ``1.0``) and keeping reasonable finite jerk inputs (weight ``1e-6``), which prevents bang-bang accelerations.
+The behavior is a weighted compromise between reaching the goal state (weight ``1.0``) and keeping reasonable finite jerk inputs (weight ``1e-6``), which prevents bang-bang accelerations.
