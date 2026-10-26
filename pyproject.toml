@@ -13,14 +13,13 @@ maintainers = [
     {name = "Stéphane Caron", email = "stephane.caron@normalesup.org"},
 ]
 dynamic = ['version', 'description']
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
     "Intended Audience :: Science/Research",
     "License :: OSI Approved :: Apache Software License",
     "Operating System :: OS Independent",
-    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
@@ -88,7 +87,7 @@ platforms = ["linux-64", "osx-64", "osx-arm64", "win-64"]
 qpmpc = { path = ".", editable = true }
 
 [tool.pixi.dependencies]
-python = ">=3.10"
+python = ">=3.11"
 qpsolvers = ">=3.4.0"
 
 [tool.pixi.feature.test.dependencies]
@@ -126,9 +125,6 @@ lint = { depends-on = ["lint-mypy", "lint-pylint", "lint-ruff", "lint-ruff-forma
 
 # Per-version features to exercise the supported Python range in CI. These
 # cannot share the "default" solve-group as each pins a different interpreter.
-[tool.pixi.feature.py310.dependencies]
-python = "3.10.*"
-
 [tool.pixi.feature.py311.dependencies]
 python = "3.11.*"
 
@@ -145,7 +141,6 @@ python = "3.14.*"
 default = { features = ["test"], solve-group = "default" }
 coverage = { features = ["coverage"], solve-group = "default" }
 lint = { features = ["lint"], solve-group = "default" }
-py310 = ["py310", "test"]
 py311 = ["py311", "test"]
 py312 = ["py312", "test"]
 py313 = ["py313", "test"]

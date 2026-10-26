@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
+- Bump minimum supported Python version to 3.11
 - MPCProblem: Reject negative terminal and stage state cost weights (thanks to @Afloat16)
 - MPCProblem: Reject NaN cost weights
 - MPCProblem: Raise `ProblemDefinitionError` rather than `TypeError` when the stage input cost weight is `None`
