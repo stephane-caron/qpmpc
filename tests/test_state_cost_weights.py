@@ -68,6 +68,32 @@ class TestSmallPositiveCostWeights(unittest.TestCase):
                         with self.assertRaises(ProblemDefinitionError):
                             MPCQP(problem)
 
+    def test_nan_cost_weights(self):
+        """Reject NaN cost weights rather than silently disabling costs."""
+        for cost in ("terminal", "stage", "input"):
+            with self.subTest(cost=cost):
+                with self.assertRaises(ProblemDefinitionError):
+                    MPCProblem(
+                        transition_state_matrix=np.eye(1),
+                        transition_input_matrix=np.eye(1),
+                        ineq_state_matrix=None,
+                        ineq_input_matrix=None,
+                        ineq_vector=np.empty(0),
+                        nb_timesteps=2,
+                        terminal_cost_weight=(
+                            np.nan if cost == "terminal" else 1.0
+                        ),
+                        stage_state_cost_weight=(
+                            np.nan if cost == "stage" else None
+                        ),
+                        stage_input_cost_weight=(
+                            np.nan if cost == "input" else 1e-12
+                        ),
+                        initial_state=np.array([0.0]),
+                        goal_state=np.array([1.0]),
+                        target_states=np.array([0.0, 2.0]),
+                    )
+
 
 if __name__ == "__main__":
     unittest.main()
